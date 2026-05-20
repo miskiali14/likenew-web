@@ -1,8 +1,9 @@
 "use client";
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { X, MapPin, Phone, Send } from "lucide-react";
+import { X, MapPin, Phone, Send, Loader2, AlertCircle } from "lucide-react"; 
 import { motion, AnimatePresence } from "framer-motion";
+import { useRouter } from "next/navigation";
 
 const HERO_SLIDES = [
   { src: "/images/slide1.png", title: "Expert Care" },
@@ -13,6 +14,84 @@ const HERO_SLIDES = [
 export default function HeroSlider() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [showOrderPopup, setShowOrderPopup] = useState(false);
+  const router = useRouter();
+
+  // --- 1. STATES-KA XOGTA IYO KHALADAADKA ---
+  const [phone, setPhone] = useState("");
+  const [address, setAddress] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(""); 
+
+  // --- 2. AUTO-FILL: SOO QAAD XOGTA HADDII AY HORAY U KAYDSANAYD ---
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const savedPhone = localStorage.getItem("likenew_phone");
+      const savedAddress = localStorage.getItem("likenew_address");
+      if (savedPhone) setPhone(savedPhone);
+      if (savedAddress) setAddress(savedAddress);
+    }
+  }, []);
+
+  // --- 3. FUNCTION-KA API-GA ---
+  const handleOrderSubmit = async () => {
+    if (!phone || !address) {
+      triggerError("Fadlan buuxi phone-ka iyo address-ka");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const response = await fetch("https://cleancloudapp.com/api/addCustomer", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          api_token: process.env.NEXT_PUBLIC_CLEANCLOUD_TOKEN,
+          customerName: phone, 
+          customerTel: phone,
+          customerAddress: address,
+          customerEmail: `${phone}@likenew.com`, 
+          noEmail: 0, 
+        }),
+      });
+
+      const data = await response.json();
+
+      // Hubi in window uu jiro ka hor localStorage
+      const isClient = typeof window !== "undefined";
+
+      if (data.Success === "True") {
+        if (isClient) {
+          localStorage.setItem("likenew_phone", phone);
+          localStorage.setItem("likenew_address", address);
+          localStorage.setItem("user_status", "new");
+          if (data.customerID) localStorage.setItem("cleancloud_customer_id", data.customerID);
+        }
+        router.push("/services1page");
+      } 
+      else if (data.Error && (data.Error.includes("exists") || data.Error.includes("already"))) {
+        if (isClient) {
+          localStorage.setItem("likenew_phone", phone);
+          localStorage.setItem("likenew_address", address);
+          localStorage.setItem("user_status", "returning");
+        }
+        router.push("/services1page");
+      } 
+      else {
+        triggerError(data.Error || "Nidaamka CleanCloud waa uu diiday dalabka.");
+      }
+    } catch (error) {
+      triggerError("Xiriirka server-ka waa go'an yahay. Fadlan dib u tijaabi.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const triggerError = (msg) => {
+    setErrorMessage(msg);
+    setTimeout(() => {
+      setErrorMessage("");
+    }, 4000);
+  };
 
   useEffect(() => {
     const slideTimer = setInterval(() => {
@@ -31,6 +110,24 @@ export default function HeroSlider() {
   return (
     <section className="relative w-full h-[100svh] overflow-hidden bg-neutral-950 font-sans">
       
+      {/* --- POP-UP YAR OO KHALADKA MASSAAJA AH --- */}
+      <AnimatePresence>
+        {errorMessage && (
+          <motion.div
+            initial={{ opacity: 0, y: -50, x: "-50%" }}
+            animate={{ opacity: 1, y: 0, x: "-50%" }}
+            exit={{ opacity: 0, y: -50, x: "-50%" }}
+            className="fixed top-6 left-1/2 z-50 bg-red-500/90 backdrop-blur-md text-white px-6 py-3.5 rounded-2xl flex items-center gap-3 shadow-xl shadow-red-950/20 max-w-sm w-[90%]"
+          >
+            <AlertCircle size={18} className="shrink-0" />
+            <p className="text-xs font-black uppercase tracking-wide leading-tight">{errorMessage}</p>
+            <button onClick={() => setErrorMessage("")} className="ml-auto p-1 hover:bg-white/10 rounded-lg transition-colors">
+              <X size={14} />
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* --- BACKGROUND LAYER --- */}
       <div className="absolute inset-0 z-0">
         <AnimatePresence mode="wait">
@@ -46,7 +143,6 @@ export default function HeroSlider() {
               src={HERO_SLIDES[currentSlide].src} 
               fill
               priority
-              // XALKA: Background sawirku wuxuu markasta qaataa 100% ballaca shaashadda
               sizes="100vw"
               className="object-cover" 
               alt={HERO_SLIDES[currentSlide].title} 
@@ -99,7 +195,6 @@ export default function HeroSlider() {
                 <Image 
                   src="/images/pop.png" 
                   fill 
-                  // XALKA: Pop-up sawirku waa yar yahay, qiyaas ahaan 360px desktop-ka
                   sizes="(max-width: 1024px) 0px, 360px"
                   className="object-cover" 
                   alt="Promo" 
@@ -115,11 +210,28 @@ export default function HeroSlider() {
               <div className="px-8 py-8 text-center text-white">
                 <h3 className="text-xl font-black uppercase tracking-tight mb-6">Quick Order</h3>
                 <div className="space-y-3 mb-6">
-                  <input type="text" placeholder="Address" className="w-full bg-white/5 border border-white/10 rounded-full px-6 py-3 text-xs outline-none focus:bg-white/20 transition-all placeholder:text-white/30" />
-                  <input type="text" placeholder="Phone" className="w-full bg-white/5 border border-white/10 rounded-full px-6 py-3 text-xs outline-none focus:bg-white/20 transition-all placeholder:text-white/30" />
+                  <input 
+                    type="text" 
+                    placeholder="Address" 
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
+                    className="w-full bg-white/5 border border-white/10 rounded-full px-6 py-3 text-xs outline-none focus:bg-white/20 transition-all placeholder:text-white/30 text-white" 
+                  />
+                  <input 
+                    type="text" 
+                    placeholder="Phone" 
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    className="w-full bg-white/5 border border-white/10 rounded-full px-6 py-3 text-xs outline-none focus:bg-white/20 transition-all placeholder:text-white/30 text-white" 
+                  />
                 </div>
-                <button className="w-full bg-purple-600 hover:bg-purple-500 text-white font-black py-4 rounded-full text-[10px] uppercase tracking-[0.2em] transition-all shadow-lg shadow-purple-500/20 text-center flex justify-center items-center">
-                  Send Request
+                
+                <button 
+                  disabled={loading}
+                  onClick={handleOrderSubmit}
+                  className="w-full bg-purple-600 hover:bg-purple-500 text-white font-black py-4 rounded-full text-[10px] uppercase tracking-[0.2em] transition-all shadow-lg shadow-purple-500/20 text-center flex justify-center items-center disabled:opacity-50"
+                >
+                  {loading ? <Loader2 className="animate-spin" size={16} /> : "Send Request"}
                 </button>
               </div>
             </motion.div>

@@ -9,26 +9,49 @@ import { motion, AnimatePresence } from "framer-motion";
 
 export default function Navbar() {
   const [lang, setLang] = useState("EN");
+  const [showLang, setShowLang] = useState(false);
   const [showHours, setShowHours] = useState(false);
   const [showServices, setShowServices] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [cartCount, setCartCount] = useState(0); // Tirada dambiisha
 
-  // Monitor scroll position
+  // --- NIDAAMKA TIRADA DAMBIISHA ---
+  const updateCartCount = () => {
+    if (typeof window !== "undefined") {
+      const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+      setCartCount(cart.length);
+    }
+  };
+
   useEffect(() => {
+    updateCartCount(); // Markuu Navbar-ka load gareeyo
+    
+    // Dhagayso dhacdada (Event) 'cartUpdated' ee ka imaanaysa boggaga kale
+    window.addEventListener("cartUpdated", updateCartCount);
+    
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
     };
+    
     window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("cartUpdated", updateCartCount);
+    };
   }, []);
 
+  const languages = [
+    { code: "EN", name: "English", flag: "🇺🇸" },
+    { code: "SO", name: "Soomaali", flag: "🇸🇴" }
+  ];
+
   const services = [
-    { name: "Clean and Press", icon: <Shirt size={18} />, desc: "Professional dry cleaning" },
-    { name: "Press Only", icon: <Wind size={18} />, desc: "Expert steam ironing" },
-    { name: "Wash and Fold", icon: <Waves size={18} />, desc: "Daily laundry care" },
-    { name: "Bed and Bath", icon: <Bed size={18} />, desc: "Linens & towel cleaning" },
-    { name: "Delivery", icon: <Truck size={18} />, desc: "Doorstep pickup & drop" },
-    { name: "Express", icon: <Zap size={18} />, desc: "Same day fast service" },
+    { name: "Clean and Press", icon: <Shirt size={18} />, desc: "Professional dry cleaning", path: "/cleanandpress" },
+    { name: "Press Only", icon: <Wind size={18} />, desc: "Expert steam ironing", path: "/pressonly" },
+    { name: "Wash and Fold", icon: <Waves size={18} />, desc: "Daily laundry care", path: "/washfold" },
+    { name: "Bed and Bath", icon: <Bed size={18} />, desc: "Linens & towel cleaning", path: "/bedbath" },
+    { name: "Delivery", icon: <Truck size={18} />, desc: "Doorstep pickup & drop", path: "/delivery" },
+    { name: "Express", icon: <Zap size={18} />, desc: "Same day fast service", path: "/express" },
   ];
 
   return (
@@ -70,7 +93,6 @@ export default function Navbar() {
             </Link>
           ))}
           
-          {/* SERVICES DROPDOWN */}
           <div 
             className="relative py-2 cursor-pointer"
             onMouseEnter={() => setShowServices(true)}
@@ -90,7 +112,7 @@ export default function Navbar() {
                   className="absolute top-full left-1/2 -translate-x-1/2 mt-4 w-[480px] bg-white rounded-[2.5rem] shadow-[0_25px_50px_-12px_rgba(0,0,0,0.15)] border border-gray-100 p-6 grid grid-cols-2 gap-4"
                 >
                   {services.map((service, index) => (
-                    <Link key={index} href="/services" className="flex items-center gap-4 p-3.5 rounded-3xl hover:bg-purple-50 transition-all group/item border border-transparent hover:border-purple-100">
+                    <Link key={index} href={service.path} className="flex items-center gap-4 p-3.5 rounded-3xl hover:bg-purple-50 transition-all group/item border border-transparent hover:border-purple-100">
                       <div className="bg-purple-100 p-3 rounded-2xl text-purple-600 group-hover/item:bg-purple-600 group-hover/item:text-white transition-all">
                         {service.icon}
                       </div>
@@ -112,7 +134,6 @@ export default function Navbar() {
         {/* RIGHT SIDE TOOLS */}
         <div className="flex items-center gap-6">
           
-          {/* Phone */}
           <div className={`hidden lg:flex items-center gap-3 font-black text-[11px] transition-colors duration-500 ${
             scrolled ? "text-gray-900" : "text-white"
           }`}>
@@ -122,7 +143,6 @@ export default function Navbar() {
             <span className="tracking-widest italic">+252 617 372514</span>
           </div>
 
-          {/* WORKING HOURS */}
           <div 
             className="relative hidden md:flex items-center gap-3 px-5 py-2.5 rounded-2xl border transition-all cursor-pointer"
             style={{ 
@@ -161,16 +181,57 @@ export default function Navbar() {
             </AnimatePresence>
           </div>
 
-          {/* Cart */}
-          <motion.div 
-            whileTap={{ scale: 0.9 }}
-            className={`relative p-3 rounded-full transition-all duration-300 cursor-pointer shadow-xl border ${
-              scrolled ? "bg-purple-600 text-white border-purple-400" : "bg-white text-gray-900 border-white/20"
-            }`}
+          <div 
+            className="relative"
+            onMouseEnter={() => setShowLang(true)}
+            onMouseLeave={() => setShowLang(false)}
           >
-            <ShoppingCart size={18} />
-            <span className="absolute -top-1.5 -right-1.5 bg-red-600 text-white text-[9px] font-black w-5 h-5 flex items-center justify-center rounded-full border-2 border-white">1</span>
-          </motion.div>
+            <button className={`flex items-center gap-2 px-3 py-2 rounded-xl border transition-all ${
+              scrolled ? "bg-gray-50 border-gray-200 text-gray-900" : "bg-white/10 border-white/20 text-white"
+            }`}>
+              <Globe size={14} className="text-purple-500" />
+              <span className="text-[10px] font-black uppercase tracking-widest">{lang}</span>
+            </button>
+
+            <AnimatePresence>
+              {showLang && (
+                <motion.div 
+                  initial={{ opacity: 0, scale: 0.95, y: 10 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.95, y: 10 }}
+                  className="absolute top-full right-0 mt-2 w-32 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden z-[120]"
+                >
+                  {languages.map((l) => (
+                    <button
+                      key={l.code}
+                      onClick={() => { setLang(l.code); setShowLang(false); }}
+                      className="w-full flex items-center justify-between px-4 py-3 hover:bg-purple-50 transition-colors group text-black"
+                    >
+                      <span className="text-[10px] font-bold group-hover:text-purple-600">{l.name}</span>
+                      <span>{l.flag}</span>
+                    </button>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          {/* Cart - Halkan ayaa tirada si toos ah loogu xiray cartCount */}
+          <Link href="/order">
+            <motion.div 
+              whileTap={{ scale: 0.9 }}
+              className={`relative p-3 rounded-full transition-all duration-300 cursor-pointer shadow-xl border ${
+                scrolled ? "bg-purple-600 text-white border-purple-400" : "bg-white text-gray-900 border-white/20"
+              }`}
+            >
+              <ShoppingCart size={18} />
+              {cartCount > 0 && (
+                <span className="absolute -top-1.5 -right-1.5 bg-red-600 text-white text-[9px] font-black w-5 h-5 flex items-center justify-center rounded-full border-2 border-white animate-in zoom-in">
+                  {cartCount}
+                </span>
+              )}
+            </motion.div>
+          </Link>
         </div>
       </div>
     </nav>

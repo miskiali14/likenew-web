@@ -2,8 +2,11 @@
 import { Check, Truck, MapPin, Phone } from "lucide-react";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { useRouter } from "next/navigation"; // 1. Soo dhoweyso Router-ka
 
 export default function AboutSection() {
+  const router = useRouter(); // 2. Qeex router-ka
+
   return (
     <section id="about" className="relative bg-white py-24 px-6 md:px-16 scroll-mt-20 overflow-hidden">
       
@@ -37,7 +40,6 @@ export default function AboutSection() {
               </div>
             </motion.div>
             
-            {/* Badge yar oo sawirka dushiisa ah */}
             <div className="absolute -bottom-6 -right-6 bg-white p-6 rounded-3xl shadow-xl z-20 flex items-center gap-4 border border-gray-50">
               <div className="bg-purple-100 p-3 rounded-2xl text-purple-600">
                 <Truck size={24} />
@@ -64,7 +66,7 @@ export default function AboutSection() {
               services focused on customer satisfaction and premium garment care.
             </p>
 
-            {/* Liiska Checkmark-yada - 2 Columns */}
+            {/* Liiska Checkmark-yada */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-5 pt-4">
               {[
                 "Transparency", "Excellence", 
@@ -107,7 +109,9 @@ export default function AboutSection() {
             />
           </div>
 
+          {/* 3. Badhanka halkan ka bedel */}
           <motion.button 
+            onClick={() => router.push("/services1page")}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             className="bg-[#7e3af2] hover:bg-black text-white font-black px-12 py-4 rounded-full text-[10px] uppercase tracking-[0.2em] transition-all shadow-xl shadow-purple-200 w-full lg:w-auto"
