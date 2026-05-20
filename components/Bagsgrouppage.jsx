@@ -1,12 +1,13 @@
 "use client";
+
+// 1. Kan ayaa Next.js ku qasbaya inuu iska dhaafo Prerendering xilliga dhismaha Vercel
+export const dynamic = "force-dynamic";
+
 import React, { useState, useEffect, useMemo, Suspense } from "react";
 import { useSearchParams } from "next/navigation"; 
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, Loader2, ShoppingBag, CheckCircle2, Star } from "lucide-react";
 import Navbar from "@/components/Navbar";
-
-// U sheeg Next.js inuu boggan mar kasta u dhiso qaab Dynamic ah (Vercel Fix)
-export const dynamic = "force-dynamic";
 
 // Khariidadda sawirrada ee alaabta Bags Group-ka ah
 const imageMap = {
@@ -15,7 +16,6 @@ const imageMap = {
   "default": "/images/Laptopbag.png" 
 };
 
-// --- WAXAA LA SAMEEYAY COMPONENT GOONNI AH OO AKHRIYA URL-KA ---
 function BagsContent() {
   const searchParams = useSearchParams();
   const [search, setSearch] = useState("");
@@ -24,8 +24,8 @@ function BagsContent() {
   const [error, setError] = useState(null);
   const [addedId, setAddedId] = useState(null);
 
-  // URL Detector: '30' (Press Only), '32' (Wash & Fold), '29' (Clean & Press)
-  const activeSection = searchParams.get("tab") || "29"; 
+  // URL Detector
+  const activeSection = searchParams ? searchParams.get("tab") || "29" : "29"; 
 
   const getProductImage = (name) => {
     const pName = (name || "").toLowerCase().trim().replace(/\s+/g, ' ');
@@ -119,6 +119,7 @@ function BagsContent() {
 
   const handleOrder = (item) => {
     try {
+      if (typeof window === "undefined") return; // Hubinta badbaadada server-ka
       const currentCart = JSON.parse(localStorage.getItem("cart") || "[]");
 
       let serviceType = " (Dry Clean)";
@@ -167,7 +168,7 @@ function BagsContent() {
         <p className="text-slate-500 mb-6">{error}</p>
         <button 
           onClick={() => window.location.reload()}
-          className="bg-[#2a5298] text-white px-8 py-3 rounded-xl font-bold uppercase text-xs tracking-widest hover:bg-[#1d3d73] shadow-lg shadow-purple-500/20 transition-all duration-300"
+          className="bg-[#2a5298] text-white px-8 py-3 rounded-xl font-bold uppercase text-xs tracking-widest hover:bg-[#1d3d73] shadow-lg transition-all duration-300"
         >
           Try Again
         </button>
@@ -299,7 +300,7 @@ function BagsContent() {
   );
 }
 
-// --- MAAJAHA GUUD EE BOGGA OO WAXAA LAGU DIYAARIYAY SUSPENSE BOUNDARY ---
+// Qaybta rasmiga ah ee shabakadu u gudbiso Next.js dhismaha Vercel
 export default function BagsServicesPage() {
   return (
     <Suspense fallback={
