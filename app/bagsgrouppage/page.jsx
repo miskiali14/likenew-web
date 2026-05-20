@@ -1,20 +1,16 @@
-"use client";
-
-import React, { Suspense } from "react";
+import React from "react";
+// Soo dhoweynta qaybta AppShowcase
 import Navbar from "@/components/Navbar";
-import Bagsgrouppage from "@/components/Bagsgrouppage";
+import Bagsgrouppage from "@/components/Bagsgrouppage"; 
 
-// Next.js wuxuu rabaa Page inuu noqdo default export
-export default function Page() {
+export default function Mensevicepage() {
   return (
     <main>
-      <Navbar />
-      {/* Maadaama Bagsgrouppage uu isticmaalo useSearchParams, 
-          waa inaan ku dhex raddnaa Suspense halkaan haddii uusan 
-          ka dhex jirin component-ka gudaha */}
-      <Suspense fallback={<div>Loading...</div>}>
-        <Bagsgrouppage />
-      </Suspense>
+      {/* Halkan ayaad ku dhex wacaysaa qaybtii */}
+       <Navbar />
+      <Bagsgrouppage/>
+      
+      {/* Waxaad ku dari kartaa waxyaabo kale haddii aad rabto */}
     </main>
   );
 }
