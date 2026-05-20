@@ -1,9 +1,12 @@
 "use client";
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, Suspense } from "react";
 import { useSearchParams } from "next/navigation"; 
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, Loader2, ShoppingBag, CheckCircle2, Star } from "lucide-react";
 import Navbar from "@/components/Navbar";
+
+// U sheeg Next.js inuu boggan mar kasta u dhiso qaab Dynamic ah (Vercel Fix)
+export const dynamic = "force-dynamic";
 
 // Khariidadda sawirrada ee alaabta Bags Group-ka ah
 const imageMap = {
@@ -12,7 +15,8 @@ const imageMap = {
   "default": "/images/Laptopbag.png" 
 };
 
-export default function BagsServicesPage() {
+// --- WAXAA LA SAMEEYAY COMPONENT GOONNI AH OO AKHRIYA URL-KA ---
+function BagsContent() {
   const searchParams = useSearchParams();
   const [search, setSearch] = useState("");
   const [rawProducts, setRawProducts] = useState([]); 
@@ -23,9 +27,6 @@ export default function BagsServicesPage() {
   // URL Detector: '30' (Press Only), '32' (Wash & Fold), '29' (Clean & Press)
   const activeSection = searchParams.get("tab") || "29"; 
 
-  // =========================
-  // GET IMAGE
-  // =========================
   const getProductImage = (name) => {
     const pName = (name || "").toLowerCase().trim().replace(/\s+/g, ' ');
     if (pName.includes("boorso ciidan") || pName.includes("army bag") || pName.includes("حقيبة الجيش")) return imageMap["boorso ciidan"];
@@ -35,9 +36,6 @@ export default function BagsServicesPage() {
     return imageMap[key] || imageMap["default"];
   };
 
-  // =========================
-  // FETCH SERVICES
-  // =========================
   useEffect(() => {
     const fetchServices = async () => {
       try {
@@ -64,11 +62,7 @@ export default function BagsServicesPage() {
     fetchServices();
   }, []);
 
-  // =========================
-  // FILTER & PROCESS PRODUCTS BY TABS
-  // =========================
   const processedProducts = useMemo(() => {
-    // Liiska xaddidan ee alaabta Bags Group ee la rabo kaliya
     const targetItems = [
       "boorso ciidan", "army bag", "حقيبة الجيش",
       "boorso laptop", "laptop bag", "حقيبة كمبيوتر"
@@ -82,27 +76,20 @@ export default function BagsServicesPage() {
       const sectionId = String(prod.section || "").trim();
       const pName = (prod.name || "").toLowerCase().trim().replace(/\s+/g, ' ');
       
-      // Hubi haddii alaabtu ay ku jirto labadan boorso mid ka mid ah
       const isBagItem = targetItems.some(target => pName.includes(target));
       if (!isBagItem) return;
 
-      // A. HADDII LA JOOGO PRESS ONLY (TAB=30)
       if (activeSection === "30") {
         if (sectionId !== "30") return;
       } 
-      
-      // B. HADDII LA JOOGO WASH & FOLD (TAB=32)
       else if (activeSection === "32") {
         if (sectionId !== "32") return;
       } 
-      
-      // C. HADDII LA JOOGO CLEAN & PRESS (TAB=29)
       else {
         if (activeSection === "31" && sectionId !== "31") return;
         if (activeSection === "29" && (sectionId === "30" || sectionId === "31" || sectionId === "32")) return;
       }
 
-      // Sameyso fure unique ah si looga fogaado nuqulada (duplicates)
       let finalKey = "other";
       if (pName.includes("boorso ciidan") || pName.includes("army") || pName.includes("الجيش")) {
         finalKey = "boorso ciidan";
@@ -124,18 +111,12 @@ export default function BagsServicesPage() {
     return Array.from(uniqueMap.values());
   }, [rawProducts, activeSection]);
 
-  // =========================
-  // SEARCH FILTER
-  // =========================
   const filteredProducts = useMemo(() => {
     return processedProducts.filter((item) =>
       (item.displayName || "").toLowerCase().includes(search.toLowerCase())
     );
   }, [search, processedProducts]);
 
-  // =========================
-  // ADD TO CART WITH SERVICE TYPE
-  // =========================
   const handleOrder = (item) => {
     try {
       const currentCart = JSON.parse(localStorage.getItem("cart") || "[]");
@@ -173,7 +154,7 @@ export default function BagsServicesPage() {
   if (loading) return (
     <div className="min-h-screen flex items-center justify-center bg-white">
       <div className="text-center">
-        <Loader2 className="animate-spin text-[#6a3da1] mb-4 mx-auto" size={48} />
+        <Loader2 className="animate-spin text-[#2a5298] mb-4 mx-auto" size={48} />
         <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-slate-400">Loading Bags Collection...</p>
       </div>
     </div>
@@ -186,7 +167,7 @@ export default function BagsServicesPage() {
         <p className="text-slate-500 mb-6">{error}</p>
         <button 
           onClick={() => window.location.reload()}
-          className="bg-[#6a3da1] text-white px-8 py-3 rounded-xl font-bold uppercase text-xs tracking-widest hover:bg-[#532e82] shadow-lg shadow-purple-500/20 transition-all duration-300"
+          className="bg-[#2a5298] text-white px-8 py-3 rounded-xl font-bold uppercase text-xs tracking-widest hover:bg-[#1d3d73] shadow-lg shadow-purple-500/20 transition-all duration-300"
         >
           Try Again
         </button>
@@ -201,7 +182,7 @@ export default function BagsServicesPage() {
       {/* Hero Section */}
       <section className="relative h-[420px] flex items-center justify-center bg-slate-950 overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-gradient-to-b from-purple-950/20 via-slate-950/80 to-slate-950 z-10" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#2a5298]/10 via-slate-950/80 to-slate-950 z-10" />
           <motion.img 
             initial={{ scale: 1.15 }}
             animate={{ scale: 1 }}
@@ -216,11 +197,11 @@ export default function BagsServicesPage() {
             animate={{ opacity: 1, y: 0 }} 
             className="inline-flex items-center gap-2 bg-white/5 backdrop-blur-md border border-white/10 px-4 py-2 rounded-full mb-6 shadow-xl"
           >
-            <Star size={14} className="text-purple-400 fill-purple-400 animate-pulse" />
+            <Star size={14} className="text-[#2a5298] fill-[#2a5298] animate-pulse" />
             <span className="text-[10px] font-black uppercase tracking-[0.25em] text-purple-200">LikeNew Care</span>
           </motion.div>
           <h1 className="text-5xl md:text-7xl font-black uppercase tracking-tight text-white mb-3">
-            BAGS <span className="text-[#6a3da1] italic font-serif">CARE</span>
+            BAGS <span className="text-[#2a5298] italic font-serif">CARE</span>
           </h1>
           <p className="text-slate-400 text-xs md:text-sm max-w-md mx-auto tracking-wide font-medium opacity-90">
             Professional deep cleaning, dust removal, and sanitization for heavy-duty and tech backpacks.
@@ -231,7 +212,7 @@ export default function BagsServicesPage() {
       {/* Search Bar */}
       <section className="max-w-4xl mx-auto px-6 -mt-10 relative z-30">
         <div className="bg-white p-2 rounded-3xl shadow-2xl border border-slate-100 flex items-center px-6 group focus-within:ring-4 ring-purple-500/10 transition-all">
-          <Search className="text-slate-400 mr-3 group-focus-within:text-[#6a3da1]" size={20} />
+          <Search className="text-slate-400 mr-3 group-focus-within:text-[#2a5298]" size={20} />
           <input 
             type="text"
             placeholder="Search bags services..."
@@ -261,7 +242,6 @@ export default function BagsServicesPage() {
                   className="group bg-white rounded-[2.5rem] p-3 border border-slate-100 shadow-sm hover:shadow-2xl transition-all duration-500 flex flex-col justify-between"
                 >
                   <div>
-                    {/* Image Container */}
                     <div className="relative aspect-[4/5] bg-[#F9FAFB] rounded-[2.2rem] mb-6 flex items-center justify-center p-10 overflow-hidden">
                       <motion.img 
                         whileHover={{ scale: 1.1 }}
@@ -271,31 +251,29 @@ export default function BagsServicesPage() {
                       />
                     </div>
 
-                    {/* Info Row */}
                     <div className="px-4 pb-2">
                       <div className="flex justify-between items-start mb-1 gap-2">
                         <h3 className="font-black text-[11px] uppercase tracking-tight text-slate-800 flex-1 line-clamp-2 min-h-[32px] flex items-center">
                           {item.displayName}
                         </h3>
-                        <span className="font-black text-sm text-[#6a3da1] whitespace-nowrap">
+                        <span className="font-black text-sm text-[#2a5298] whitespace-nowrap">
                           ${Number(item.price || 0).toFixed(2)}
                         </span>
                       </div>
 
-                      <p className="text-[9px] font-bold text-purple-500 uppercase tracking-widest mb-6">
+                      <p className="text-[9px] font-bold text-purple-400 uppercase tracking-widest mb-6">
                         {activeSection === "30" ? "Istirin Kaliya" : activeSection === "32" ? "Dhaqis & Laabid" : "Nadiifin & Istirin"}
                       </p>
                     </div>
                   </div>
                   
-                  {/* Action Button */}
                   <div className="px-4 pb-4">
                     <button 
                       onClick={() => handleOrder(item)}
                       className={`w-full py-4 rounded-2xl flex items-center justify-center gap-2 transition-all duration-300 font-black text-[10px] uppercase tracking-widest shadow-lg ${
                         addedId === item.id 
                           ? "bg-emerald-500 text-white shadow-emerald-100" 
-                          : "bg-slate-900 text-white hover:bg-[#6a3da1]"
+                          : "bg-slate-900 text-white hover:bg-[#2a5298]"
                       }`}
                     >
                       {addedId === item.id ? (
@@ -318,5 +296,18 @@ export default function BagsServicesPage() {
         )}
       </section>
     </main>
+  );
+}
+
+// --- MAAJAHA GUUD EE BOGGA OO WAXAA LAGU DIYAARIYAY SUSPENSE BOUNDARY ---
+export default function BagsServicesPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <Loader2 className="animate-spin text-[#2a5298]" size={48} />
+      </div>
+    }>
+      <BagsContent />
+    </Suspense>
   );
 }
