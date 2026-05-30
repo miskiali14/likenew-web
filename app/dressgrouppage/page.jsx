@@ -1,16 +1,20 @@
-import React from "react";
-// Soo dhoweynta qaybta AppShowcase
-import Navbar from "@/components/Navbar";
-import Dressgrouppage from "@/components/Dressgrouppage"; 
+import React, { Suspense } from "react";
+import { Loader2 } from "lucide-react";
+import Dressgrouppage from "@/components/Dressgrouppage";
 
 export default function Dressgroup() {
   return (
-    <main>
-      {/* Halkan ayaad ku dhex wacaysaa qaybtii */}
-       <Navbar />
-      <Dressgrouppage/>
-      
-      {/* Waxaad ku dari kartaa waxyaabo kale haddii aad rabto */}
-    </main>
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center bg-white">
+          <Loader2
+            className="animate-spin text-[#7047A8]"
+            size={48}
+          />
+        </div>
+      }
+    >
+      <Dressgrouppage />
+    </Suspense>
   );
 }
