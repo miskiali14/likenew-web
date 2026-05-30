@@ -15,9 +15,6 @@ export default function Home() {
       <AboutSection />
       <Services1page />
       <AppShowcase />
-      
-       < Express/>
-       <Delivery />
        <Lockers />
        {/* Tani waa qeybtii cusbayd */}
     </main>

@@ -11,7 +11,6 @@ export default function PremiumServicesPage() {
   const [selectedGroup, setSelectedGroup] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Liiska kooxaha (Collections) oo lagu daray Bed, Home, iyo Guest
   const collections = [
     { name: "Ladies Group", icon: "👗", color: "bg-pink-50" },       
     { name: "Men Group", icon: "👕", color: "bg-blue-50" },         
@@ -28,9 +27,6 @@ export default function PremiumServicesPage() {
     { name: "Guest", icon: "🛎️", color: "bg-violet-50" },
   ];
 
-  // ==========================================
-  // ROUTE REDIRECTION (HABKA LOO KALA WEEJIYO)
-  // ==========================================
   const handleGroupClick = (groupName) => {
     const isPressOnly = activeTab === "Press Only";
     const isWashFold = activeTab === "Wash & Fold";
@@ -41,54 +37,22 @@ export default function PremiumServicesPage() {
     if (isWashFold) sectionParam = "?tab=32";
     if (isBedBath) sectionParam = "?tab=31";
 
-    if (groupName === "Ladies Group") {
-      router.push(`/ladiespage${sectionParam}`);
-    } 
-    else if (groupName === "Men Group") {
-      router.push(`/menpage${sectionParam}`);
-    } 
-    else if (groupName === "Underwear Group") {
-      router.push(`/underwearpage${sectionParam}`);
-    } 
-    else if (groupName === "Traditional Group") {
-      router.push(`/traditionalpage${sectionParam}`);
-    } 
-    else if (groupName === "Suit Group") {
-      router.push(`/suitpage${sectionParam}`);
-    } 
-    else if (groupName === "Sportswear Group") {
-      router.push(`/sportswearpage${sectionParam}`);
-    } 
-    else if (groupName === "Dress Group") {
-      router.push(`/dressgrouppage${sectionParam}`);
-    }
-    else if (groupName === "Bags Group") {
-      router.push(`/bagsgrouppage${sectionParam}`);
-    }
-    else if (groupName === "Shoes Group") {
-      router.push(`/shoesgrouppage${sectionParam}`);
-    }
-    // MAREERKA BOGGAGA CUSUB EE BED & BATH IYO WASH & FOLD
-    else if (groupName === "Bath") {
-      router.push(`/bathpage${sectionParam}`);
-    }
-    else if (groupName === "Bed") {
-      router.push(`/bedpage${sectionParam}`);
-    }
-    else if (groupName === "Home") {
-      router.push(`/homepage${sectionParam}`);
-    }
-    else if (groupName === "Guest") {
-      router.push(`/guestpage${sectionParam}`);
-    }
-    else {
-      setSelectedGroup(groupName); 
-    }
+    if (groupName === "Ladies Group") router.push(`/ladiespage${sectionParam}`);
+    else if (groupName === "Men Group") router.push(`/menpage${sectionParam}`);
+    else if (groupName === "Underwear Group") router.push(`/underwearpage${sectionParam}`);
+    else if (groupName === "Traditional Group") router.push(`/traditionalpage${sectionParam}`);
+    else if (groupName === "Suit Group") router.push(`/suitpage${sectionParam}`);
+    else if (groupName === "Sportswear Group") router.push(`/sportswearpage${sectionParam}`);
+    else if (groupName === "Dress Group") router.push(`/dressgrouppage${sectionParam}`);
+    else if (groupName === "Bags Group") router.push(`/bagsgrouppage${sectionParam}`);
+    else if (groupName === "Shoes Group") router.push(`/shoesgrouppage${sectionParam}`);
+    else if (groupName === "Bath") router.push(`/bathpage${sectionParam}`);
+    else if (groupName === "Bed") router.push(`/bedpage${sectionParam}`);
+    else if (groupName === "Home") router.push(`/homepage${sectionParam}`);
+    else if (groupName === "Guest") router.push(`/guestpage${sectionParam}`);
+    else setSelectedGroup(groupName); 
   };
 
-  // ==========================================
-  // FETCH & MAP CLEANCLOUD API DATA
-  // ==========================================
   useEffect(() => {
     const fetchServices = async () => {
       try {
@@ -123,84 +87,51 @@ export default function PremiumServicesPage() {
           const sectionId = String(prod.section || "").trim(); 
           let gName = null;
 
-          if (pName.includes("bag") || pName.includes("boorso")) {
-            gName = "Bags Group";
-          }
-          else if (pName.includes("shoe") || pName.includes("kab")) {
-            gName = "Shoes Group";
-          }
-          else if (targetDressItems.some(target => pName.includes(target))) {
-            gName = "Dress Group";
-          }
+          if (pName.includes("bag") || pName.includes("boorso")) gName = "Bags Group";
+          else if (pName.includes("shoe") || pName.includes("kab")) gName = "Shoes Group";
+          else if (targetDressItems.some(target => pName.includes(target))) gName = "Dress Group";
           else if (
             pName.includes("ladi") || pName.includes("dirac") || pName.includes("gorgorad") || 
             pName.includes("baati") || pName.includes("abaya") || pName.includes("cabaya") ||
             pName.includes("taash") || pName.includes("xijaab") || pName.includes("indha-shareer") ||
             pName.includes("qamaar") || pName.includes("headscarf") || pName.includes("rajabeeto") || pName.includes("istiriij")
-          ) {
-            gName = "Ladies Group";
-          } 
+          ) gName = "Ladies Group";
           else if (
             pName.includes("underwear") || pName.includes("nigis") || pName.includes("buumo") || 
             pName.includes("garan") || pName.includes("funaanad hoose") || pName.includes("shukumaan") ||
             pName.includes("socks") || pName.includes("sigsaan") || pName.includes("towel")
-          ) {
-            // Sifayn dheeri ah si loogu kala bixiyo Bath iyo Underwear
-            gName = (pName.includes("shukumaan") || pName.includes("towel")) ? "Bath" : "Underwear Group";
-          }
-          else if (pName.includes("suit") || pName.includes("suud") || pName.includes("traffic dress")) {
-            gName = "Suit Group";
-          }
-          else if (pName.includes("sport") || pName.includes("sports")) {
-            gName = "Sportswear Group";
-          }
-          // KALA SHUBIDDA CARDS-KA MAREERKA GURIGA
-          else if (pName.includes("bed") || pName.includes("sariir") || pName.includes("buste") || pName.includes("go'") || pName.includes("kubeerto") || pName.includes("foodare")) {
-            gName = "Bed";
-          }
-          else if (pName.includes("daah") || pName.includes("roog") || pName.includes("maro fadhi") || pName.includes("maro miis") || pName.includes("sali salaad") || pName.includes("caga-saar")) {
-            gName = "Home";
-          }
-          else if (pName.includes("guest") || pName.includes("marti")) {
-            gName = "Guest";
-          }
-          else if (sectionId === "31") {
-            gName = "Bath"; 
-          }
+          ) gName = (pName.includes("shukumaan") || pName.includes("towel")) ? "Bath" : "Underwear Group";
+          else if (pName.includes("suit") || pName.includes("suud") || pName.includes("traffic dress")) gName = "Suit Group";
+          else if (pName.includes("sport") || pName.includes("sports")) gName = "Sportswear Group";
+          else if (pName.includes("bed") || pName.includes("sariir") || pName.includes("buste") || pName.includes("go'") || pName.includes("kubeerto") || pName.includes("foodare")) gName = "Bed";
+          else if (pName.includes("daah") || pName.includes("roog") || pName.includes("maro fadhi") || pName.includes("maro miis") || pName.includes("sali salaad") || pName.includes("caga-saar")) gName = "Home";
+          else if (pName.includes("guest") || pName.includes("marti")) gName = "Guest";
+          else if (sectionId === "31") gName = "Bath"; 
           else if (
             pName.includes("traditional") || pName.includes("futashaari") || 
             pName.includes("macawiis") || pName.includes("sarong") || 
             pName.includes("shaal") || pName.includes("go/shaal") || pName.includes("ixraam") ||
             pName.includes("بدلة") || pName.includes("شال") || pName.includes("fوطه") || pName.includes("koofi")
-          ) {
-            gName = sectionId === "32" ? "Men Group" : "Traditional Group";
-          }
-          else if (pName.includes("men") || (pName.includes("shaati") && !pName.includes("futashaari"))) {
-            gName = "Men Group";
-          } 
+          ) gName = sectionId === "32" ? "Men Group" : "Traditional Group";
+          else if (pName.includes("men") || (pName.includes("shaati") && !pName.includes("futashaari"))) gName = "Men Group";
 
-          // SETUP DATA BY TABS
           if (gName) {
             if (sectionId === "30") {
               if (!formatted["Press Only"][gName]) formatted["Press Only"][gName] = [];
               formatted["Press Only"][gName].push(prod);
-            } 
-            else if (sectionId === "31") {
+            } else if (sectionId === "31") {
               if (!formatted["Bed & Bath"][gName]) formatted["Bed & Bath"][gName] = [];
               formatted["Bed & Bath"][gName].push(prod);
-            } 
-            else if (sectionId === "32") {
+            } else if (sectionId === "32") {
               if (!formatted["Wash & Fold"][gName]) formatted["Wash & Fold"][gName] = [];
               formatted["Wash & Fold"][gName].push(prod);
-            } 
-            else {
+            } else {
               if (!formatted["Clean & Press"][gName]) formatted["Clean & Press"][gName] = [];
               formatted["Clean & Press"][gName].push(prod);
             }
           }
         });
 
-        // Hubi in Bed, Bath, Home, iyo Guest ay xog ku leeyihiin Bed & Bath Tab si ay u muuqdaan
         ["Bath", "Bed", "Home", "Guest"].forEach(key => {
           if (!formatted["Bed & Bath"][key]) {
             formatted["Bed & Bath"][key] = [{ name: "Placeholder", price: 0 }]; 
@@ -230,7 +161,6 @@ export default function PremiumServicesPage() {
           {!selectedGroup ? (
             <motion.div key="grid" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, x: -20 }}>
               
-              {/* TABS SECTION */}
               <div className="flex justify-center mb-12 overflow-x-auto py-2">
                 <div className="flex bg-gray-100 p-1.5 rounded-full border border-gray-200">
                   {Object.keys(servicesData).map((tab) => (
@@ -238,7 +168,7 @@ export default function PremiumServicesPage() {
                       key={tab}
                       onClick={() => { setActiveTab(tab); setSelectedGroup(null); }}
                       className={`px-8 py-3 rounded-full text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap ${
-                        activeTab === tab ? "bg-[#6a3da1] text-white shadow-lg" : "text-gray-500 hover:text-[#6a3da1]"
+                        activeTab === tab ? "bg-[#6a3da1] text-white" : "text-gray-500 hover:text-[#6a3da1]"
                       }`}
                     >
                       {tab}
@@ -247,17 +177,13 @@ export default function PremiumServicesPage() {
                 </div>
               </div>
 
-              {/* GROUPS GRID */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {collections
                   .filter((col) => {
-                    // 1. FILTERS MARKA LA JOOGO WASH & FOLD
                     if (activeTab === "Wash & Fold") {
                       if (col.name === "Traditional Group" || col.name === "Dress Group") return false;
                     }
-                    // 2. KA SAAR UNDERWEAR MARKA LA JOOGO BED & BATH TAB
                     if (activeTab === "Bed & Bath" && col.name === "Underwear Group") return false;
-                    
                     return true;
                   })
                   .map((col) => {
@@ -270,7 +196,7 @@ export default function PremiumServicesPage() {
                       <button
                         key={groupName}
                         onClick={() => handleGroupClick(groupName)} 
-                        className="group bg-white border border-gray-100 p-8 rounded-[2.5rem] shadow-sm hover:shadow-xl transition-all text-left relative"
+                        className="group bg-[#F7F7FA] border border-gray-100 p-8 rounded-[2.5rem] transition-all text-left relative hover:bg-[#F1F1F5]"
                       >
                         <div className={`${col.color} w-20 h-20 rounded-3xl flex items-center justify-center text-4xl mb-6 group-hover:scale-110 transition-transform duration-500`}>
                           {col.icon}
@@ -284,7 +210,6 @@ export default function PremiumServicesPage() {
               </div>
             </motion.div>
           ) : (
-            /* ITEMS VIEW FOR LOCAL GROUPS */
             <motion.div key="items" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }}>
               <button onClick={() => setSelectedGroup(null)} className="flex items-center gap-2 text-gray-500 font-black uppercase text-[10px] mb-8 hover:text-[#6a3da1]">
                 <ArrowLeft size={16} /> Back to {activeTab}
@@ -294,7 +219,7 @@ export default function PremiumServicesPage() {
                 {servicesData[activeTab]?.[selectedGroup]?.map((item, idx) => {
                   if (item.name === "Placeholder") return null;
                   return (
-                    <div key={idx} className="bg-white border border-gray-50 p-6 rounded-[2rem] shadow-sm text-center">
+                    <div key={idx} className="bg-[#F7F7FA] border border-gray-100 p-6 rounded-[2rem] text-center">
                       <h4 className="font-bold text-gray-900 text-xs uppercase mb-2">{item.name}</h4>
                       <span className="text-[#6a3da1] font-black text-lg">${Number(item.price || 0).toFixed(2)}</span>
                     </div>

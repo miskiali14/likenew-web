@@ -1,5 +1,11 @@
 import "./globals.css";
-import Navbar from "@/components/Navbar";
+import { Ubuntu } from "next/font/google";
+
+const ubuntu = Ubuntu({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "700"],
+  variable: "--font-ubuntu",
+});
 
 export default function RootLayout({
   children,
@@ -8,8 +14,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="bg-brand-dark antialiased">
-      
+      <body
+        className={`
+          ${ubuntu.className}
+          bg-[var(--secondary)]
+          text-white
+          antialiased
+        `}
+      >
         {children}
       </body>
     </html>
