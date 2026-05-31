@@ -108,18 +108,22 @@ export default function HeroSlider() {
   }, []);
 
   return (
-    <section className="relative w-full h-[100svh] overflow-hidden bg-black font-sans">
+    <section className="relative w-full h-[100svh] overflow-hidden bg-black font-[Ubuntu]">
       <AnimatePresence>
         {errorMessage && (
           <motion.div
             initial={{ opacity: 0, y: -50, x: "-50%" }}
             animate={{ opacity: 1, y: 0, x: "-50%" }}
             exit={{ opacity: 0, y: -50, x: "-50%" }}
-            className="absolute top-6 left-1/2 z-[80] bg-red-500 text-white px-6 py-3 rounded-2xl flex items-center gap-3 shadow-[0_15px_40px_rgba(0,0,0,0.35)]"
+            className="absolute top-28 left-1/2 z-[90] bg-red-500 text-white px-6 py-3 rounded-2xl flex items-center gap-3 shadow-[0_15px_40px_rgba(0,0,0,0.35)]"
           >
             <AlertCircle size={18} />
             <p className="text-xs font-black uppercase">{errorMessage}</p>
-            <button onClick={() => setErrorMessage("")}>
+            <button
+              type="button"
+              onClick={() => setErrorMessage("")}
+              className="cursor-pointer"
+            >
               <X size={14} />
             </button>
           </motion.div>
@@ -187,9 +191,9 @@ export default function HeroSlider() {
               initial={{ opacity: 0, y: 30, scale: 0.96 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 30, scale: 0.96 }}
-              className="absolute inset-0 z-40 flex items-center justify-center p-4 bg-black/45 md:bg-transparent md:static md:p-0 md:block md:w-full md:max-w-[360px]"
+              className="absolute top-32 right-4 md:right-10 z-[60] w-[340px] md:w-[360px]"
             >
-              <div className="bg-black/35 backdrop-blur-2xl rounded-[2.5rem] w-full max-w-[360px] overflow-hidden border border-white/25 p-2 shadow-[0_30px_80px_rgba(0,0,0,0.45)]">
+              <div className="bg-black/35 backdrop-blur-2xl rounded-[2.5rem] w-full overflow-hidden border border-white/25 p-2 shadow-[0_30px_80px_rgba(0,0,0,0.45)]">
                 <div className="relative h-44 w-full rounded-[1.8rem] overflow-hidden">
                   <Image
                     src="/images/pops.png"
@@ -200,10 +204,15 @@ export default function HeroSlider() {
                   />
 
                   <button
-                    onClick={() => setShowOrderPopup(false)}
-                    className="absolute top-4 right-4 bg-black/55 text-white rounded-full p-2"
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setShowOrderPopup(false);
+                    }}
+                    className="absolute top-3 right-3 z-[999] bg-red-500 hover:bg-red-600 text-white rounded-full p-2 cursor-pointer transition-all"
                   >
-                    <X size={16} />
+                    <X size={18} />
                   </button>
                 </div>
 
@@ -231,6 +240,7 @@ export default function HeroSlider() {
                   </div>
 
                   <button
+                    type="button"
                     disabled={loading}
                     onClick={handleOrderSubmit}
                     className="w-full bg-white text-black font-black py-4 rounded-full text-[10px] uppercase tracking-[0.2em] flex justify-center items-center disabled:opacity-50"
@@ -252,6 +262,7 @@ export default function HeroSlider() {
         {HERO_SLIDES.map((_, i) => (
           <button
             key={i}
+            type="button"
             onClick={() => setCurrentSlide(i)}
             className={`rounded-full transition-all duration-300 ${
               i === currentSlide ? "w-8 h-[3px] bg-white" : "w-2 h-2 bg-white/40"
