@@ -1,37 +1,38 @@
 "use client";
+
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation"; 
+import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronRight, Loader2, ArrowLeft } from "lucide-react";
 
 export default function PremiumServicesPage() {
-  const router = useRouter(); 
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState("Clean & Press");
   const [servicesData, setServicesData] = useState({});
   const [selectedGroup, setSelectedGroup] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const collections = [
-    { name: "Ladies Group", icon: "👗", color: "bg-pink-50" },       
-    { name: "Men Group", icon: "👕", color: "bg-blue-50" },         
-    { name: "Traditional Group", icon: "👳", color: "bg-amber-50" }, 
-    { name: "Suit Group", icon: "🧥", color: "bg-slate-100" },      
-    { name: "Underwear Group", icon: "🩲", color: "bg-indigo-50" },   
-    { name: "Sportswear Group", icon: "👟", color: "bg-green-50" },  
-    { name: "Dress Group", icon: "💃", color: "bg-purple-50" },
-    { name: "Bags Group", icon: "👜", color: "bg-rose-50" },
-    { name: "Shoes Group", icon: "👟", color: "bg-cyan-50" },
-    { name: "Bath", icon: "🛁", color: "bg-gray-100" },
-    { name: "Bed", icon: "🛏️", color: "bg-blue-50" },
-    { name: "Home", icon: "🏠", color: "bg-emerald-50" },
-    { name: "Guest", icon: "🛎️", color: "bg-violet-50" },
+    { name: "Ladies Group", icon: "👗", color: "bg-[#825bac]/10" },
+    { name: "Men Group", icon: "👕", color: "bg-[#662d8f]/10" },
+    { name: "Traditional Group", icon: "👳", color: "bg-[#825bac]/10" },
+    { name: "Suit Group", icon: "🧥", color: "bg-[#662d8f]/10" },
+    { name: "Underwear Group", icon: "🩲", color: "bg-[#825bac]/10" },
+    { name: "Sportswear Group", icon: "👟", color: "bg-[#662d8f]/10" },
+    { name: "Dress Group", icon: "💃", color: "bg-[#825bac]/10" },
+    { name: "Bags Group", icon: "👜", color: "bg-[#662d8f]/10" },
+    { name: "Shoes Group", icon: "👟", color: "bg-[#825bac]/10" },
+    { name: "Bath", icon: "🛁", color: "bg-[#662d8f]/10" },
+    { name: "Bed", icon: "🛏️", color: "bg-[#825bac]/10" },
+    { name: "Home", icon: "🏠", color: "bg-[#662d8f]/10" },
+    { name: "Guest", icon: "🛎️", color: "bg-[#825bac]/10" },
   ];
 
   const handleGroupClick = (groupName) => {
     const isPressOnly = activeTab === "Press Only";
     const isWashFold = activeTab === "Wash & Fold";
     const isBedBath = activeTab === "Bed & Bath";
-    
+
     let sectionParam = "?tab=29";
     if (isPressOnly) sectionParam = "?tab=30";
     if (isWashFold) sectionParam = "?tab=32";
@@ -50,16 +51,21 @@ export default function PremiumServicesPage() {
     else if (groupName === "Bed") router.push(`/bedpage${sectionParam}`);
     else if (groupName === "Home") router.push(`/homepage${sectionParam}`);
     else if (groupName === "Guest") router.push(`/guestpage${sectionParam}`);
-    else setSelectedGroup(groupName); 
+    else setSelectedGroup(groupName);
   };
 
   useEffect(() => {
     const fetchServices = async () => {
       try {
         const response = await fetch("/api/services", { method: "POST" });
-        
+
         if (!response.ok) {
-          setServicesData({ "Clean & Press": {}, "Press Only": {}, "Wash & Fold": {}, "Bed & Bath": {} });
+          setServicesData({
+            "Clean & Press": {},
+            "Press Only": {},
+            "Wash & Fold": {},
+            "Bed & Bath": {},
+          });
           return;
         }
 
@@ -70,48 +76,57 @@ export default function PremiumServicesPage() {
           "Clean & Press": {},
           "Press Only": {},
           "Wash & Fold": {},
-          "Bed & Bath": {}
+          "Bed & Bath": {},
         };
 
         const targetDressItems = [
           "african dress", "زي افريقي", "aviation dress", "زي طيران مدني",
-          "isku-joga xirfadlayasha", "زي المحترفين", "isku-joog waxbarasho", "uniform", 
-          "زي مدرسي", "ixraam", "احرام", "jaakada dhaqaatiirta", "doctor jacket", 
-          "جاكيت طبيب", "military dress", "زي عسكري", "police dress", "زي شرطي", "traffic dress", "زي مرور"
+          "isku-joga xirfadlayasha", "زي المحترفين", "isku-joog waxbarasho",
+          "uniform", "زي مدرسي", "ixraam", "احرام", "jaakada dhaqaatiirta",
+          "doctor jacket", "جاكيت طبيب", "military dress", "زي عسكري",
+          "police dress", "زي شرطي", "traffic dress", "زي مرور",
         ];
 
-        rawProducts.forEach(prod => {
+        rawProducts.forEach((prod) => {
           if (!prod) return;
-          
-          const pName = (prod.name || "").toLowerCase().trim().replace(/\s+/g, ' ');
-          const sectionId = String(prod.section || "").trim(); 
+
+          const pName = (prod.name || "").toLowerCase().trim().replace(/\s+/g, " ");
+          const sectionId = String(prod.section || "").trim();
           let gName = null;
 
           if (pName.includes("bag") || pName.includes("boorso")) gName = "Bags Group";
           else if (pName.includes("shoe") || pName.includes("kab")) gName = "Shoes Group";
-          else if (targetDressItems.some(target => pName.includes(target))) gName = "Dress Group";
+          else if (targetDressItems.some((target) => pName.includes(target))) gName = "Dress Group";
           else if (
-            pName.includes("ladi") || pName.includes("dirac") || pName.includes("gorgorad") || 
+            pName.includes("ladi") || pName.includes("dirac") || pName.includes("gorgorad") ||
             pName.includes("baati") || pName.includes("abaya") || pName.includes("cabaya") ||
             pName.includes("taash") || pName.includes("xijaab") || pName.includes("indha-shareer") ||
-            pName.includes("qamaar") || pName.includes("headscarf") || pName.includes("rajabeeto") || pName.includes("istiriij")
+            pName.includes("qamaar") || pName.includes("headscarf") || pName.includes("rajabeeto") ||
+            pName.includes("istiriij")
           ) gName = "Ladies Group";
           else if (
-            pName.includes("underwear") || pName.includes("nigis") || pName.includes("buumo") || 
+            pName.includes("underwear") || pName.includes("nigis") || pName.includes("buumo") ||
             pName.includes("garan") || pName.includes("funaanad hoose") || pName.includes("shukumaan") ||
             pName.includes("socks") || pName.includes("sigsaan") || pName.includes("towel")
-          ) gName = (pName.includes("shukumaan") || pName.includes("towel")) ? "Bath" : "Underwear Group";
+          ) gName = pName.includes("shukumaan") || pName.includes("towel") ? "Bath" : "Underwear Group";
           else if (pName.includes("suit") || pName.includes("suud") || pName.includes("traffic dress")) gName = "Suit Group";
           else if (pName.includes("sport") || pName.includes("sports")) gName = "Sportswear Group";
-          else if (pName.includes("bed") || pName.includes("sariir") || pName.includes("buste") || pName.includes("go'") || pName.includes("kubeerto") || pName.includes("foodare")) gName = "Bed";
-          else if (pName.includes("daah") || pName.includes("roog") || pName.includes("maro fadhi") || pName.includes("maro miis") || pName.includes("sali salaad") || pName.includes("caga-saar")) gName = "Home";
-          else if (pName.includes("guest") || pName.includes("marti")) gName = "Guest";
-          else if (sectionId === "31") gName = "Bath"; 
           else if (
-            pName.includes("traditional") || pName.includes("futashaari") || 
-            pName.includes("macawiis") || pName.includes("sarong") || 
+            pName.includes("bed") || pName.includes("sariir") || pName.includes("buste") ||
+            pName.includes("go'") || pName.includes("kubeerto") || pName.includes("foodare")
+          ) gName = "Bed";
+          else if (
+            pName.includes("daah") || pName.includes("roog") || pName.includes("maro fadhi") ||
+            pName.includes("maro miis") || pName.includes("sali salaad") || pName.includes("caga-saar")
+          ) gName = "Home";
+          else if (pName.includes("guest") || pName.includes("marti")) gName = "Guest";
+          else if (sectionId === "31") gName = "Bath";
+          else if (
+            pName.includes("traditional") || pName.includes("futashaari") ||
+            pName.includes("macawiis") || pName.includes("sarong") ||
             pName.includes("shaal") || pName.includes("go/shaal") || pName.includes("ixraam") ||
-            pName.includes("بدلة") || pName.includes("شال") || pName.includes("fوطه") || pName.includes("koofi")
+            pName.includes("بدلة") || pName.includes("شال") || pName.includes("fوطه") ||
+            pName.includes("koofi")
           ) gName = sectionId === "32" ? "Men Group" : "Traditional Group";
           else if (pName.includes("men") || (pName.includes("shaati") && !pName.includes("futashaari"))) gName = "Men Group";
 
@@ -132,9 +147,9 @@ export default function PremiumServicesPage() {
           }
         });
 
-        ["Bath", "Bed", "Home", "Guest"].forEach(key => {
+        ["Bath", "Bed", "Home", "Guest"].forEach((key) => {
           if (!formatted["Bed & Bath"][key]) {
-            formatted["Bed & Bath"][key] = [{ name: "Placeholder", price: 0 }]; 
+            formatted["Bed & Bath"][key] = [{ name: "Placeholder", price: 0 }];
           }
         });
 
@@ -145,30 +160,42 @@ export default function PremiumServicesPage() {
         setLoading(false);
       }
     };
+
     fetchServices();
   }, []);
 
-  if (loading) return (
-    <div className="min-h-screen flex items-center justify-center">
-      <Loader2 className="animate-spin text-[#6a3da1]" size={40} />
-    </div>
-  );
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center font-[Ubuntu]">
+        <Loader2 className="animate-spin text-[#662d8f]" size={40} />
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen bg-[#FDFDFF] pt-24 pb-20 px-6 font-sans">
+    <div className="min-h-screen bg-[#fbf8ff] pt-24 pb-20 px-6 font-[Ubuntu]">
       <div className="max-w-6xl mx-auto">
         <AnimatePresence mode="wait">
           {!selectedGroup ? (
-            <motion.div key="grid" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, x: -20 }}>
-              
+            <motion.div
+              key="grid"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+            >
               <div className="flex justify-center mb-12 overflow-x-auto py-2">
-                <div className="flex bg-gray-100 p-1.5 rounded-full border border-gray-200">
+                <div className="flex bg-white p-1.5 rounded-full border border-[#825bac]/20 shadow-sm">
                   {Object.keys(servicesData).map((tab) => (
                     <button
                       key={tab}
-                      onClick={() => { setActiveTab(tab); setSelectedGroup(null); }}
+                      onClick={() => {
+                        setActiveTab(tab);
+                        setSelectedGroup(null);
+                      }}
                       className={`px-8 py-3 rounded-full text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap ${
-                        activeTab === tab ? "bg-[#6a3da1] text-white" : "text-gray-500 hover:text-[#6a3da1]"
+                        activeTab === tab
+                          ? "bg-[#662d8f] text-white shadow-lg shadow-[#825bac]/30"
+                          : "text-gray-500 hover:text-[#662d8f]"
                       }`}
                     >
                       {tab}
@@ -189,39 +216,69 @@ export default function PremiumServicesPage() {
                   .map((col) => {
                     const groupName = col.name;
                     const groupItems = servicesData[activeTab]?.[groupName];
-                    
+
                     if (!groupItems || groupItems.length === 0) return null;
-                    
+
                     return (
                       <button
                         key={groupName}
-                        onClick={() => handleGroupClick(groupName)} 
-                        className="group bg-[#F7F7FA] border border-gray-100 p-8 rounded-[2.5rem] transition-all text-left relative hover:bg-[#F1F1F5]"
+                        onClick={() => handleGroupClick(groupName)}
+                        className="group bg-white border border-[#825bac]/15 p-8 rounded-[2.5rem] transition-all text-left relative hover:bg-[#fbf8ff] hover:shadow-xl hover:shadow-[#825bac]/10"
                       >
-                        <div className={`${col.color} w-20 h-20 rounded-3xl flex items-center justify-center text-4xl mb-6 group-hover:scale-110 transition-transform duration-500`}>
+                        <div
+                          className={`${col.color} w-20 h-20 rounded-3xl flex items-center justify-center text-4xl mb-6 group-hover:scale-110 transition-transform duration-500`}
+                        >
                           {col.icon}
                         </div>
-                        <h3 className="text-lg font-black text-gray-900 uppercase tracking-tight">{groupName}</h3>
-                        <p className="text-gray-400 text-xs mt-1 font-bold uppercase tracking-widest">View Services</p>
-                        <ChevronRight className="absolute right-8 bottom-8 text-gray-300 group-hover:text-[#6a3da1] group-hover:translate-x-2 transition-all" />
+
+                        <h3 className="text-lg font-black text-gray-900 uppercase tracking-tight">
+                          {groupName}
+                        </h3>
+
+                        <p className="text-[#825bac] text-xs mt-1 font-bold uppercase tracking-widest">
+                          View Services
+                        </p>
+
+                        <ChevronRight className="absolute right-8 bottom-8 text-[#825bac] group-hover:text-[#662d8f] group-hover:translate-x-2 transition-all" />
                       </button>
                     );
                   })}
               </div>
             </motion.div>
           ) : (
-            <motion.div key="items" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }}>
-              <button onClick={() => setSelectedGroup(null)} className="flex items-center gap-2 text-gray-500 font-black uppercase text-[10px] mb-8 hover:text-[#6a3da1]">
+            <motion.div
+              key="items"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 20 }}
+            >
+              <button
+                onClick={() => setSelectedGroup(null)}
+                className="flex items-center gap-2 text-gray-500 font-black uppercase text-[10px] mb-8 hover:text-[#662d8f]"
+              >
                 <ArrowLeft size={16} /> Back to {activeTab}
               </button>
-              <h2 className="text-3xl font-black text-gray-900 uppercase mb-10">{selectedGroup}</h2>
+
+              <h2 className="text-3xl font-black text-gray-900 uppercase mb-10">
+                {selectedGroup}
+              </h2>
+
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 {servicesData[activeTab]?.[selectedGroup]?.map((item, idx) => {
                   if (item.name === "Placeholder") return null;
+
                   return (
-                    <div key={idx} className="bg-[#F7F7FA] border border-gray-100 p-6 rounded-[2rem] text-center">
-                      <h4 className="font-bold text-gray-900 text-xs uppercase mb-2">{item.name}</h4>
-                      <span className="text-[#6a3da1] font-black text-lg">${Number(item.price || 0).toFixed(2)}</span>
+                    <div
+                      key={idx}
+                      className="bg-white border border-[#825bac]/15 p-6 rounded-[2rem] text-center shadow-sm"
+                    >
+                      <h4 className="font-bold text-gray-900 text-xs uppercase mb-2">
+                        {item.name}
+                      </h4>
+
+                      <span className="text-[#662d8f] font-black text-lg">
+                        ${Number(item.price || 0).toFixed(2)}
+                      </span>
                     </div>
                   );
                 })}
