@@ -89,20 +89,33 @@ export default function Navbar() {
 
   return (
     <nav
-      className={`fixed top-0 left-0 w-full z-[100] font-[Ubuntu] transition-all duration-500 ease-in-out px-4 md:px-16 ${
+      className={`fixed top-0 left-0 w-full z-[100] font-[Ubuntu] transition-all duration-500 ease-in-out px-3 md:px-16 ${
         scrolled
-          ? "py-3 bg-white/90 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.1)] border-b border-white/20"
-          : "py-4 md:py-6 bg-gradient-to-b from-black/60 to-transparent"
+          ? "py-2 bg-white/90 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.1)] border-b border-white/20"
+          : "py-3 md:py-5 bg-gradient-to-b from-black/60 to-transparent"
       }`}
     >
       <div className="max-w-[1400px] mx-auto flex items-center justify-between">
-        <Link href="/" className="flex items-center cursor-pointer">
-          <img
-            src="/logo.png"
-            alt="LikeNew Logo"
-            className="h-20 md:h-32 lg:h-36 object-contain"
-          />
-        </Link>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => setMobileOpen(!mobileOpen)}
+            className={`xl:hidden p-4 rounded-full border transition-all ${
+              scrolled
+                ? "bg-[#662d8f] text-white border-[#825bac]"
+                : "bg-white text-gray-900 border-white/20"
+            }`}
+          >
+            {mobileOpen ? <X size={32} /> : <Menu size={32} />}
+          </button>
+
+          <Link href="/" className="flex items-center cursor-pointer">
+            <img
+              src="/logo.png"
+              alt="LikeNew Logo"
+              className="h-28 sm:h-32 md:h-40 lg:h-44 object-contain"
+            />
+          </Link>
+        </div>
 
         <div
           className={`hidden xl:flex items-center gap-10 font-black text-[10px] uppercase tracking-[0.2em] transition-colors duration-500 ${
@@ -210,7 +223,7 @@ export default function Navbar() {
           </div>
 
           <div
-            className="relative"
+            className="relative hidden sm:block"
             onMouseEnter={() => setShowLang(true)}
             onMouseLeave={() => setShowLang(false)}
           >
@@ -255,17 +268,6 @@ export default function Navbar() {
             </AnimatePresence>
           </div>
 
-          <button
-            onClick={() => setMobileOpen(!mobileOpen)}
-            className={`xl:hidden p-4 rounded-full border transition-all ${
-              scrolled
-                ? "bg-[#662d8f] text-white border-[#825bac]"
-                : "bg-white text-gray-900 border-white/20"
-            }`}
-          >
-            {mobileOpen ? <X size={28} /> : <Menu size={28} />}
-          </button>
-
           <Link href="/order">
             <motion.div
               whileTap={{ scale: 0.9 }}
@@ -309,14 +311,14 @@ export default function Navbar() {
                 <img
                   src="/logo.png"
                   alt="LikeNew Logo"
-                  className="h-20 object-contain"
+                  className="h-24 object-contain"
                 />
 
                 <button
                   onClick={closeMobile}
-                  className="p-3 rounded-full bg-[#662d8f] text-white"
+                  className="p-4 rounded-full bg-[#662d8f] text-white"
                 >
-                  <X size={24} />
+                  <X size={30} />
                 </button>
               </div>
 
