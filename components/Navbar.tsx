@@ -23,7 +23,6 @@ import { motion, AnimatePresence } from "framer-motion";
 export default function Navbar() {
   const [lang, setLang] = useState("EN");
   const [showLang, setShowLang] = useState(false);
-  const [showHours, setShowHours] = useState(false);
   const [showServices, setShowServices] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -56,7 +55,6 @@ export default function Navbar() {
       services: "Services",
       app: "App",
       lockers: "Lockers",
-      availability: "Availability",
       open247: "Open 24/7",
       whatsapp: "WhatsApp",
     },
@@ -66,7 +64,6 @@ export default function Navbar() {
       services: "Adeegyada",
       app: "App-ka",
       lockers: "Lockers",
-      availability: "Furan",
       open247: "Furan 24/7",
       whatsapp: "WhatsApp",
     },
@@ -92,9 +89,9 @@ export default function Navbar() {
 
   return (
     <nav
-      className={`fixed top-0 left-0 w-full z-[100] transition-all duration-500 ease-in-out px-4 md:px-16 ${
+      className={`fixed top-0 left-0 w-full z-[100] font-[Ubuntu] transition-all duration-500 ease-in-out px-4 md:px-16 ${
         scrolled
-          ? "py-3 bg-white/80 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.1)] border-b border-white/20"
+          ? "py-3 bg-white/90 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.1)] border-b border-white/20"
           : "py-4 md:py-6 bg-gradient-to-b from-black/60 to-transparent"
       }`}
     >
@@ -112,11 +109,11 @@ export default function Navbar() {
             scrolled ? "text-gray-600" : "text-white/90"
           }`}
         >
-          <Link href="/" className="hover:text-purple-600 transition-all">
+          <Link href="/" className="hover:text-[#662d8f] transition-all">
             {t.home}
           </Link>
 
-          <Link href="/about" className="hover:text-purple-600 transition-all">
+          <Link href="/about" className="hover:text-[#662d8f] transition-all">
             {t.about}
           </Link>
 
@@ -125,12 +122,12 @@ export default function Navbar() {
             onMouseEnter={() => setShowServices(true)}
             onMouseLeave={() => setShowServices(false)}
           >
-            <div className="flex items-center gap-1.5 hover:text-purple-600 transition-all">
+            <div className="flex items-center gap-1.5 hover:text-[#662d8f] transition-all">
               <span>{t.services}</span>
               <ChevronDown
                 size={14}
                 className={`transition-transform duration-500 ${
-                  showServices ? "rotate-180 text-purple-500" : ""
+                  showServices ? "rotate-180 text-[#662d8f]" : ""
                 }`}
               />
             </div>
@@ -141,17 +138,18 @@ export default function Navbar() {
                   initial={{ opacity: 0, y: 15, scale: 0.95 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 15, scale: 0.95 }}
-                  className="absolute top-full left-1/2 -translate-x-1/2 mt-4 w-[480px] bg-white rounded-[2.5rem] shadow-[0_25px_50px_-12px_rgba(0,0,0,0.15)] border border-gray-100 p-6 grid grid-cols-2 gap-4"
+                  className="absolute top-full left-1/2 -translate-x-1/2 mt-4 w-[480px] bg-white rounded-[2.5rem] shadow-2xl border border-[#825bac]/15 p-6 grid grid-cols-2 gap-4"
                 >
                   {services.map((service, index) => (
                     <Link
                       key={index}
                       href={service.path}
-                      className="flex items-center gap-4 p-3.5 rounded-3xl hover:bg-purple-50 transition-all group/item border border-transparent hover:border-purple-100"
+                      className="flex items-center gap-4 p-3.5 rounded-3xl hover:bg-[#825bac]/10 transition-all group/item border border-transparent hover:border-[#825bac]/20"
                     >
-                      <div className="bg-purple-100 p-3 rounded-2xl text-purple-600 group-hover/item:bg-purple-600 group-hover/item:text-white transition-all">
+                      <div className="bg-[#825bac]/15 p-3 rounded-2xl text-[#662d8f] group-hover/item:bg-[#662d8f] group-hover/item:text-white transition-all">
                         {service.icon}
                       </div>
+
                       <div>
                         <div className="text-black text-[11px] font-black uppercase tracking-tight">
                           {service.name}
@@ -167,11 +165,11 @@ export default function Navbar() {
             </AnimatePresence>
           </div>
 
-          <Link href="/mobileapp" className="hover:text-purple-600 transition-all">
+          <Link href="/mobileapp" className="hover:text-[#662d8f] transition-all">
             {t.app}
           </Link>
 
-          <Link href="/lockers" className="hover:text-purple-600 transition-all">
+          <Link href="/lockers" className="hover:text-[#662d8f] transition-all">
             {t.lockers}
           </Link>
         </div>
@@ -198,17 +196,15 @@ export default function Navbar() {
           <div
             className="relative hidden md:flex items-center gap-3 px-5 py-2.5 rounded-2xl border transition-all cursor-pointer"
             style={{
-              backgroundColor: scrolled ? "rgba(124, 58, 237, 0.1)" : "rgba(255, 255, 255, 0.1)",
-              borderColor: scrolled ? "rgba(124, 58, 237, 0.2)" : "rgba(255, 255, 255, 0.1)",
+              backgroundColor: scrolled ? "rgba(102,45,143,0.10)" : "rgba(255,255,255,0.10)",
+              borderColor: scrolled ? "rgba(130,91,172,0.25)" : "rgba(255,255,255,0.12)",
             }}
-            onMouseEnter={() => setShowHours(true)}
-            onMouseLeave={() => setShowHours(false)}
           >
-            <span className={`text-[9px] font-black uppercase tracking-[0.2em] ${scrolled ? "text-purple-700" : "text-white"}`}>
+            <span className={`text-[9px] font-black uppercase tracking-[0.2em] ${scrolled ? "text-[#662d8f]" : "text-white"}`}>
               {t.open247}
             </span>
 
-            <div className="bg-purple-600 p-1.5 rounded-xl shadow-lg shadow-purple-500/30 text-white">
+            <div className="bg-[#662d8f] p-1.5 rounded-xl shadow-lg shadow-[#825bac]/30 text-white">
               <Clock size={14} />
             </div>
           </div>
@@ -225,7 +221,7 @@ export default function Navbar() {
                   : "bg-white/10 border-white/20 text-white"
               }`}
             >
-              <Globe size={14} className="text-purple-500" />
+              <Globe size={14} className="text-[#662d8f]" />
               <span className="text-[10px] font-black uppercase tracking-widest">
                 {lang}
               </span>
@@ -246,9 +242,9 @@ export default function Navbar() {
                         setLang(l.code);
                         setShowLang(false);
                       }}
-                      className="w-full flex items-center justify-between px-4 py-3 hover:bg-purple-50 transition-colors group text-black"
+                      className="w-full flex items-center justify-between px-4 py-3 hover:bg-[#825bac]/10 transition-colors group text-black"
                     >
-                      <span className="text-[10px] font-bold group-hover:text-purple-600">
+                      <span className="text-[10px] font-bold group-hover:text-[#662d8f]">
                         {l.name}
                       </span>
                       <span>{l.flag}</span>
@@ -261,13 +257,13 @@ export default function Navbar() {
 
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className={`xl:hidden p-3 rounded-full border transition-all ${
+            className={`xl:hidden p-4 rounded-full border transition-all ${
               scrolled
-                ? "bg-purple-600 text-white border-purple-400"
+                ? "bg-[#662d8f] text-white border-[#825bac]"
                 : "bg-white text-gray-900 border-white/20"
             }`}
           >
-            {mobileOpen ? <X size={20} /> : <Menu size={20} />}
+            {mobileOpen ? <X size={28} /> : <Menu size={28} />}
           </button>
 
           <Link href="/order">
@@ -275,7 +271,7 @@ export default function Navbar() {
               whileTap={{ scale: 0.9 }}
               className={`relative p-3 rounded-full transition-all duration-300 cursor-pointer shadow-xl border ${
                 scrolled
-                  ? "bg-purple-600 text-white border-purple-400"
+                  ? "bg-[#662d8f] text-white border-[#825bac]"
                   : "bg-white text-gray-900 border-white/20"
               }`}
             >
@@ -293,37 +289,81 @@ export default function Navbar() {
 
       <AnimatePresence>
         {mobileOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -16 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -16 }}
-            className="xl:hidden absolute top-full left-4 right-4 bg-white rounded-[2rem] shadow-2xl border border-gray-100 p-5 z-[200] max-h-[75vh] overflow-y-auto"
-          >
-            <div className="flex flex-col gap-3 text-black font-black text-[12px] uppercase tracking-widest">
-              <Link onClick={closeMobile} href="/">Home</Link>
-              <Link onClick={closeMobile} href="/about">About</Link>
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={closeMobile}
+              className="xl:hidden fixed inset-0 bg-black/45 z-[180]"
+            />
 
-              <div className="pt-2 text-purple-700 text-[10px]">Services</div>
+            <motion.div
+              initial={{ opacity: 0, x: -320 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -320 }}
+              transition={{ type: "spring", stiffness: 260, damping: 28 }}
+              className="xl:hidden fixed top-0 left-0 h-screen w-[82%] max-w-[360px] bg-white z-[200] shadow-2xl p-6 overflow-y-auto font-[Ubuntu]"
+            >
+              <div className="flex items-center justify-between mb-8">
+                <img
+                  src="/logo.png"
+                  alt="LikeNew Logo"
+                  className="h-20 object-contain"
+                />
 
-              {services.map((service, index) => (
-                <Link
-                  key={index}
+                <button
                   onClick={closeMobile}
-                  href={service.path}
-                  className="flex items-center gap-3 p-3 rounded-2xl bg-purple-50 text-black"
+                  className="p-3 rounded-full bg-[#662d8f] text-white"
                 >
-                  <span className="text-purple-700">{service.icon}</span>
-                  <span>{service.name}</span>
-                </Link>
-              ))}
+                  <X size={24} />
+                </button>
+              </div>
 
-              <Link onClick={closeMobile} href="/mobileapp">App</Link>
-              <Link onClick={closeMobile} href="/lockers">Lockers</Link>
-              <a onClick={closeMobile} href="https://wa.me/252617372514" target="_blank">
-                WhatsApp
-              </a>
-            </div>
-          </motion.div>
+              <div className="flex flex-col gap-4 text-black font-black text-[16px] uppercase tracking-[0.12em]">
+                <Link onClick={closeMobile} href="/" className="py-3 border-b border-gray-100">
+                  Home
+                </Link>
+
+                <Link onClick={closeMobile} href="/about" className="py-3 border-b border-gray-100">
+                  About
+                </Link>
+
+                <div className="pt-4 text-[#662d8f] text-[12px] tracking-[0.25em]">
+                  Services
+                </div>
+
+                {services.map((service, index) => (
+                  <Link
+                    key={index}
+                    onClick={closeMobile}
+                    href={service.path}
+                    className="flex items-center gap-4 p-4 rounded-2xl bg-[#825bac]/10 text-black"
+                  >
+                    <span className="text-[#662d8f]">{service.icon}</span>
+                    <span>{service.name}</span>
+                  </Link>
+                ))}
+
+                <Link onClick={closeMobile} href="/mobileapp" className="py-3 border-b border-gray-100">
+                  App
+                </Link>
+
+                <Link onClick={closeMobile} href="/lockers" className="py-3 border-b border-gray-100">
+                  Lockers
+                </Link>
+
+                <a
+                  onClick={closeMobile}
+                  href="https://wa.me/252617372514"
+                  target="_blank"
+                  className="mt-4 bg-[#662d8f] text-white text-center py-4 rounded-2xl"
+                >
+                  WhatsApp
+                </a>
+              </div>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </nav>
