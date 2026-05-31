@@ -45,7 +45,7 @@ export default function LockerPage() {
           className="absolute inset-0"
         >
           <Image
-            src="/images/hero.png"
+            src="/images/locker2.png"
             fill
             className="object-cover brightness-[0.35]"
             alt="Likenew Lockers"
