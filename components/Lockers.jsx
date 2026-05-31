@@ -1,5 +1,6 @@
 "use client";
-import React, { useState, useEffect } from "react";
+
+import React, { useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { MapPin, Search, Navigation, Globe } from "lucide-react";
@@ -11,7 +12,7 @@ const locations = [
     address: "21 Oct Street, Waaberi",
     image: "/images/locker1.png",
     status: "24/7 Open",
-    link: "https://maps.app.goo.gl/ayk9tkJVuBcJvJU58",
+    link: "https://tr.ee/svLfTEDcjY",
   },
   {
     id: 2,
@@ -19,25 +20,15 @@ const locations = [
     address: "KM4 Street, Hodan",
     image: "/images/locker2.png",
     status: "24/7 Open",
-    link: "https://maps.app.goo.gl/pv5Ru6j5MWHs7jan8",
+    link: "https://tr.ee/_CQ2_klREz",
   },
 ];
 
 export default function LockerPage() {
-  const [scrolled, setScrolled] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
-
-    window.addEventListener("scroll", handleScroll);
-
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   const filteredLocations = locations.filter((locker) => {
     const query = searchTerm.toLowerCase();
-
     return (
       locker.name.toLowerCase().includes(query) ||
       locker.address.toLowerCase().includes(query)
@@ -45,11 +36,10 @@ export default function LockerPage() {
   });
 
   return (
-    <div className="bg-white min-h-screen font-sans selection:bg-[#825bac]/20 selection:text-[#662d8f]">
-      {/* HERO SECTION */}
-      <section className="relative h-[50vh] min-h-[450px] flex items-end pb-16 pt-36 overflow-hidden">
+    <div className="bg-white min-h-screen font-sans overflow-x-hidden">
+      <section className="relative min-h-[520px] md:min-h-[560px] flex items-end pb-14 md:pb-16 pt-32 overflow-hidden">
         <motion.div
-          initial={{ scale: 1.1 }}
+          initial={{ scale: 1.08 }}
           animate={{ scale: 1 }}
           transition={{ duration: 1.5 }}
           className="absolute inset-0"
@@ -60,33 +50,32 @@ export default function LockerPage() {
             className="object-cover brightness-[0.35]"
             alt="Likenew Lockers"
             priority
+            sizes="100vw"
           />
         </motion.div>
 
-        <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-          <div className="absolute -top-[10%] -left-[10%] w-[40%] h-[60%] bg-[#662d8f]/20 blur-[120px] rounded-full" />
-        </div>
+        <div className="absolute inset-0 bg-black/25" />
 
-        <div className="relative max-w-7xl mx-auto px-9 w-full text-white">
-          <div className="max-w-3xl mt-40 md:mt-50">
+        <div className="relative max-w-7xl mx-auto px-5 md:px-9 w-full text-white">
+          <div className="max-w-3xl">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
             >
-              <span className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 text-white text-[10px] font-black uppercase tracking-[0.2em] px-4 py-2 rounded-full mb-2">
-                <Globe size={12} className="animate-spin-slow" />
+              <span className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 text-white text-[9px] md:text-[10px] font-black uppercase tracking-[0.18em] px-4 py-2 rounded-full mb-4">
+                <Globe size={12} />
                 Global Standard Laundry
               </span>
 
-              <h1 className="text-6xl md:text-8xl font-black uppercase tracking-tighter leading-[0.85] mb-6">
+              <h1 className="text-5xl sm:text-6xl md:text-8xl font-black uppercase tracking-tighter leading-[0.88] mb-5">
                 Laundry <br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#662d8f] to-[#825bac]">
                   Simplified.
                 </span>
               </h1>
 
-              <p className="text-gray-300 text-lg font-medium max-w-md leading-relaxed">
+              <p className="text-gray-300 text-sm md:text-lg font-medium max-w-md leading-relaxed">
                 Experience the convenience of 24/7 smart lockers. We wash, you
                 enjoy.
               </p>
@@ -95,29 +84,28 @@ export default function LockerPage() {
         </div>
       </section>
 
-      {/* SEARCH SECTION */}
-      <section className="py-20 max-w-7xl mx-auto px-6">
+      <section className="py-16 md:py-20 max-w-7xl mx-auto px-5 md:px-6">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
+          className="text-center mb-12 md:mb-16"
         >
-          <h2 className="text-[11px] font-black text-[#662d8f] uppercase tracking-[0.3em] mb-3">
+          <h2 className="text-[10px] md:text-[11px] font-black text-[#662d8f] uppercase tracking-[0.3em] mb-3">
             Available Locations
           </h2>
 
-          <h3 className="text-4xl md:text-5xl font-black text-gray-900 uppercase tracking-tighter">
+          <h3 className="text-3xl sm:text-4xl md:text-5xl font-black text-gray-900 uppercase tracking-tighter">
             Find Your Nearest{" "}
             <span className="italic text-[#662d8f]">Hub</span>
           </h3>
 
-          <div className="mt-10 max-w-2xl mx-auto relative group">
-            <div className="absolute -inset-1 bg-gradient-to-r from-[#662d8f] to-[#825bac] rounded-[2.2rem] blur opacity-20 group-hover:opacity-40 transition duration-1000"></div>
+          <div className="mt-8 md:mt-10 max-w-2xl mx-auto relative group">
+            <div className="absolute -inset-1 bg-gradient-to-r from-[#662d8f] to-[#825bac] rounded-[2rem] blur opacity-20" />
 
             <div className="relative">
               <Search
-                className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-400"
+                className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400"
                 size={20}
               />
 
@@ -126,41 +114,43 @@ export default function LockerPage() {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 placeholder="Search by address or locker name..."
-                className="w-full pl-16 pr-8 py-6 bg-white border border-gray-100 rounded-[2rem] focus:outline-none focus:ring-2 focus:ring-[#662d8f]/50 transition-all font-bold shadow-xl shadow-gray-200/50 text-gray-900"
+                className="w-full pl-14 pr-5 py-5 md:py-6 bg-white border border-gray-100 rounded-[2rem] focus:outline-none focus:ring-2 focus:ring-[#662d8f]/50 transition-all font-bold shadow-xl shadow-gray-200/50 text-gray-900 text-sm"
               />
             </div>
           </div>
         </motion.div>
 
-        {/* LOCKERS GRID */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10">
           {filteredLocations.map((locker, index) => (
             <motion.div
               key={locker.id}
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.2 }}
+              transition={{ delay: index * 0.15 }}
               viewport={{ once: true }}
-              whileHover={{ y: -12 }}
-              className="group relative bg-white rounded-[3rem] overflow-hidden border border-gray-100 shadow-[0_20px_50px_rgba(0,0,0,0.04)] hover:shadow-[0_40px_80px_rgba(102,45,143,0.14)] transition-all duration-700"
+              className="group relative bg-white rounded-[2rem] md:rounded-[3rem] overflow-hidden border border-gray-100 shadow-[0_20px_50px_rgba(0,0,0,0.04)] transition-all duration-700"
             >
-              <div className="relative h-[350px] w-full overflow-hidden">
+              <div className="relative h-[240px] sm:h-[300px] md:h-[350px] w-full overflow-hidden bg-gray-100">
                 <Image
                   src={locker.image}
                   fill
-                  className="object-cover transition-transform duration-1000 group-hover:scale-110"
+                  className="object-cover transition-transform duration-1000 group-hover:scale-105"
                   alt={locker.name}
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  onError={(e) => {
+                    e.currentTarget.src = "/images/hero.png";
+                  }}
                 />
 
-                <div className="absolute top-6 right-6 bg-white/90 backdrop-blur-md text-gray-900 px-5 py-2.5 rounded-2xl text-[10px] font-black uppercase flex items-center gap-2 shadow-xl">
+                <div className="absolute top-4 right-4 md:top-6 md:right-6 bg-white/90 backdrop-blur-md text-gray-900 px-4 md:px-5 py-2 rounded-2xl text-[9px] md:text-[10px] font-black uppercase flex items-center gap-2 shadow-xl">
                   <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
                   {locker.status}
                 </div>
               </div>
 
-              <div className="p-10 flex justify-between items-center">
+              <div className="p-6 md:p-10 flex flex-col sm:flex-row gap-5 sm:items-center sm:justify-between">
                 <div>
-                  <h4 className="text-3xl font-black text-gray-900 uppercase tracking-tighter mb-2">
+                  <h4 className="text-2xl md:text-3xl font-black text-gray-900 uppercase tracking-tighter mb-2">
                     {locker.name}
                   </h4>
 
@@ -175,7 +165,7 @@ export default function LockerPage() {
                   target="_blank"
                   rel="noopener noreferrer"
                   whileTap={{ scale: 0.9 }}
-                  className="bg-gray-900 text-white w-14 h-14 rounded-2xl flex items-center justify-center hover:bg-[#662d8f] transition-all group-hover:rotate-[360deg] duration-700 shadow-lg"
+                  className="bg-gray-900 text-white w-full sm:w-14 h-14 rounded-2xl flex items-center justify-center hover:bg-[#662d8f] transition-all shadow-lg"
                 >
                   <Navigation size={24} />
                 </motion.a>
@@ -193,14 +183,13 @@ export default function LockerPage() {
         )}
       </section>
 
-      {/* HOW IT WORKS */}
-      <section className="bg-gray-900 py-32 rounded-[5rem] mx-6 mb-20 relative overflow-hidden">
+      <section className="bg-gray-900 py-20 md:py-32 rounded-[2.5rem] md:rounded-[5rem] mx-4 md:mx-6 mb-20 relative overflow-hidden">
         <div className="max-w-5xl mx-auto text-center px-6 relative z-10">
-          <h3 className="text-4xl font-black uppercase text-white tracking-tighter mb-20">
-            How It <span className="text-[#662d8f]">Works</span>
+          <h3 className="text-3xl md:text-4xl font-black uppercase text-white tracking-tighter mb-16 md:mb-20">
+            How It <span className="text-[#825bac]">Works</span>
           </h3>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-16">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-14 md:gap-16">
             {[
               {
                 step: "01",
@@ -219,7 +208,7 @@ export default function LockerPage() {
               },
             ].map((s, i) => (
               <motion.div key={i} className="relative">
-                <div className="text-8xl font-black text-white/5 absolute -top-12 left-1/2 -translate-x-1/2 select-none">
+                <div className="text-7xl md:text-8xl font-black text-white/5 absolute -top-10 md:-top-12 left-1/2 -translate-x-1/2 select-none">
                   {s.step}
                 </div>
 
