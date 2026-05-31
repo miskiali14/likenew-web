@@ -28,6 +28,7 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [cartCount, setCartCount] = useState(0);
+  const [mounted, setMounted] = useState(false);
 
   const translations = {
     EN: {
@@ -69,6 +70,8 @@ export default function Navbar() {
   const closeMobile = () => setMobileOpen(false);
 
   useEffect(() => {
+    setMounted(true);
+
     const updateCartCount = () => {
       const cart = JSON.parse(localStorage.getItem("cart") || "[]");
       setCartCount(cart.length);
@@ -78,6 +81,7 @@ export default function Navbar() {
     window.addEventListener("cartUpdated", updateCartCount);
 
     const handleScroll = () => setScrolled(window.scrollY > 20);
+    handleScroll();
     window.addEventListener("scroll", handleScroll);
 
     return () => {
@@ -88,8 +92,9 @@ export default function Navbar() {
 
   return (
     <nav
+      suppressHydrationWarning
       className={`fixed top-0 left-0 w-full z-[100] font-[Ubuntu] transition-all duration-500 px-3 md:px-16 ${
-        scrolled
+        mounted && scrolled
           ? "py-2 bg-white/90 backdrop-blur-xl shadow-lg"
           : "py-3 md:py-5 bg-gradient-to-b from-black/60 to-transparent"
       }`}
@@ -98,8 +103,8 @@ export default function Navbar() {
         <div className="flex items-center gap-3">
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className={`xl:hidden p-4 rounded-full border ${
-              scrolled
+            className={`xl:hidden p-4 rounded-full border transition-all ${
+              mounted && scrolled
                 ? "bg-[#662d8f] text-white border-[#825bac]"
                 : "bg-white text-gray-900 border-white/20"
             }`}
@@ -107,7 +112,7 @@ export default function Navbar() {
             {mobileOpen ? <X size={32} /> : <Menu size={32} />}
           </button>
 
-          <Link href="/">
+          <Link href="/" className="flex items-center">
             <img
               src="/logo.png"
               alt="LikeNew Logo"
@@ -118,7 +123,7 @@ export default function Navbar() {
 
         <div
           className={`hidden xl:flex items-center gap-10 font-black text-[10px] uppercase tracking-[0.2em] ${
-            scrolled ? "text-gray-600" : "text-white/90"
+            mounted && scrolled ? "text-gray-600" : "text-white/90"
           }`}
         >
           <Link href="/" className="hover:text-[#662d8f]">
@@ -190,7 +195,7 @@ export default function Navbar() {
             target="_blank"
             rel="noopener noreferrer"
             className={`hidden lg:flex items-center gap-3 font-black text-[11px] ${
-              scrolled ? "text-gray-900" : "text-white"
+              mounted && scrolled ? "text-gray-900" : "text-white"
             }`}
           >
             <Phone size={14} className="text-green-500" />
@@ -200,17 +205,19 @@ export default function Navbar() {
           <div
             className="hidden md:flex items-center gap-3 px-5 py-2.5 rounded-2xl border"
             style={{
-              backgroundColor: scrolled
-                ? "rgba(102,45,143,0.10)"
-                : "rgba(255,255,255,0.10)",
-              borderColor: scrolled
-                ? "rgba(130,91,172,0.25)"
-                : "rgba(255,255,255,0.12)",
+              backgroundColor:
+                mounted && scrolled
+                  ? "rgba(102,45,143,0.10)"
+                  : "rgba(255,255,255,0.10)",
+              borderColor:
+                mounted && scrolled
+                  ? "rgba(130,91,172,0.25)"
+                  : "rgba(255,255,255,0.12)",
             }}
           >
             <span
               className={`text-[9px] font-black uppercase tracking-[0.2em] ${
-                scrolled ? "text-[#662d8f]" : "text-white"
+                mounted && scrolled ? "text-[#662d8f]" : "text-white"
               }`}
             >
               {t.open247}
@@ -228,7 +235,7 @@ export default function Navbar() {
           >
             <button
               className={`flex items-center gap-2 px-3 py-2 rounded-xl border ${
-                scrolled
+                mounted && scrolled
                   ? "bg-gray-50 border-gray-200 text-gray-900"
                   : "bg-white/10 border-white/20 text-white"
               }`}
@@ -269,14 +276,14 @@ export default function Navbar() {
             <motion.div
               whileTap={{ scale: 0.9 }}
               className={`relative p-3 rounded-full shadow-xl border ${
-                scrolled
+                mounted && scrolled
                   ? "bg-[#662d8f] text-white border-[#825bac]"
                   : "bg-white text-gray-900 border-white/20"
               }`}
             >
               <ShoppingCart size={18} />
 
-              {cartCount > 0 && (
+              {mounted && cartCount > 0 && (
                 <span className="absolute -top-1.5 -right-1.5 bg-red-600 text-white text-[9px] font-black w-5 h-5 flex items-center justify-center rounded-full border-2 border-white">
                   {cartCount}
                 </span>
