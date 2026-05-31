@@ -357,7 +357,7 @@ export default function Navbar() {
 
                 <a
                   onClick={closeMobile}
-                  href="https://wa.me/252617372514"
+                  href="https://wa.me/252615311877"
                   target="_blank"
                   className="mt-4 bg-[#662d8f] text-white text-center py-4 rounded-2xl"
                 >
