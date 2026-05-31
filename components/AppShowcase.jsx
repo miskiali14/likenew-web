@@ -59,7 +59,7 @@ export default function AppShowcase() {
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-[#825bac]/20 via-transparent to-transparent -z-10" />
 
       <div className="max-w-7xl mx-auto px-5 sm:px-6 md:px-12">
-        <div className="flex flex-col lg:flex-row items-center gap-14 lg:gap-20">
+        <div className="flex flex-col-reverse lg:flex-row items-center gap-14 lg:gap-20">
           {/* LEFT SIDE */}
           <div className="w-full lg:w-1/2 space-y-8 md:space-y-10 text-center lg:text-left">
             <motion.div

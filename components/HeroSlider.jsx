@@ -234,7 +234,7 @@ export default function HeroSlider() {
                 x: 50,
                 opacity: 0,
               }}
-              className="fixed inset-0 z-[999] flex items-center justify-center p-4 bg-black/60 lg:relative lg:inset-auto lg:z-auto lg:bg-black/35 lg:p-2 lg:block backdrop-blur-2xl rounded-none lg:rounded-[2.5rem] w-full lg:max-w-[360px] overflow-hidden border border-white/25 shadow-[0_30px_80px_rgba(0,0,0,0.45)]"
+             className="absolute right-0 top-1/2 -translate-y-1/2 z-40 hidden lg:block w-full max-w-[360px]"
             >
               <div className="bg-black/35 lg:bg-transparent backdrop-blur-2xl rounded-[2.5rem] w-full max-w-[360px] overflow-hidden border border-white/25 p-2 lg:border-0 lg:p-0">
                 <div className="relative h-44 w-full rounded-[1.8rem] overflow-hidden">

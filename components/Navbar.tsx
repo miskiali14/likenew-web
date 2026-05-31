@@ -23,7 +23,6 @@ import { motion, AnimatePresence } from "framer-motion";
 export default function Navbar() {
   const [lang, setLang] = useState("EN");
   const [showLang, setShowLang] = useState(false);
-  const [showHours, setShowHours] = useState(false);
   const [showServices, setShowServices] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -56,7 +55,6 @@ export default function Navbar() {
       services: "Services",
       app: "App",
       lockers: "Lockers",
-      availability: "Availability",
       open247: "Open 24/7",
       whatsapp: "WhatsApp",
     },
@@ -66,7 +64,6 @@ export default function Navbar() {
       services: "Adeegyada",
       app: "App-ka",
       lockers: "Lockers",
-      availability: "Furan",
       open247: "Furan 24/7",
       whatsapp: "WhatsApp",
     },
@@ -80,36 +77,68 @@ export default function Navbar() {
   ];
 
   const services = [
-    { name: "Clean and Press", icon: <Shirt size={18} />, desc: "Professional dry cleaning", path: "/cleanandpress" },
-    { name: "Press Only", icon: <Wind size={18} />, desc: "Expert steam ironing", path: "/pressonly" },
-    { name: "Wash and Fold", icon: <Waves size={18} />, desc: "Daily laundry care", path: "/washfold" },
-    { name: "Bed and Bath", icon: <Bed size={18} />, desc: "Linens & towel cleaning", path: "/bedbath" },
-    { name: "Delivery", icon: <Truck size={18} />, desc: "Doorstep pickup & drop", path: "/delivery" },
-    { name: "Express", icon: <Zap size={18} />, desc: "Same day fast service", path: "/express" },
+    {
+      name: "Clean and Press",
+      icon: <Shirt size={18} />,
+      desc: "Professional dry cleaning",
+      path: "/cleanandpress",
+    },
+    {
+      name: "Press Only",
+      icon: <Wind size={18} />,
+      desc: "Expert steam ironing",
+      path: "/pressonly",
+    },
+    {
+      name: "Wash and Fold",
+      icon: <Waves size={18} />,
+      desc: "Daily laundry care",
+      path: "/washfold",
+    },
+    {
+      name: "Bed and Bath",
+      icon: <Bed size={18} />,
+      desc: "Linens & towel cleaning",
+      path: "/bedbath",
+    },
+    {
+      name: "Delivery",
+      icon: <Truck size={18} />,
+      desc: "Doorstep pickup & drop",
+      path: "/delivery",
+    },
+    {
+      name: "Express",
+      icon: <Zap size={18} />,
+      desc: "Same day fast service",
+      path: "/express",
+    },
   ];
 
   const closeMobile = () => setMobileOpen(false);
 
   return (
     <nav
-      className={`fixed top-0 left-0 w-full z-[100] transition-all duration-500 ease-in-out px-4 md:px-16 ${
+      className={`fixed top-0 left-0 w-full z-[100] transition-all duration-500 px-4 md:px-8 lg:px-14 ${
         scrolled
-          ? "py-3 bg-white/80 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.1)] border-b border-white/20"
-          : "py-4 md:py-6 bg-gradient-to-b from-black/60 to-transparent"
+          ? "py-3 bg-white/90 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.1)] border-b border-white/20"
+          : "py-4 bg-gradient-to-b from-black/60 to-transparent"
       }`}
     >
-      <div className="max-w-[1400px] mx-auto flex items-center justify-between">
-        <Link href="/" className="flex items-center cursor-pointer">
+      <div className="max-w-[1400px] mx-auto flex items-center justify-between gap-4">
+        {/* LOGO */}
+        <Link href="/" className="flex items-center shrink-0">
           <img
             src="/logo.png"
             alt="LikeNew Logo"
-            className="h-20 md:h-32 lg:h-36 object-contain"
+            className="h-16 sm:h-20 md:h-24 lg:h-28 object-contain"
           />
         </Link>
 
+        {/* TABLET + DESKTOP MENU */}
         <div
-          className={`hidden xl:flex items-center gap-10 font-black text-[10px] uppercase tracking-[0.2em] transition-colors duration-500 ${
-            scrolled ? "text-gray-600" : "text-white/90"
+          className={`hidden md:flex items-center gap-5 lg:gap-8 font-black text-[9px] lg:text-[10px] uppercase tracking-[0.16em] lg:tracking-[0.2em] transition-colors duration-500 ${
+            scrolled ? "text-gray-700" : "text-white/90"
           }`}
         >
           <Link href="/" className="hover:text-purple-600 transition-all">
@@ -141,22 +170,23 @@ export default function Navbar() {
                   initial={{ opacity: 0, y: 15, scale: 0.95 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 15, scale: 0.95 }}
-                  className="absolute top-full left-1/2 -translate-x-1/2 mt-4 w-[480px] bg-white rounded-[2.5rem] shadow-[0_25px_50px_-12px_rgba(0,0,0,0.15)] border border-gray-100 p-6 grid grid-cols-2 gap-4"
+                  className="absolute top-full left-1/2 -translate-x-1/2 mt-4 w-[440px] bg-white rounded-[2rem] shadow-2xl border border-gray-100 p-5 grid grid-cols-2 gap-3"
                 >
                   {services.map((service, index) => (
                     <Link
                       key={index}
                       href={service.path}
-                      className="flex items-center gap-4 p-3.5 rounded-3xl hover:bg-purple-50 transition-all group/item border border-transparent hover:border-purple-100"
+                      className="flex items-center gap-3 p-3 rounded-2xl hover:bg-purple-50 transition-all group/item"
                     >
                       <div className="bg-purple-100 p-3 rounded-2xl text-purple-600 group-hover/item:bg-purple-600 group-hover/item:text-white transition-all">
                         {service.icon}
                       </div>
+
                       <div>
-                        <div className="text-black text-[11px] font-black uppercase tracking-tight">
+                        <div className="text-black text-[10px] font-black uppercase">
                           {service.name}
                         </div>
-                        <div className="text-gray-400 text-[10px] font-medium leading-tight">
+                        <div className="text-gray-400 text-[9px] font-medium leading-tight">
                           {service.desc}
                         </div>
                       </div>
@@ -176,45 +206,35 @@ export default function Navbar() {
           </Link>
         </div>
 
-        <div className="flex items-center gap-3 md:gap-6">
-          <div
-            className={`hidden lg:flex items-center gap-3 font-black text-[11px] transition-colors duration-500 ${
+        {/* RIGHT SIDE */}
+        <div className="flex items-center gap-2 md:gap-3 lg:gap-5 shrink-0">
+          <a
+            href="https://wa.me/252617372514"
+            target="_blank"
+            className={`hidden lg:flex items-center gap-2 font-black text-[10px] tracking-widest italic transition ${
               scrolled ? "text-gray-900" : "text-white"
             }`}
           >
-            <div className={`p-2 rounded-full ${scrolled ? "bg-green-100 text-green-600" : "bg-white/10 text-green-400"}`}>
-              <Phone size={14} />
-            </div>
-
-            <a
-              href="https://wa.me/252617372514"
-              target="_blank"
-              className="tracking-widest italic hover:text-green-500 transition"
-            >
-              {t.whatsapp}
-            </a>
-          </div>
+            <Phone size={14} className="text-green-500" />
+            {t.whatsapp}
+          </a>
 
           <div
-            className="relative hidden md:flex items-center gap-3 px-5 py-2.5 rounded-2xl border transition-all cursor-pointer"
-            style={{
-              backgroundColor: scrolled ? "rgba(124, 58, 237, 0.1)" : "rgba(255, 255, 255, 0.1)",
-              borderColor: scrolled ? "rgba(124, 58, 237, 0.2)" : "rgba(255, 255, 255, 0.1)",
-            }}
-            onMouseEnter={() => setShowHours(true)}
-            onMouseLeave={() => setShowHours(false)}
+            className={`hidden lg:flex items-center gap-2 px-4 py-2 rounded-2xl border ${
+              scrolled
+                ? "bg-purple-50 border-purple-100 text-purple-700"
+                : "bg-white/10 border-white/20 text-white"
+            }`}
           >
-            <span className={`text-[9px] font-black uppercase tracking-[0.2em] ${scrolled ? "text-purple-700" : "text-white"}`}>
+            <span className="text-[9px] font-black uppercase tracking-[0.18em]">
               {t.open247}
             </span>
-
-            <div className="bg-purple-600 p-1.5 rounded-xl shadow-lg shadow-purple-500/30 text-white">
-              <Clock size={14} />
-            </div>
+            <Clock size={14} className="text-purple-500" />
           </div>
 
+          {/* LANGUAGE */}
           <div
-            className="relative"
+            className="relative hidden sm:block"
             onMouseEnter={() => setShowLang(true)}
             onMouseLeave={() => setShowLang(false)}
           >
@@ -246,9 +266,9 @@ export default function Navbar() {
                         setLang(l.code);
                         setShowLang(false);
                       }}
-                      className="w-full flex items-center justify-between px-4 py-3 hover:bg-purple-50 transition-colors group text-black"
+                      className="w-full flex items-center justify-between px-4 py-3 hover:bg-purple-50 text-black"
                     >
-                      <span className="text-[10px] font-bold group-hover:text-purple-600">
+                      <span className="text-[10px] font-bold">
                         {l.name}
                       </span>
                       <span>{l.flag}</span>
@@ -259,9 +279,10 @@ export default function Navbar() {
             </AnimatePresence>
           </div>
 
+          {/* MOBILE BUTTON */}
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className={`xl:hidden p-3 rounded-full border transition-all ${
+            className={`md:hidden p-3 rounded-full border transition-all ${
               scrolled
                 ? "bg-purple-600 text-white border-purple-400"
                 : "bg-white text-gray-900 border-white/20"
@@ -270,6 +291,7 @@ export default function Navbar() {
             {mobileOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
 
+          {/* CART */}
           <Link href="/order">
             <motion.div
               whileTap={{ scale: 0.9 }}
@@ -291,19 +313,27 @@ export default function Navbar() {
         </div>
       </div>
 
+      {/* MOBILE MENU */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
             initial={{ opacity: 0, y: -16 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -16 }}
-            className="xl:hidden absolute top-full left-4 right-4 bg-white rounded-[2rem] shadow-2xl border border-gray-100 p-5 z-[200] max-h-[75vh] overflow-y-auto"
+            className="md:hidden absolute top-full left-4 right-4 bg-white rounded-[2rem] shadow-2xl border border-gray-100 p-5 z-[200] max-h-[75vh] overflow-y-auto"
           >
             <div className="flex flex-col gap-3 text-black font-black text-[12px] uppercase tracking-widest">
-              <Link onClick={closeMobile} href="/">Home</Link>
-              <Link onClick={closeMobile} href="/about">About</Link>
+              <Link onClick={closeMobile} href="/">
+                Home
+              </Link>
 
-              <div className="pt-2 text-purple-700 text-[10px]">Services</div>
+              <Link onClick={closeMobile} href="/about">
+                About
+              </Link>
+
+              <div className="pt-2 text-purple-700 text-[10px]">
+                Services
+              </div>
 
               {services.map((service, index) => (
                 <Link
@@ -317,9 +347,19 @@ export default function Navbar() {
                 </Link>
               ))}
 
-              <Link onClick={closeMobile} href="/mobileapp">App</Link>
-              <Link onClick={closeMobile} href="/lockers">Lockers</Link>
-              <a onClick={closeMobile} href="https://wa.me/252617372514" target="_blank">
+              <Link onClick={closeMobile} href="/mobileapp">
+                App
+              </Link>
+
+              <Link onClick={closeMobile} href="/lockers">
+                Lockers
+              </Link>
+
+              <a
+                onClick={closeMobile}
+                href="https://wa.me/252617372514"
+                target="_blank"
+              >
                 WhatsApp
               </a>
             </div>
