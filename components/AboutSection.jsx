@@ -1,4 +1,5 @@
 "use client";
+
 import { Check, Truck, MapPin, Phone } from "lucide-react";
 import { motion } from "framer-motion";
 import Image from "next/image";
@@ -10,21 +11,21 @@ export default function AboutSection() {
   return (
     <section
       id="about"
-      className="relative bg-white py-24 px-6 md:px-16 scroll-mt-20 overflow-hidden"
+      className="relative bg-[#fbf8ff] py-24 px-6 md:px-16 scroll-mt-20 overflow-hidden font-[Ubuntu]"
     >
-      {/* Background Decor (Circles) */}
-      <div className="absolute top-0 right-0 -mr-20 w-64 h-64 bg-[#825bac]/10 rounded-full blur-3xl opacity-50" />
-      <div className="absolute bottom-0 left-0 -ml-20 w-64 h-64 bg-red-50 rounded-full blur-3xl opacity-50" />
+      {/* Background Decor */}
+      <div className="absolute top-0 right-0 -mr-20 w-64 h-64 bg-[#662d8f]/15 rounded-full blur-3xl opacity-70" />
+      <div className="absolute bottom-0 left-0 -ml-20 w-64 h-64 bg-[#825bac]/15 rounded-full blur-3xl opacity-70" />
 
       <motion.div
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.8, ease: "easeOut" }}
-        className="max-w-6xl mx-auto bg-white rounded-[3.5rem] shadow-[0_30px_100px_rgba(0,0,0,0.06)] overflow-hidden border border-gray-100"
+        className="max-w-6xl mx-auto bg-white rounded-[3.5rem] shadow-[0_30px_100px_rgba(102,45,143,0.10)] overflow-hidden border border-[#825bac]/15"
       >
         <div className="flex flex-col md:flex-row items-center gap-12 p-8 md:p-16">
-          {/* BIDIX: Sawirka Gaariga oo leh Animation */}
+          {/* LEFT IMAGE */}
           <div className="w-full md:w-[45%] relative">
             <motion.div
               animate={{ y: [0, -15, 0] }}
@@ -45,23 +46,23 @@ export default function AboutSection() {
               </div>
             </motion.div>
 
-            <div className="absolute -bottom-6 -right-6 bg-white p-6 rounded-3xl shadow-xl z-20 flex items-center gap-4 border border-gray-50">
+            <div className="absolute -bottom-6 -right-6 bg-white p-6 rounded-3xl shadow-xl z-20 flex items-center gap-4 border border-[#825bac]/15">
               <div className="bg-[#825bac]/20 p-3 rounded-2xl text-[#662d8f]">
                 <Truck size={24} />
               </div>
 
               <div>
-                <p className="text-[10px] font-black uppercase text-gray-400 tracking-widest leading-none">
+                <p className="text-[10px] font-black uppercase text-[#825bac] tracking-widest leading-none">
                   Fastest
                 </p>
-                <p className="text-sm font-black text-gray-900 uppercase">
+                <p className="text-sm font-black text-[#662d8f] uppercase">
                   Delivery
                 </p>
               </div>
             </div>
           </div>
 
-          {/* MIDIG: Qoraalka */}
+          {/* RIGHT TEXT */}
           <div className="w-full md:w-[55%] space-y-8">
             <div className="space-y-4">
               <span className="text-[#662d8f] text-xs font-black uppercase tracking-[0.4em]">
@@ -82,7 +83,6 @@ export default function AboutSection() {
               and premium garment care.
             </p>
 
-            {/* Liiska Checkmark-yada */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-5 pt-4">
               {[
                 "Transparency",
@@ -95,7 +95,7 @@ export default function AboutSection() {
                   whileHover={{ x: 5 }}
                   className="flex items-center gap-3 group"
                 >
-                  <div className="bg-gray-900 group-hover:bg-[#662d8f] transition-colors rounded-full p-1 text-white">
+                  <div className="bg-[#662d8f] group-hover:bg-[#825bac] transition-colors rounded-full p-1 text-white">
                     <Check size={14} strokeWidth={4} />
                   </div>
 
@@ -108,31 +108,31 @@ export default function AboutSection() {
           </div>
         </div>
 
-        {/* FOOMKA HOOSE (Modern CTA Bar) */}
-        <div className="bg-gray-50/80 backdrop-blur-sm border-t border-gray-100 p-8 flex flex-col lg:flex-row justify-center items-center gap-5">
+        {/* CTA BAR */}
+        <div className="bg-[#fbf8ff] backdrop-blur-sm border-t border-[#825bac]/15 p-8 flex flex-col lg:flex-row justify-center items-center gap-5">
           <div className="relative w-full lg:w-72">
             <MapPin
               size={16}
-              className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-400"
+              className="absolute left-6 top-1/2 -translate-y-1/2 text-[#825bac]"
             />
 
             <input
               type="text"
               placeholder="Your Address"
-              className="w-full pl-14 pr-6 py-4 rounded-full border border-gray-200 text-xs font-bold uppercase tracking-widest focus:ring-2 focus:ring-[#662d8f] outline-none transition-all"
+              className="w-full pl-14 pr-6 py-4 rounded-full border border-[#825bac]/20 text-xs font-bold uppercase tracking-widest focus:ring-2 focus:ring-[#662d8f] outline-none transition-all"
             />
           </div>
 
           <div className="relative w-full lg:w-72">
             <Phone
               size={16}
-              className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-400"
+              className="absolute left-6 top-1/2 -translate-y-1/2 text-[#825bac]"
             />
 
             <input
               type="text"
               placeholder="Phone Number"
-              className="w-full pl-14 pr-6 py-4 rounded-full border border-gray-200 text-xs font-bold uppercase tracking-widest focus:ring-2 focus:ring-[#662d8f] outline-none transition-all"
+              className="w-full pl-14 pr-6 py-4 rounded-full border border-[#825bac]/20 text-xs font-bold uppercase tracking-widest focus:ring-2 focus:ring-[#662d8f] outline-none transition-all"
             />
           </div>
 
