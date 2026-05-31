@@ -16,37 +16,18 @@ import {
   Menu,
   X,
 } from "lucide-react";
-
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 
+type Lang = "EN" | "SO";
+
 export default function Navbar() {
-  const [lang, setLang] = useState("EN");
+  const [lang, setLang] = useState<Lang>("EN");
   const [showLang, setShowLang] = useState(false);
   const [showServices, setShowServices] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [cartCount, setCartCount] = useState(0);
-
-  const updateCartCount = () => {
-    if (typeof window !== "undefined") {
-      const cart = JSON.parse(localStorage.getItem("cart") || "[]");
-      setCartCount(cart.length);
-    }
-  };
-
-  useEffect(() => {
-    updateCartCount();
-    window.addEventListener("cartUpdated", updateCartCount);
-
-    const handleScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      window.removeEventListener("cartUpdated", updateCartCount);
-    };
-  }, []);
 
   const translations = {
     EN: {
@@ -69,9 +50,9 @@ export default function Navbar() {
     },
   };
 
-  const t = translations[lang as keyof typeof translations];
+  const t = translations[lang];
 
-  const languages = [
+  const languages: { code: Lang; name: string; flag: string }[] = [
     { code: "EN", name: "English", flag: "🇺🇸" },
     { code: "SO", name: "Soomaali", flag: "🇸🇴" },
   ];
@@ -87,11 +68,29 @@ export default function Navbar() {
 
   const closeMobile = () => setMobileOpen(false);
 
+  useEffect(() => {
+    const updateCartCount = () => {
+      const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+      setCartCount(cart.length);
+    };
+
+    updateCartCount();
+    window.addEventListener("cartUpdated", updateCartCount);
+
+    const handleScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("cartUpdated", updateCartCount);
+    };
+  }, []);
+
   return (
     <nav
-      className={`fixed top-0 left-0 w-full z-[100] font-[Ubuntu] transition-all duration-500 ease-in-out px-3 md:px-16 ${
+      className={`fixed top-0 left-0 w-full z-[100] font-[Ubuntu] transition-all duration-500 px-3 md:px-16 ${
         scrolled
-          ? "py-2 bg-white/90 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.1)] border-b border-white/20"
+          ? "py-2 bg-white/90 backdrop-blur-xl shadow-lg"
           : "py-3 md:py-5 bg-gradient-to-b from-black/60 to-transparent"
       }`}
     >
@@ -99,7 +98,7 @@ export default function Navbar() {
         <div className="flex items-center gap-3">
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className={`xl:hidden p-4 rounded-full border transition-all ${
+            className={`xl:hidden p-4 rounded-full border ${
               scrolled
                 ? "bg-[#662d8f] text-white border-[#825bac]"
                 : "bg-white text-gray-900 border-white/20"
@@ -108,7 +107,7 @@ export default function Navbar() {
             {mobileOpen ? <X size={32} /> : <Menu size={32} />}
           </button>
 
-          <Link href="/" className="flex items-center cursor-pointer">
+          <Link href="/">
             <img
               src="/logo.png"
               alt="LikeNew Logo"
@@ -118,15 +117,15 @@ export default function Navbar() {
         </div>
 
         <div
-          className={`hidden xl:flex items-center gap-10 font-black text-[10px] uppercase tracking-[0.2em] transition-colors duration-500 ${
+          className={`hidden xl:flex items-center gap-10 font-black text-[10px] uppercase tracking-[0.2em] ${
             scrolled ? "text-gray-600" : "text-white/90"
           }`}
         >
-          <Link href="/" className="hover:text-[#662d8f] transition-all">
+          <Link href="/" className="hover:text-[#662d8f]">
             {t.home}
           </Link>
 
-          <Link href="/about" className="hover:text-[#662d8f] transition-all">
+          <Link href="/about" className="hover:text-[#662d8f]">
             {t.about}
           </Link>
 
@@ -135,13 +134,11 @@ export default function Navbar() {
             onMouseEnter={() => setShowServices(true)}
             onMouseLeave={() => setShowServices(false)}
           >
-            <div className="flex items-center gap-1.5 hover:text-[#662d8f] transition-all">
+            <div className="flex items-center gap-1.5 hover:text-[#662d8f]">
               <span>{t.services}</span>
               <ChevronDown
                 size={14}
-                className={`transition-transform duration-500 ${
-                  showServices ? "rotate-180 text-[#662d8f]" : ""
-                }`}
+                className={showServices ? "rotate-180 text-[#662d8f]" : ""}
               />
             </div>
 
@@ -157,17 +154,17 @@ export default function Navbar() {
                     <Link
                       key={index}
                       href={service.path}
-                      className="flex items-center gap-4 p-3.5 rounded-3xl hover:bg-[#825bac]/10 transition-all group/item border border-transparent hover:border-[#825bac]/20"
+                      className="flex items-center gap-4 p-3.5 rounded-3xl hover:bg-[#825bac]/10"
                     >
-                      <div className="bg-[#825bac]/15 p-3 rounded-2xl text-[#662d8f] group-hover/item:bg-[#662d8f] group-hover/item:text-white transition-all">
+                      <div className="bg-[#825bac]/15 p-3 rounded-2xl text-[#662d8f]">
                         {service.icon}
                       </div>
 
                       <div>
-                        <div className="text-black text-[11px] font-black uppercase tracking-tight">
+                        <div className="text-black text-[11px] font-black uppercase">
                           {service.name}
                         </div>
-                        <div className="text-gray-400 text-[10px] font-medium leading-tight">
+                        <div className="text-gray-400 text-[10px]">
                           {service.desc}
                         </div>
                       </div>
@@ -178,46 +175,48 @@ export default function Navbar() {
             </AnimatePresence>
           </div>
 
-          <Link href="/mobileapp" className="hover:text-[#662d8f] transition-all">
+          <Link href="/mobileapp" className="hover:text-[#662d8f]">
             {t.app}
           </Link>
 
-          <Link href="/lockers" className="hover:text-[#662d8f] transition-all">
+          <Link href="/lockers" className="hover:text-[#662d8f]">
             {t.lockers}
           </Link>
         </div>
 
         <div className="flex items-center gap-3 md:gap-6">
-          <div
-            className={`hidden lg:flex items-center gap-3 font-black text-[11px] transition-colors duration-500 ${
+          <a
+            href="https://wa.me/252617372514"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`hidden lg:flex items-center gap-3 font-black text-[11px] ${
               scrolled ? "text-gray-900" : "text-white"
             }`}
           >
-            <div className={`p-2 rounded-full ${scrolled ? "bg-green-100 text-green-600" : "bg-white/10 text-green-400"}`}>
-              <Phone size={14} />
-            </div>
-
-            <a
-              href="https://wa.me/252617372514"
-              target="_blank"
-              className="tracking-widest italic hover:text-green-500 transition"
-            >
-              {t.whatsapp}
-            </a>
-          </div>
+            <Phone size={14} className="text-green-500" />
+            {t.whatsapp}
+          </a>
 
           <div
-            className="relative hidden md:flex items-center gap-3 px-5 py-2.5 rounded-2xl border transition-all cursor-pointer"
+            className="hidden md:flex items-center gap-3 px-5 py-2.5 rounded-2xl border"
             style={{
-              backgroundColor: scrolled ? "rgba(102,45,143,0.10)" : "rgba(255,255,255,0.10)",
-              borderColor: scrolled ? "rgba(130,91,172,0.25)" : "rgba(255,255,255,0.12)",
+              backgroundColor: scrolled
+                ? "rgba(102,45,143,0.10)"
+                : "rgba(255,255,255,0.10)",
+              borderColor: scrolled
+                ? "rgba(130,91,172,0.25)"
+                : "rgba(255,255,255,0.12)",
             }}
           >
-            <span className={`text-[9px] font-black uppercase tracking-[0.2em] ${scrolled ? "text-[#662d8f]" : "text-white"}`}>
+            <span
+              className={`text-[9px] font-black uppercase tracking-[0.2em] ${
+                scrolled ? "text-[#662d8f]" : "text-white"
+              }`}
+            >
               {t.open247}
             </span>
 
-            <div className="bg-[#662d8f] p-1.5 rounded-xl shadow-lg shadow-[#825bac]/30 text-white">
+            <div className="bg-[#662d8f] p-1.5 rounded-xl text-white">
               <Clock size={14} />
             </div>
           </div>
@@ -228,7 +227,7 @@ export default function Navbar() {
             onMouseLeave={() => setShowLang(false)}
           >
             <button
-              className={`flex items-center gap-2 px-3 py-2 rounded-xl border transition-all ${
+              className={`flex items-center gap-2 px-3 py-2 rounded-xl border ${
                 scrolled
                   ? "bg-gray-50 border-gray-200 text-gray-900"
                   : "bg-white/10 border-white/20 text-white"
@@ -255,11 +254,9 @@ export default function Navbar() {
                         setLang(l.code);
                         setShowLang(false);
                       }}
-                      className="w-full flex items-center justify-between px-4 py-3 hover:bg-[#825bac]/10 transition-colors group text-black"
+                      className="w-full flex items-center justify-between px-4 py-3 hover:bg-[#825bac]/10 text-black"
                     >
-                      <span className="text-[10px] font-bold group-hover:text-[#662d8f]">
-                        {l.name}
-                      </span>
+                      <span className="text-[10px] font-bold">{l.name}</span>
                       <span>{l.flag}</span>
                     </button>
                   ))}
@@ -271,7 +268,7 @@ export default function Navbar() {
           <Link href="/order">
             <motion.div
               whileTap={{ scale: 0.9 }}
-              className={`relative p-3 rounded-full transition-all duration-300 cursor-pointer shadow-xl border ${
+              className={`relative p-3 rounded-full shadow-xl border ${
                 scrolled
                   ? "bg-[#662d8f] text-white border-[#825bac]"
                   : "bg-white text-gray-900 border-white/20"
@@ -304,7 +301,6 @@ export default function Navbar() {
               initial={{ opacity: 0, x: -320 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -320 }}
-              transition={{ type: "spring", stiffness: 260, damping: 28 }}
               className="xl:hidden fixed top-0 left-0 h-screen w-[82%] max-w-[360px] bg-white z-[200] shadow-2xl p-6 overflow-y-auto font-[Ubuntu]"
             >
               <div className="flex items-center justify-between mb-8">
@@ -323,11 +319,19 @@ export default function Navbar() {
               </div>
 
               <div className="flex flex-col gap-4 text-black font-black text-[16px] uppercase tracking-[0.12em]">
-                <Link onClick={closeMobile} href="/" className="py-3 border-b border-gray-100">
+                <Link
+                  onClick={closeMobile}
+                  href="/"
+                  className="py-3 border-b border-gray-100"
+                >
                   Home
                 </Link>
 
-                <Link onClick={closeMobile} href="/about" className="py-3 border-b border-gray-100">
+                <Link
+                  onClick={closeMobile}
+                  href="/about"
+                  className="py-3 border-b border-gray-100"
+                >
                   About
                 </Link>
 
@@ -347,18 +351,27 @@ export default function Navbar() {
                   </Link>
                 ))}
 
-                <Link onClick={closeMobile} href="/mobileapp" className="py-3 border-b border-gray-100">
+                <Link
+                  onClick={closeMobile}
+                  href="/mobileapp"
+                  className="py-3 border-b border-gray-100"
+                >
                   App
                 </Link>
 
-                <Link onClick={closeMobile} href="/lockers" className="py-3 border-b border-gray-100">
+                <Link
+                  onClick={closeMobile}
+                  href="/lockers"
+                  className="py-3 border-b border-gray-100"
+                >
                   Lockers
                 </Link>
 
                 <a
                   onClick={closeMobile}
-                  href="https://wa.me/252615311877"
+                  href="https://wa.me/252617372514"
                   target="_blank"
+                  rel="noopener noreferrer"
                   className="mt-4 bg-[#662d8f] text-white text-center py-4 rounded-2xl"
                 >
                   WhatsApp
