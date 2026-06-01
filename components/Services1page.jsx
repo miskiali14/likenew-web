@@ -29,14 +29,11 @@ export default function PremiumServicesPage() {
   ];
 
   const handleGroupClick = (groupName) => {
-    const isPressOnly = activeTab === "Press Only";
-    const isWashFold = activeTab === "Wash & Fold";
-    const isBedBath = activeTab === "Bed & Bath";
-
     let sectionParam = "?tab=29";
-    if (isPressOnly) sectionParam = "?tab=30";
-    if (isWashFold) sectionParam = "?tab=32";
-    if (isBedBath) sectionParam = "?tab=31";
+
+    if (activeTab === "Press Only") sectionParam = "?tab=30";
+    if (activeTab === "Wash & Fold") sectionParam = "?tab=32";
+    if (activeTab === "Bed & Bath") sectionParam = "?tab=31";
 
     if (groupName === "Ladies Group") router.push(`/ladiespage${sectionParam}`);
     else if (groupName === "Men Group") router.push(`/menpage${sectionParam}`);
@@ -80,76 +77,141 @@ export default function PremiumServicesPage() {
         };
 
         const targetDressItems = [
-          "african dress", "زي افريقي", "aviation dress", "زي طيران مدني",
-          "isku-joga xirfadlayasha", "زي المحترفين", "isku-joog waxbarasho",
-          "uniform", "زي مدرسي", "ixraam", "احرام", "jaakada dhaqaatiirta",
-          "doctor jacket", "جاكيت طبيب", "military dress", "زي عسكري",
-          "police dress", "زي شرطي", "traffic dress", "زي مرور",
+          "african dress",
+          "زي افريقي",
+          "aviation dress",
+          "زي طيران مدني",
+          "isku-joga xirfadlayasha",
+          "زي المحترفين",
+          "isku-joog waxbarasho",
+          "uniform",
+          "زي مدرسي",
+          "ixraam",
+          "احرام",
+          "jaakada dhaqaatiirta",
+          "doctor jacket",
+          "جاكيت طبيب",
+          "military dress",
+          "زي عسكري",
+          "police dress",
+          "زي شرطي",
+          "traffic dress",
+          "زي مرور",
         ];
 
         rawProducts.forEach((prod) => {
           if (!prod) return;
 
-          const pName = (prod.name || "").toLowerCase().trim().replace(/\s+/g, " ");
+          const pName = (prod.name || "")
+            .toLowerCase()
+            .trim()
+            .replace(/\s+/g, " ");
+
           const sectionId = String(prod.section || "").trim();
           let gName = null;
 
-          if (pName.includes("bag") || pName.includes("boorso")) gName = "Bags Group";
-          else if (pName.includes("shoe") || pName.includes("kab")) gName = "Shoes Group";
-          else if (targetDressItems.some((target) => pName.includes(target))) gName = "Dress Group";
-          else if (
-            pName.includes("ladi") || pName.includes("dirac") || pName.includes("gorgorad") ||
-            pName.includes("baati") || pName.includes("abaya") || pName.includes("cabaya") ||
-            pName.includes("taash") || pName.includes("xijaab") || pName.includes("indha-shareer") ||
-            pName.includes("qamaar") || pName.includes("headscarf") || pName.includes("rajabeeto") ||
+          if (pName.includes("guest") || pName.includes("marti")) {
+            gName = "Guest";
+          } else if (pName.includes("bag") || pName.includes("boorso")) {
+            gName = "Bags Group";
+          } else if (pName.includes("shoe") || pName.includes("kab")) {
+            gName = "Shoes Group";
+          } else if (targetDressItems.some((target) => pName.includes(target))) {
+            gName = "Dress Group";
+          } else if (
+            pName.includes("ladi") ||
+            pName.includes("dirac") ||
+            pName.includes("gorgorad") ||
+            pName.includes("baati") ||
+            pName.includes("abaya") ||
+            pName.includes("cabaya") ||
+            pName.includes("taash") ||
+            pName.includes("xijaab") ||
+            pName.includes("indha-shareer") ||
+            pName.includes("qamaar") ||
+            pName.includes("headscarf") ||
+            pName.includes("rajabeeto") ||
             pName.includes("istiriij")
-          ) gName = "Ladies Group";
-          else if (
-            pName.includes("underwear") || pName.includes("nigis") || pName.includes("buumo") ||
-            pName.includes("garan") || pName.includes("funaanad hoose") || pName.includes("shukumaan") ||
-            pName.includes("socks") || pName.includes("sigsaan") || pName.includes("towel")
-          ) gName = pName.includes("shukumaan") || pName.includes("towel") ? "Bath" : "Underwear Group";
-          else if (pName.includes("suit") || pName.includes("suud") || pName.includes("traffic dress")) gName = "Suit Group";
-          else if (pName.includes("sport") || pName.includes("sports")) gName = "Sportswear Group";
-          else if (
-            pName.includes("bed") || pName.includes("sariir") || pName.includes("buste") ||
-            pName.includes("go'") || pName.includes("kubeerto") || pName.includes("foodare")
-          ) gName = "Bed";
-          else if (
-            pName.includes("daah") || pName.includes("roog") || pName.includes("maro fadhi") ||
-            pName.includes("maro miis") || pName.includes("sali salaad") || pName.includes("caga-saar")
-          ) gName = "Home";
-          else if (pName.includes("guest") || pName.includes("marti")) gName = "Guest";
-          else if (sectionId === "31") gName = "Bath";
-          else if (
-            pName.includes("traditional") || pName.includes("futashaari") ||
-            pName.includes("macawiis") || pName.includes("sarong") ||
-            pName.includes("shaal") || pName.includes("go/shaal") || pName.includes("ixraam") ||
-            pName.includes("بدلة") || pName.includes("شال") || pName.includes("fوطه") ||
+          ) {
+            gName = "Ladies Group";
+          } else if (
+            pName.includes("underwear") ||
+            pName.includes("nigis") ||
+            pName.includes("buumo") ||
+            pName.includes("garan") ||
+            pName.includes("funaanad hoose") ||
+            pName.includes("shukumaan") ||
+            pName.includes("socks") ||
+            pName.includes("sigsaan") ||
+            pName.includes("towel")
+          ) {
+            gName =
+              pName.includes("shukumaan") || pName.includes("towel")
+                ? "Bath"
+                : "Underwear Group";
+          } else if (
+            pName.includes("bed") ||
+            pName.includes("sariir") ||
+            pName.includes("buste") ||
+            pName.includes("go'") ||
+            pName.includes("kubeerto") ||
+            pName.includes("foodare")
+          ) {
+            gName = "Bed";
+          } else if (
+            pName.includes("daah") ||
+            pName.includes("roog") ||
+            pName.includes("maro fadhi") ||
+            pName.includes("maro miis") ||
+            pName.includes("sali salaad") ||
+            pName.includes("caga-saar")
+          ) {
+            gName = "Home";
+          } else if (
+            pName.includes("suit") ||
+            pName.includes("suud") ||
+            pName.includes("traffic dress")
+          ) {
+            gName = "Suit Group";
+          } else if (pName.includes("sport") || pName.includes("sports")) {
+            gName = "Sportswear Group";
+          } else if (
+            pName.includes("traditional") ||
+            pName.includes("futashaari") ||
+            pName.includes("macawiis") ||
+            pName.includes("sarong") ||
+            pName.includes("shaal") ||
+            pName.includes("go/shaal") ||
+            pName.includes("ixraam") ||
+            pName.includes("بدلة") ||
+            pName.includes("شال") ||
+            pName.includes("fوطه") ||
             pName.includes("koofi")
-          ) gName = sectionId === "32" ? "Men Group" : "Traditional Group";
-          else if (pName.includes("men") || (pName.includes("shaati") && !pName.includes("futashaari"))) gName = "Men Group";
-
-          if (gName) {
-            if (sectionId === "30") {
-              if (!formatted["Press Only"][gName]) formatted["Press Only"][gName] = [];
-              formatted["Press Only"][gName].push(prod);
-            } else if (sectionId === "31") {
-              if (!formatted["Bed & Bath"][gName]) formatted["Bed & Bath"][gName] = [];
-              formatted["Bed & Bath"][gName].push(prod);
-            } else if (sectionId === "32") {
-              if (!formatted["Wash & Fold"][gName]) formatted["Wash & Fold"][gName] = [];
-              formatted["Wash & Fold"][gName].push(prod);
-            } else {
-              if (!formatted["Clean & Press"][gName]) formatted["Clean & Press"][gName] = [];
-              formatted["Clean & Press"][gName].push(prod);
-            }
+          ) {
+            gName = sectionId === "32" ? "Men Group" : "Traditional Group";
+          } else if (
+            pName.includes("men") ||
+            (pName.includes("shaati") && !pName.includes("futashaari"))
+          ) {
+            gName = "Men Group";
+          } else if (sectionId === "31") {
+            gName = "Bath";
           }
-        });
 
-        ["Bath", "Bed", "Home", "Guest"].forEach((key) => {
-          if (!formatted["Bed & Bath"][key]) {
-            formatted["Bed & Bath"][key] = [{ name: "Placeholder", price: 0 }];
+          if (!gName) return;
+
+          if (sectionId === "30") {
+            if (!formatted["Press Only"][gName]) formatted["Press Only"][gName] = [];
+            formatted["Press Only"][gName].push(prod);
+          } else if (sectionId === "31") {
+            if (!formatted["Bed & Bath"][gName]) formatted["Bed & Bath"][gName] = [];
+            formatted["Bed & Bath"][gName].push(prod);
+          } else if (sectionId === "32") {
+            if (!formatted["Wash & Fold"][gName]) formatted["Wash & Fold"][gName] = [];
+            formatted["Wash & Fold"][gName].push(prod);
+          } else {
+            if (!formatted["Clean & Press"][gName]) formatted["Clean & Press"][gName] = [];
+            formatted["Clean & Press"][gName].push(prod);
           }
         });
 
@@ -163,6 +225,18 @@ export default function PremiumServicesPage() {
 
     fetchServices();
   }, []);
+
+  const shouldHideCard = (colName) => {
+    if (activeTab === "Wash & Fold") {
+      return ["Traditional Group", "Dress Group", "Bed", "Home", "Guest"].includes(colName);
+    }
+
+    if (activeTab === "Bed & Bath") {
+      return colName === "Underwear Group";
+    }
+
+    return false;
+  };
 
   if (loading) {
     return (
@@ -206,13 +280,7 @@ export default function PremiumServicesPage() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {collections
-                  .filter((col) => {
-                    if (activeTab === "Wash & Fold") {
-                      if (col.name === "Traditional Group" || col.name === "Dress Group") return false;
-                    }
-                    if (activeTab === "Bed & Bath" && col.name === "Underwear Group") return false;
-                    return true;
-                  })
+                  .filter((col) => !shouldHideCard(col.name))
                   .map((col) => {
                     const groupName = col.name;
                     const groupItems = servicesData[activeTab]?.[groupName];
@@ -264,24 +332,20 @@ export default function PremiumServicesPage() {
               </h2>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                {servicesData[activeTab]?.[selectedGroup]?.map((item, idx) => {
-                  if (item.name === "Placeholder") return null;
+                {servicesData[activeTab]?.[selectedGroup]?.map((item, idx) => (
+                  <div
+                    key={idx}
+                    className="bg-white border border-[#825bac]/15 p-6 rounded-[2rem] text-center shadow-sm"
+                  >
+                    <h4 className="font-bold text-gray-900 text-xs uppercase mb-2">
+                      {item.name}
+                    </h4>
 
-                  return (
-                    <div
-                      key={idx}
-                      className="bg-white border border-[#825bac]/15 p-6 rounded-[2rem] text-center shadow-sm"
-                    >
-                      <h4 className="font-bold text-gray-900 text-xs uppercase mb-2">
-                        {item.name}
-                      </h4>
-
-                      <span className="text-[#662d8f] font-black text-lg">
-                        ${Number(item.price || 0).toFixed(2)}
-                      </span>
-                    </div>
-                  );
-                })}
+                    <span className="text-[#662d8f] font-black text-lg">
+                      ${Number(item.price || 0).toFixed(2)}
+                    </span>
+                  </div>
+                ))}
               </div>
             </motion.div>
           )}
