@@ -173,7 +173,7 @@ export default function PremiumServicesPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#fbf8ff] pt-24 pb-20 px-6 font-[Ubuntu]">
+    <div className="min-h-screen bg-[#fbf8ff] pt-24 pb-20 px-4 md:px-6 font-[Ubuntu]">
       <div className="max-w-6xl mx-auto">
         <AnimatePresence mode="wait">
           {!selectedGroup ? (
@@ -183,8 +183,8 @@ export default function PremiumServicesPage() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, x: -20 }}
             >
-              <div className="flex justify-center mb-12 overflow-x-auto py-2">
-                <div className="flex bg-white p-1.5 rounded-full border border-[#825bac]/20 shadow-sm">
+              <div className="mb-8 md:mb-12 w-full">
+                <div className="grid grid-cols-2 md:flex md:justify-center gap-2 bg-white p-2 rounded-[2rem] md:rounded-full border border-[#825bac]/20 shadow-sm">
                   {Object.keys(servicesData).map((tab) => (
                     <button
                       key={tab}
@@ -192,10 +192,10 @@ export default function PremiumServicesPage() {
                         setActiveTab(tab);
                         setSelectedGroup(null);
                       }}
-                      className={`px-8 py-3 rounded-full text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap ${
+                      className={`w-full md:w-auto px-3 md:px-8 py-3 rounded-full text-[9px] md:text-[10px] font-black uppercase tracking-wide md:tracking-widest transition-all whitespace-nowrap ${
                         activeTab === tab
                           ? "bg-[#662d8f] text-white shadow-lg shadow-[#825bac]/30"
-                          : "text-gray-500 hover:text-[#662d8f]"
+                          : "text-gray-500 hover:text-[#662d8f] bg-[#fbf8ff] md:bg-transparent"
                       }`}
                     >
                       {tab}
