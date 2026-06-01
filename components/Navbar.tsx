@@ -26,6 +26,7 @@ export default function Navbar() {
   const [showLang, setShowLang] = useState(false);
   const [showServices, setShowServices] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [cartCount, setCartCount] = useState(0);
   const [mounted, setMounted] = useState(false);
@@ -37,8 +38,9 @@ export default function Navbar() {
       services: "Services",
       app: "App",
       lockers: "Lockers",
+      express: "Express",
+      delivery: "Delivery",
       open247: "Open 24/7",
-      whatsapp: "WhatsApp",
     },
     SO: {
       home: "Bogga Hore",
@@ -46,8 +48,9 @@ export default function Navbar() {
       services: "Adeegyada",
       app: "App-ka",
       lockers: "Lockers",
+      express: "Express",
+      delivery: "Delivery",
       open247: "Furan 24/7",
-      whatsapp: "WhatsApp",
     },
   };
 
@@ -59,15 +62,48 @@ export default function Navbar() {
   ];
 
   const services = [
-    { name: "Clean and Press", icon: <Shirt size={18} />, desc: "Professional dry cleaning", path: "/cleanandpress" },
-    { name: "Press Only", icon: <Wind size={18} />, desc: "Expert steam ironing", path: "/pressonly" },
-    { name: "Wash and Fold", icon: <Waves size={18} />, desc: "Daily laundry care", path: "/washfold" },
-    { name: "Bed and Bath", icon: <Bed size={18} />, desc: "Linens & towel cleaning", path: "/bedbath" },
-    { name: "Delivery", icon: <Truck size={18} />, desc: "Doorstep pickup & drop", path: "/delivery" },
-    { name: "Express", icon: <Zap size={18} />, desc: "Same day fast service", path: "/express" },
+    {
+      name: "Clean and Press",
+      icon: <Shirt size={18} />,
+      desc: "Professional dry cleaning",
+      path: "/cleanandpress",
+    },
+    {
+      name: "Press Only",
+      icon: <Wind size={18} />,
+      desc: "Expert steam ironing",
+      path: "/pressonly",
+    },
+    {
+      name: "Wash and Fold",
+      icon: <Waves size={18} />,
+      desc: "Daily laundry care",
+      path: "/washfold",
+    },
+    {
+      name: "Bed and Bath",
+      icon: <Bed size={18} />,
+      desc: "Linens & towel cleaning",
+      path: "/bedbath",
+    },
+    {
+      name: "Delivery",
+      icon: <Truck size={18} />,
+      desc: "Doorstep pickup & drop",
+      path: "/delivery",
+    },
+    {
+      name: "Express",
+      icon: <Zap size={18} />,
+      desc: "Same day fast service",
+      path: "/express",
+    },
   ];
 
-  const closeMobile = () => setMobileOpen(false);
+  const closeMobile = () => {
+    setMobileOpen(false);
+    setMobileServicesOpen(false);
+  };
 
   useEffect(() => {
     setMounted(true);
@@ -93,65 +129,72 @@ export default function Navbar() {
   return (
     <nav
       suppressHydrationWarning
-      className={`fixed top-0 left-0 w-full z-[100] font-[Ubuntu] transition-all duration-500 px-3 md:px-16 ${
+      className={`fixed top-0 left-0 w-full z-[100] font-[Ubuntu] transition-all duration-300 px-4 md:px-16 ${
         mounted && scrolled
-          ? "py-2 bg-white/90 backdrop-blur-xl shadow-lg"
-          : "py-3 md:py-5 bg-gradient-to-b from-black/60 to-transparent"
+          ? "h-[64px] bg-white/95 backdrop-blur-xl shadow-sm"
+          : "h-[64px] bg-white"
       }`}
     >
-      <div className="max-w-[1400px] mx-auto flex items-center justify-between">
-        <div className="flex items-center gap-3">
+      <div className="max-w-[1180px] h-full mx-auto flex items-center justify-between">
+        {/* LEFT SIDE */}
+        <div className="flex items-center gap-5">
           <button
-            onClick={() => setMobileOpen(!mobileOpen)}
-            className={`xl:hidden p-3 rounded-full border transition-all ${
-              mounted && scrolled
-                ? "bg-[#662d8f] text-white border-[#825bac]"
-                : "bg-white text-gray-900 border-white/20"
-            }`}
+            type="button"
+            onClick={() => setMobileOpen(true)}
+            className="xl:hidden text-black p-1"
+            aria-label="Open menu"
           >
-            {mobileOpen ? <X size={18} /> : <Menu size={18} />}
+            <Menu size={24} />
           </button>
 
           <Link href="/" className="flex items-center">
             <img
               src="/logo.png"
               alt="LikeNew Logo"
-              className="h-28 sm:h-32 md:h-40 lg:h-44 object-contain"
+              className="h-14 sm:h-16 md:h-20 lg:h-24 object-contain"
             />
           </Link>
         </div>
 
-        <div
-          className={`hidden xl:flex items-center gap-10 font-black text-[10px] uppercase tracking-[0.2em] ${
-            mounted && scrolled ? "text-gray-600" : "text-white/90"
-          }`}
-        >
-          <Link href="/" className="hover:text-[#662d8f]">{t.home}</Link>
-          <Link href="/about" className="hover:text-[#662d8f]">{t.about}</Link>
+        {/* DESKTOP MENU */}
+        <div className="hidden xl:flex items-center gap-10 font-black text-[10px] uppercase tracking-[0.2em] text-gray-700">
+          <Link href="/" className="hover:text-[#662d8f] transition-colors">
+            {t.home}
+          </Link>
+
+          <Link href="/about" className="hover:text-[#662d8f] transition-colors">
+            {t.about}
+          </Link>
 
           <div
             className="relative py-2 cursor-pointer"
             onMouseEnter={() => setShowServices(true)}
             onMouseLeave={() => setShowServices(false)}
           >
-            <div className="flex items-center gap-1.5 hover:text-[#662d8f]">
+            <div className="flex items-center gap-1.5 hover:text-[#662d8f] transition-colors">
               <span>{t.services}</span>
-              <ChevronDown size={14} className={showServices ? "rotate-180 text-[#662d8f]" : ""} />
+              <ChevronDown
+                size={14}
+                className={`transition-transform ${
+                  showServices ? "rotate-180 text-[#662d8f]" : ""
+                }`}
+              />
             </div>
 
             <AnimatePresence>
               {showServices && (
                 <motion.div
-                  initial={{ opacity: 0, y: 15, scale: 0.95 }}
+                  initial={{ opacity: 0, y: 12, scale: 0.96 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: 15, scale: 0.95 }}
-                  className="absolute top-full left-1/2 -translate-x-1/2 mt-4 w-[480px] bg-white rounded-[2.5rem] shadow-2xl border border-[#825bac]/15 p-6 grid grid-cols-2 gap-4"
+                  exit={{ opacity: 0, y: 12, scale: 0.96 }}
+                  transition={{ duration: 0.18 }}
+                  className="absolute top-full left-1/2 -translate-x-1/2 mt-4 w-[480px] bg-white rounded-[2rem] shadow-2xl border border-[#825bac]/15 p-5 grid grid-cols-2 gap-3"
                 >
                   {services.map((service, index) => (
                     <Link
                       key={index}
                       href={service.path}
-                      className="flex items-center gap-4 p-3.5 rounded-3xl hover:bg-[#825bac]/10"
+                      className="flex items-center gap-4 p-3 rounded-2xl hover:bg-[#825bac]/10 transition-all"
                     >
                       <div className="bg-[#825bac]/15 p-3 rounded-2xl text-[#662d8f]">
                         {service.icon}
@@ -161,7 +204,7 @@ export default function Navbar() {
                         <div className="text-black text-[11px] font-black uppercase">
                           {service.name}
                         </div>
-                        <div className="text-gray-400 text-[10px]">
+                        <div className="text-gray-400 text-[10px] normal-case">
                           {service.desc}
                         </div>
                       </div>
@@ -172,78 +215,66 @@ export default function Navbar() {
             </AnimatePresence>
           </div>
 
-          <Link href="/mobileapp" className="hover:text-[#662d8f]">{t.app}</Link>
-          <Link href="/lockers" className="hover:text-[#662d8f]">{t.lockers}</Link>
+          <Link href="/mobileapp" className="hover:text-[#662d8f] transition-colors">
+            {t.app}
+          </Link>
+
+          <Link href="/lockers" className="hover:text-[#662d8f] transition-colors">
+            {t.lockers}
+          </Link>
         </div>
 
-        <div className="flex items-center gap-2 md:gap-6">
+        {/* RIGHT SIDE */}
+        <div className="flex items-center gap-3 md:gap-5">
           <a
             href="https://wa.me/252617372514"
             target="_blank"
             rel="noopener noreferrer"
-            className={`hidden lg:flex items-center gap-3 font-black text-[11px] ${
-              mounted && scrolled ? "text-gray-900" : "text-white"
-            }`}
+            className="hidden lg:flex items-center gap-2 text-[12px] font-semibold text-black hover:text-[#662d8f] transition-colors"
           >
-            <Phone size={14} className="text-green-500" />
-            {t.whatsapp}
+            <Phone size={14} className="text-[#662d8f]" />
+            <span>+252 61 737 2514</span>
           </a>
 
-          <div
-            className="hidden md:flex items-center gap-3 px-5 py-2.5 rounded-2xl border"
-            style={{
-              backgroundColor:
-                mounted && scrolled
-                  ? "rgba(102,45,143,0.10)"
-                  : "rgba(255,255,255,0.10)",
-              borderColor:
-                mounted && scrolled
-                  ? "rgba(130,91,172,0.25)"
-                  : "rgba(255,255,255,0.12)",
-            }}
-          >
-            <span
-              className={`text-[9px] font-black uppercase tracking-[0.2em] ${
-                mounted && scrolled ? "text-[#662d8f]" : "text-white"
-              }`}
-            >
-              {t.open247}
-            </span>
-
-            <div className="bg-[#662d8f] p-1.5 rounded-xl text-white">
-              <Clock size={14} />
-            </div>
+          <div className="hidden md:flex items-center gap-2 text-[11px] font-black text-[#662d8f] uppercase tracking-[0.16em]">
+            <Clock size={14} />
+            <span>{t.open247}</span>
           </div>
 
+          {/* LANGUAGE */}
           <div
-            className="relative hidden sm:block"
+            className="relative block"
             onMouseEnter={() => setShowLang(true)}
             onMouseLeave={() => setShowLang(false)}
           >
             <button
-              className={`flex items-center gap-2 px-3 py-2 rounded-xl border ${
-                mounted && scrolled
-                  ? "bg-gray-50 border-gray-200 text-gray-900"
-                  : "bg-white/10 border-white/20 text-white"
-              }`}
+              type="button"
+              onClick={() => setShowLang(!showLang)}
+              className="flex items-center gap-2 px-2 sm:px-3 py-2 rounded-xl bg-white text-black hover:text-[#662d8f] transition-colors"
             >
-              <Globe size={14} className="text-[#662d8f]" />
-              <span className="text-[10px] font-black uppercase tracking-widest">
+              <Globe size={16} className="text-[#662d8f]" />
+              <span className="text-[11px] font-black uppercase tracking-widest">
                 {lang}
               </span>
+              <ChevronDown
+                size={12}
+                className={`transition-transform ${showLang ? "rotate-180" : ""}`}
+              />
             </button>
 
             <AnimatePresence>
               {showLang && (
                 <motion.div
-                  initial={{ opacity: 0, scale: 0.95, y: 10 }}
+                  initial={{ opacity: 0, scale: 0.96, y: 8 }}
                   animate={{ opacity: 1, scale: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.95, y: 10 }}
+                  exit={{ opacity: 0, scale: 0.96, y: 8 }}
+                  transition={{ duration: 0.15 }}
                   className="absolute top-full right-0 mt-2 w-32 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden z-[120]"
                 >
                   {languages.map((l) => (
                     <button
                       key={l.code}
+                      type="button"
                       onClick={() => {
                         setLang(l.code);
                         setShowLang(false);
@@ -259,14 +290,11 @@ export default function Navbar() {
             </AnimatePresence>
           </div>
 
+          {/* CART */}
           <Link href="/order">
             <motion.div
-              whileTap={{ scale: 0.9 }}
-              className={`relative p-3 rounded-full shadow-xl border ${
-                mounted && scrolled
-                  ? "bg-[#662d8f] text-white border-[#825bac]"
-                  : "bg-white text-gray-900 border-white/20"
-              }`}
+              whileTap={{ scale: 0.92 }}
+              className="relative w-11 h-11 rounded-full bg-[#662d8f] text-white flex items-center justify-center"
             >
               <ShoppingCart size={18} />
 
@@ -280,6 +308,7 @@ export default function Navbar() {
         </div>
       </div>
 
+      {/* MOBILE DRAWER */}
       <AnimatePresence>
         {mobileOpen && (
           <>
@@ -288,92 +317,160 @@ export default function Navbar() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={closeMobile}
-              className="xl:hidden fixed inset-0 bg-black/45 z-[180]"
+              className="xl:hidden fixed inset-0 bg-black/55 z-[180]"
             />
 
             <motion.div
-              initial={{ opacity: 0, x: -320 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -320 }}
-              className="xl:hidden fixed top-0 left-0 h-screen w-[82%] max-w-[360px] bg-white z-[200] shadow-2xl p-6 overflow-y-auto font-[Ubuntu]"
+              initial={{ x: -360 }}
+              animate={{ x: 0 }}
+              exit={{ x: -360 }}
+              transition={{ duration: 0.25 }}
+              className="xl:hidden fixed top-0 left-0 h-screen w-[78%] max-w-[330px] bg-white z-[200] shadow-2xl font-[Ubuntu] flex flex-col"
             >
-              <div className="flex items-center justify-between mb-8">
-                <img src="/logo.png" alt="LikeNew Logo" className="h-24 object-contain" />
+              <div className="flex items-center justify-between px-5 py-5 border-b border-gray-100">
+                <h2 className="text-xl font-black text-black">Menu</h2>
 
-                <button onClick={closeMobile} className="p-3 rounded-full bg-[#662d8f] text-white">
-                  <X size={18} />
+                <button
+                  type="button"
+                  onClick={closeMobile}
+                  className="text-gray-500 hover:text-[#662d8f] transition-colors"
+                  aria-label="Close menu"
+                >
+                  <X size={22} />
                 </button>
               </div>
 
-              <div className="grid grid-cols-2 gap-3 mb-6">
-                {languages.map((l) => (
-                  <button
-                    key={l.code}
-                    onClick={() => setLang(l.code)}
-                    className={`flex items-center justify-center gap-2 py-3 rounded-2xl text-[11px] font-black uppercase ${
-                      lang === l.code
-                        ? "bg-[#662d8f] text-white"
-                        : "bg-[#825bac]/10 text-[#662d8f]"
-                    }`}
-                  >
-                    <span>{l.flag}</span>
-                    <span>{l.code}</span>
-                  </button>
-                ))}
-              </div>
-
-              <div className="flex items-center justify-between bg-[#825bac]/10 rounded-2xl px-4 py-4 mb-6">
-                <span className="text-[#662d8f] text-[11px] font-black uppercase tracking-[0.2em]">
-                  {t.open247}
-                </span>
-
-                <div className="bg-[#662d8f] p-2 rounded-xl text-white">
-                  <Clock size={18} />
-                </div>
-              </div>
-
-              <div className="flex flex-col gap-4 text-black font-black text-[16px] uppercase tracking-[0.12em]">
-                <Link onClick={closeMobile} href="/" className="py-3 border-b border-gray-100">
-                  Home
-                </Link>
-
-                <Link onClick={closeMobile} href="/about" className="py-3 border-b border-gray-100">
-                  About
-                </Link>
-
-                <div className="pt-4 text-[#662d8f] text-[12px] tracking-[0.25em]">
-                  Services
-                </div>
-
-                {services.map((service, index) => (
-                  <Link
-                    key={index}
-                    onClick={closeMobile}
-                    href={service.path}
-                    className="flex items-center gap-4 p-4 rounded-2xl bg-[#825bac]/10 text-black"
-                  >
-                    <span className="text-[#662d8f]">{service.icon}</span>
-                    <span>{service.name}</span>
-                  </Link>
-                ))}
-
-                <Link onClick={closeMobile} href="/mobileapp" className="py-3 border-b border-gray-100">
-                  App
-                </Link>
-
-                <Link onClick={closeMobile} href="/lockers" className="py-3 border-b border-gray-100">
-                  Lockers
-                </Link>
-
-                <a
+              <div className="flex-1 overflow-y-auto">
+                <Link
                   onClick={closeMobile}
+                  href="/"
+                  className="block px-5 py-4 text-lg font-medium text-black border-b border-gray-100"
+                >
+                  {t.home}
+                </Link>
+
+                <Link
+                  onClick={closeMobile}
+                  href="/about"
+                  className="block px-5 py-4 text-lg font-medium text-black border-b border-gray-100"
+                >
+                  {t.about}
+                </Link>
+
+                <button
+                  type="button"
+                  onClick={() => setMobileServicesOpen(!mobileServicesOpen)}
+                  className="w-full flex items-center justify-between px-5 py-5 text-left border-b border-gray-100"
+                >
+                  <span className="text-lg font-semibold text-black">
+                    {t.services}
+                  </span>
+
+                  <ChevronDown
+                    size={20}
+                    className={`transition-transform ${
+                      mobileServicesOpen ? "rotate-180 text-[#662d8f]" : ""
+                    }`}
+                  />
+                </button>
+
+                <AnimatePresence>
+                  {mobileServicesOpen && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      className="overflow-hidden bg-[#fbfbfb]"
+                    >
+                      <div className="px-5 py-5">
+                        <p className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] mb-4">
+                          Clothing Care
+                        </p>
+
+                        {services.slice(0, 4).map((service, index) => (
+                          <Link
+                            key={index}
+                            onClick={closeMobile}
+                            href={service.path}
+                            className="flex items-center gap-4 py-3 text-[15px] font-medium text-black"
+                          >
+                            <span className="text-[#662d8f]">
+                              {service.icon}
+                            </span>
+                            <span>{service.name}</span>
+                          </Link>
+                        ))}
+
+                        <p className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] mt-5 mb-4">
+                          Pickup & Delivery
+                        </p>
+
+                        {services.slice(4).map((service, index) => (
+                          <Link
+                            key={index}
+                            onClick={closeMobile}
+                            href={service.path}
+                            className="flex items-center gap-4 py-3 text-[15px] font-medium text-black"
+                          >
+                            <span className="text-[#662d8f]">
+                              {service.icon}
+                            </span>
+                            <span>{service.name}</span>
+                          </Link>
+                        ))}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
+                <Link
+                  onClick={closeMobile}
+                  href="/mobileapp"
+                  className="block px-5 py-4 text-lg font-medium text-black border-b border-gray-100"
+                >
+                  {t.app}
+                </Link>
+
+                <Link
+                  onClick={closeMobile}
+                  href="/lockers"
+                  className="block px-5 py-4 text-lg font-medium text-black border-b border-gray-100"
+                >
+                  {t.lockers}
+                </Link>
+
+                <Link
+                  onClick={closeMobile}
+                  href="/express"
+                  className="block px-5 py-4 text-lg font-medium text-black border-b border-gray-100"
+                >
+                  {t.express}
+                </Link>
+
+                <Link
+                  onClick={closeMobile}
+                  href="/delivery"
+                  className="block px-5 py-4 text-lg font-medium text-black border-b border-gray-100"
+                >
+                  {t.delivery}
+                </Link>
+              </div>
+
+              <div className="border-t border-gray-100 px-5 py-4 bg-white">
+                <a
                   href="https://wa.me/252617372514"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="mt-4 bg-[#662d8f] text-white text-center py-4 rounded-2xl"
+                  className="flex items-center gap-2 text-[13px] font-semibold text-black mb-2"
                 >
-                  WhatsApp
+                  <Phone size={14} className="text-[#662d8f]" />
+                  <span>+252 61 737 2514</span>
                 </a>
+
+                <div className="flex items-center gap-2 text-[11px] font-black text-[#662d8f] uppercase tracking-[0.14em]">
+                  <Clock size={13} />
+                  <span>Open 24/7</span>
+                </div>
               </div>
             </motion.div>
           </>
