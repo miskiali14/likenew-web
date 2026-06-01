@@ -103,13 +103,13 @@ export default function Navbar() {
         <div className="flex items-center gap-3">
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className={`xl:hidden p-4 rounded-full border transition-all ${
+            className={`xl:hidden p-3 rounded-full border transition-all ${
               mounted && scrolled
                 ? "bg-[#662d8f] text-white border-[#825bac]"
                 : "bg-white text-gray-900 border-white/20"
             }`}
           >
-            {mobileOpen ? <X size={32} /> : <Menu size={32} />}
+            {mobileOpen ? <X size={18} /> : <Menu size={18} />}
           </button>
 
           <Link href="/" className="flex items-center">
@@ -126,13 +126,8 @@ export default function Navbar() {
             mounted && scrolled ? "text-gray-600" : "text-white/90"
           }`}
         >
-          <Link href="/" className="hover:text-[#662d8f]">
-            {t.home}
-          </Link>
-
-          <Link href="/about" className="hover:text-[#662d8f]">
-            {t.about}
-          </Link>
+          <Link href="/" className="hover:text-[#662d8f]">{t.home}</Link>
+          <Link href="/about" className="hover:text-[#662d8f]">{t.about}</Link>
 
           <div
             className="relative py-2 cursor-pointer"
@@ -141,10 +136,7 @@ export default function Navbar() {
           >
             <div className="flex items-center gap-1.5 hover:text-[#662d8f]">
               <span>{t.services}</span>
-              <ChevronDown
-                size={14}
-                className={showServices ? "rotate-180 text-[#662d8f]" : ""}
-              />
+              <ChevronDown size={14} className={showServices ? "rotate-180 text-[#662d8f]" : ""} />
             </div>
 
             <AnimatePresence>
@@ -180,16 +172,11 @@ export default function Navbar() {
             </AnimatePresence>
           </div>
 
-          <Link href="/mobileapp" className="hover:text-[#662d8f]">
-            {t.app}
-          </Link>
-
-          <Link href="/lockers" className="hover:text-[#662d8f]">
-            {t.lockers}
-          </Link>
+          <Link href="/mobileapp" className="hover:text-[#662d8f]">{t.app}</Link>
+          <Link href="/lockers" className="hover:text-[#662d8f]">{t.lockers}</Link>
         </div>
 
-        <div className="flex items-center gap-3 md:gap-6">
+        <div className="flex items-center gap-2 md:gap-6">
           <a
             href="https://wa.me/252617372514"
             target="_blank"
@@ -311,34 +298,46 @@ export default function Navbar() {
               className="xl:hidden fixed top-0 left-0 h-screen w-[82%] max-w-[360px] bg-white z-[200] shadow-2xl p-6 overflow-y-auto font-[Ubuntu]"
             >
               <div className="flex items-center justify-between mb-8">
-                <img
-                  src="/logo.png"
-                  alt="LikeNew Logo"
-                  className="h-24 object-contain"
-                />
+                <img src="/logo.png" alt="LikeNew Logo" className="h-24 object-contain" />
 
-                <button
-                  onClick={closeMobile}
-                  className="p-4 rounded-full bg-[#662d8f] text-white"
-                >
-                  <X size={30} />
+                <button onClick={closeMobile} className="p-3 rounded-full bg-[#662d8f] text-white">
+                  <X size={18} />
                 </button>
               </div>
 
+              <div className="grid grid-cols-2 gap-3 mb-6">
+                {languages.map((l) => (
+                  <button
+                    key={l.code}
+                    onClick={() => setLang(l.code)}
+                    className={`flex items-center justify-center gap-2 py-3 rounded-2xl text-[11px] font-black uppercase ${
+                      lang === l.code
+                        ? "bg-[#662d8f] text-white"
+                        : "bg-[#825bac]/10 text-[#662d8f]"
+                    }`}
+                  >
+                    <span>{l.flag}</span>
+                    <span>{l.code}</span>
+                  </button>
+                ))}
+              </div>
+
+              <div className="flex items-center justify-between bg-[#825bac]/10 rounded-2xl px-4 py-4 mb-6">
+                <span className="text-[#662d8f] text-[11px] font-black uppercase tracking-[0.2em]">
+                  {t.open247}
+                </span>
+
+                <div className="bg-[#662d8f] p-2 rounded-xl text-white">
+                  <Clock size={18} />
+                </div>
+              </div>
+
               <div className="flex flex-col gap-4 text-black font-black text-[16px] uppercase tracking-[0.12em]">
-                <Link
-                  onClick={closeMobile}
-                  href="/"
-                  className="py-3 border-b border-gray-100"
-                >
+                <Link onClick={closeMobile} href="/" className="py-3 border-b border-gray-100">
                   Home
                 </Link>
 
-                <Link
-                  onClick={closeMobile}
-                  href="/about"
-                  className="py-3 border-b border-gray-100"
-                >
+                <Link onClick={closeMobile} href="/about" className="py-3 border-b border-gray-100">
                   About
                 </Link>
 
@@ -358,19 +357,11 @@ export default function Navbar() {
                   </Link>
                 ))}
 
-                <Link
-                  onClick={closeMobile}
-                  href="/mobileapp"
-                  className="py-3 border-b border-gray-100"
-                >
+                <Link onClick={closeMobile} href="/mobileapp" className="py-3 border-b border-gray-100">
                   App
                 </Link>
 
-                <Link
-                  onClick={closeMobile}
-                  href="/lockers"
-                  className="py-3 border-b border-gray-100"
-                >
+                <Link onClick={closeMobile} href="/lockers" className="py-3 border-b border-gray-100">
                   Lockers
                 </Link>
 
