@@ -7,6 +7,16 @@ const ubuntu = Ubuntu({
   variable: "--font-ubuntu",
 });
 
+export const metadata = {
+  title: "LikeNew Laundry",
+  description: "LikeNew Smart Laundry & Dry Cleaning Services",
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+    apple: "/favicon.ico",
+  },
+};
+
 export default function RootLayout({
   children,
 }: {
