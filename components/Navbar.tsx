@@ -48,8 +48,7 @@ export default function Navbar() {
       services: "Adeegyada",
       app: "App-ka",
       lockers: "Lockers",
-      express: "Express",
-      delivery: "Delivery",
+    
       open247: "Furan 24/7",
     },
   };
@@ -433,21 +432,9 @@ export default function Navbar() {
                   {t.lockers}
                 </Link>
 
-                <Link
-                  onClick={closeMobile}
-                  href="/express"
-                  className="block px-5 py-5 text-xl font-semibold text-[#662d8f] border-b border-[#825bac]/10"
-                >
-                  {t.express}
-                </Link>
+               
 
-                <Link
-                  onClick={closeMobile}
-                  href="/delivery"
-                  className="block px-5 py-5 text-xl font-semibold text-[#662d8f] border-b border-[#825bac]/10"
-                >
-                  {t.delivery}
-                </Link>
+              
               </div>
 
               <div className="border-t border-[#825bac]/15 px-5 py-5 bg-white">
