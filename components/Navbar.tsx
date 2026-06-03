@@ -439,13 +439,13 @@ export default function Navbar() {
 
               <div className="border-t border-[#825bac]/15 px-5 py-5 bg-white">
                 <a
-                  href="https://wa.me/252615311877"
+                  href="https://wa.me/252 615311877"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 text-[15px] font-semibold text-[#662d8f] mb-2"
                 >
                   <Phone size={16} />
-                  <span>+252 61 737 2514</span>
+                  <span>+252 61 531 1877</span>
                 </a>
 
                 <div className="flex items-center gap-2 text-[12px] font-black text-[#662d8f] uppercase tracking-[0.14em]">
