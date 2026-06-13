@@ -2,21 +2,18 @@ import Navbar from "@/components/Navbar";
 import HeroSlider from "@/components/HeroSlider";
 import AboutSection from "@/components/AboutSection";
 import AppShowcase from "@/components/AppShowcase";
-import Lockers from "@/components/Lockers"; //r
+import Lockers from "@/components/Lockers";
 import Services1page from "@/components/Services1page";
-import Express from "@/components/Express"; 
-import Delivery from "@/components/Delivery"; 
+
 export default function Home() {
   return (
-    <main>
+    <main className="bg-white">
       <Navbar />
       <HeroSlider />
-
       <AboutSection />
       <Services1page />
       <AppShowcase />
-       <Lockers />
-       {/* Tani waa qeybtii cusbayd */}
+      <Lockers />
     </main>
   );
 }

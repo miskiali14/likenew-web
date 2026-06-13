@@ -17,6 +17,8 @@ import {
   Phone,
   AlertCircle,
   WifiOff,
+  CreditCard,
+  Wallet,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -27,6 +29,7 @@ function OrderContent() {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [showInternetPopup, setShowInternetPopup] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState("call_center");
 
   const [formData, setFormData] = useState({
     name: "",
@@ -34,6 +37,39 @@ function OrderContent() {
     address: "",
     note: "",
   });
+
+  const paymentOptions = [
+    {
+      id: "call_center",
+      title: "Call Center",
+      desc: "Our team will call you",
+      icon: PhoneCall,
+    },
+    {
+      id: "evc",
+      title: "EVC Plus",
+      desc: "Pay with Hormuud EVC",
+      icon: Phone,
+    },
+    {
+      id: "edahab",
+      title: "eDahab",
+      desc: "Pay with eDahab wallet",
+      icon: Wallet,
+    },
+    {
+      id: "premier",
+      title: "Premier Link",
+      desc: "Pay with Premier Wallet",
+      icon: ShieldCheck,
+    },
+    {
+      id: "card",
+      title: "Mastercard / Visa",
+      desc: "Pay by bank card",
+      icon: CreditCard,
+    },
+  ];
 
   useEffect(() => {
     const savedCart = JSON.parse(localStorage.getItem("cart") || "[]");
@@ -126,12 +162,17 @@ function OrderContent() {
           address: formData.address,
           total: totalAmount.toFixed(2),
           is_express: isExpress,
+          payment_method: paymentMethod,
+          payment_status:
+            paymentMethod === "call_center"
+              ? "pending_call"
+              : "pending_payment",
           products: productsForAPI,
           customer_note: formData.note
-            ? `${formData.note}${isExpress ? " [EXPRESS ORDER]" : ""}`
+            ? `${formData.note}${isExpress ? " [EXPRESS ORDER]" : ""} [PAYMENT: ${paymentMethod}]`
             : isExpress
-            ? "[EXPRESS ORDER]"
-            : "No special instructions",
+            ? `[EXPRESS ORDER] [PAYMENT: ${paymentMethod}]`
+            : `[PAYMENT: ${paymentMethod}]`,
         }),
       });
 
@@ -262,7 +303,7 @@ function OrderContent() {
                 <p className="text-slate-500 text-sm leading-relaxed max-w-md mx-auto mb-8 font-medium">
                   Thank you for choosing LikeNew Laundry. Your order has been
                   received successfully and our support team will contact you
-                  shortly to confirm pickup and delivery details.
+                  shortly to confirm pickup, delivery, and payment details.
                 </p>
 
                 <div className="bg-[#FAFAFC] border border-slate-100 rounded-[2rem] p-6 text-left mb-8">
@@ -285,6 +326,13 @@ function OrderContent() {
                           {formData.phone}
                         </div>
                       </div>
+
+                      <p className="text-slate-500 text-xs font-bold mt-4">
+                        Payment Method:{" "}
+                        <span className="text-[#7047A8] uppercase">
+                          {paymentMethod.replace("_", " ")}
+                        </span>
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -493,6 +541,67 @@ function OrderContent() {
               </div>
             </div>
           </div>
+
+          <div className="bg-white rounded-[2.5rem] p-8 border border-[#7047A8]/10 space-y-5 shadow-[0_15px_50px_rgba(15,23,42,0.04)]">
+            <div>
+              <h2 className="text-lg font-black uppercase text-slate-900">
+                Payment Method
+              </h2>
+
+              <p className="text-xs text-slate-400 mt-1">
+                Choose how you want to pay for your order
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {paymentOptions.map((method) => {
+                const Icon = method.icon;
+                const active = paymentMethod === method.id;
+
+                return (
+                  <button
+                    key={method.id}
+                    type="button"
+                    onClick={() => setPaymentMethod(method.id)}
+                    className={`text-left p-5 rounded-2xl border transition-all ${
+                      active
+                        ? "border-[#7047A8] bg-[#7047A8]/10 shadow-[0_12px_30px_rgba(112,71,168,0.12)]"
+                        : "border-slate-100 bg-slate-50 hover:bg-white hover:border-[#7047A8]/30"
+                    }`}
+                  >
+                    <div className="flex items-center gap-4">
+                      <div
+                        className={`w-12 h-12 rounded-xl flex items-center justify-center ${
+                          active
+                            ? "bg-[#7047A8] text-white"
+                            : "bg-white text-[#7047A8]"
+                        }`}
+                      >
+                        <Icon size={20} />
+                      </div>
+
+                      <div>
+                        <h3 className="text-sm font-black text-slate-900">
+                          {method.title}
+                        </h3>
+
+                        <p className="text-[11px] text-slate-500 font-medium mt-1">
+                          {method.desc}
+                        </p>
+                      </div>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+
+            {paymentMethod !== "call_center" && (
+              <div className="bg-amber-50 border border-amber-100 text-amber-700 rounded-2xl p-4 text-xs font-bold leading-relaxed">
+                Payment gateway is selected. The API integration will be added
+                after the payment provider gives the merchant API keys.
+              </div>
+            )}
+          </div>
         </div>
 
         <div className="lg:col-span-5 lg:sticky lg:top-28 space-y-6">
@@ -556,6 +665,13 @@ function OrderContent() {
                 <span>${expressCharge.toFixed(2)}</span>
               </div>
 
+              <div className="flex justify-between text-sm">
+                <span className="text-slate-400">Payment</span>
+                <span className="capitalize">
+                  {paymentMethod.replace("_", " ")}
+                </span>
+              </div>
+
               <div className="h-[1px] bg-slate-800 my-2" />
 
               <div className="flex justify-between items-center">
@@ -576,8 +692,10 @@ function OrderContent() {
             >
               {loading ? (
                 <Loader2 className="animate-spin" size={16} />
+              ) : paymentMethod === "call_center" ? (
+                "Confirm & Request Call"
               ) : (
-                "Confirm & Place Order"
+                "Confirm & Continue Payment"
               )}
             </button>
           </div>

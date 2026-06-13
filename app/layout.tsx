@@ -1,5 +1,6 @@
 import "./globals.css";
 import { Ubuntu } from "next/font/google";
+import Footer from "@/components/Footer";
 
 const ubuntu = Ubuntu({
   subsets: ["latin"],
@@ -8,8 +9,8 @@ const ubuntu = Ubuntu({
 });
 
 export const metadata = {
-  title: "LikeNew Laundry",
-  description: "LikeNew Smart Laundry & Dry Cleaning Services",
+  title: "Likenew Laundry",
+  description: "Likenew Smart Laundry & Dry Cleaning Services",
   icons: {
     icon: "/favicon.ico",
     shortcut: "/favicon.ico",
@@ -33,6 +34,8 @@ export default function RootLayout({
         `}
       >
         {children}
+
+        <Footer />
       </body>
     </html>
   );
