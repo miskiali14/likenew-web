@@ -62,7 +62,7 @@ export default function ChallengeRulesPage() {
                 tartanka Likenew Content Creators Challenge! Waa madal aan ku
                 dhiirrigelinaynno dhallinyarada Soomaaliyeed ee xirfadda leh, si
                 ay u muujiyaan awooddooda, uguna guulaystaan abaalmarin lacageed
-                gaaraysa Abaalmarin Qaali Ah Kun Doollar.
+                gaaraysa Abaalmarin Qaali Ah.
               </p>
             </div>
 
