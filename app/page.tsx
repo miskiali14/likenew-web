@@ -4,6 +4,7 @@ import AboutSection from "@/components/AboutSection";
 import AppShowcase from "@/components/AppShowcase";
 import Lockers from "@/components/Lockers";
 import Services1page from "@/components/Services1page";
+import LatestBlogs from "@/components/LatestBlogs";
 
 export default function Home() {
   return (
@@ -14,6 +15,7 @@ export default function Home() {
       <Services1page />
       <AppShowcase />
       <Lockers />
+       <LatestBlogs />
     </main>
   );
 }

@@ -3,6 +3,7 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
+    
     <footer className="bg-white border-t border-gray-100 px-6 py-20">
       <div className="max-w-6xl mx-auto flex flex-col items-center">
         <Image
@@ -17,14 +18,21 @@ export default function Footer() {
           Laundry, Dry Cleaning, Smart Lockers & Delivery Services.
         </p>
 
-        <div className="mt-8">
-          <Link
-            href="/privacy-policy"
-            className="inline-flex items-center rounded-full border border-gray-200 bg-white px-6 py-3 text-sm font-medium text-gray-600 transition-all duration-300 hover:border-[#662d8f] hover:text-[#662d8f]"
-          >
-            Privacy Policy
-          </Link>
-        </div>
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+  <Link
+    href="/privacy-policy"
+    className="inline-flex items-center rounded-full border border-gray-200 bg-white px-6 py-3 text-sm font-medium text-gray-600 transition-all duration-300 hover:border-[#662d8f] hover:text-[#662d8f]"
+  >
+    Privacy Policy
+  </Link>
+
+  <Link
+    href="/blogs"
+    className="inline-flex items-center rounded-full border border-gray-200 bg-white px-6 py-3 text-sm font-medium text-gray-600 transition-all duration-300 hover:border-[#662d8f] hover:text-[#662d8f]"
+  >
+    Blogs
+  </Link>
+</div>
 
         <div className="mt-12 w-full border-t border-gray-100 pt-6">
           <div className="flex flex-col items-center justify-between gap-4 text-center md:flex-row">
@@ -37,6 +45,7 @@ export default function Footer() {
               <span className="ml-1 font-semibold text-[#662d8f]">
                 likenew.so
               </span>
+              
             </p>
           </div>
         </div>

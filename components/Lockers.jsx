@@ -12,7 +12,7 @@ const locations = [
     address: "21 Oct Street, Waaberi",
     image: "/images/locker1.png",
     status: "24/7 Open",
-    link: "https://tr.ee/svLfTEDcjY",
+    link: "https://maps.app.goo.gl/tTvbmD63yowVTdz69",
   },
   {
     id: 2,
@@ -20,7 +20,7 @@ const locations = [
     address: "KM4 Street, Hodan",
     image: "/images/locker2.png",
     status: "24/7 Open",
-    link: "https://tr.ee/_CQ2_klREz",
+    link: "https://maps.app.goo.gl/EoL4JyeiVgUq5aYQ7",
   },
 ];
 
