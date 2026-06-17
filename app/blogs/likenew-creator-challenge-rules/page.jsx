@@ -47,7 +47,7 @@ export default function ChallengeRulesPage() {
         <section className="mt-12 rounded-[2rem] bg-[#fbf8ff] p-6 md:p-10 border border-[#662d8f]/10">
           <h2 className="text-3xl md:text-4xl font-black text-gray-900 leading-tight">
             LIKENEW CONTENT CREATORS CHALLENGE: Muuji Hal-abuurkaaga oo Ku
-            Guulayso $1,000!
+            Guulayso abaalmarino qaali ah!
           </h2>
 
           <div className="mt-8 space-y-8 text-gray-600 text-base leading-8">
@@ -61,8 +61,7 @@ export default function ChallengeRulesPage() {
                 Shirkadda Likenew Smart Laundry waxay si rasmi ah ugu dhawaaqaysaa
                 tartanka Likenew Content Creators Challenge! Waa madal aan ku
                 dhiirrigelinaynno dhallinyarada Soomaaliyeed ee xirfadda leh, si
-                ay u muujiyaan awooddooda, uguna guulaystaan abaalmarin lacageed
-                gaaraysa Abaalmarin Qaali Ah.
+                ay u muujiyaan awooddooda, uguna guulaystaan abaalmarin qaali ah.
               </p>
             </div>
 

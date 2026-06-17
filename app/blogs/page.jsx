@@ -4,13 +4,23 @@ import { blogs } from "@/data/blogs";
 
 export const metadata = {
   title: "Blogs | Likenew",
-  description: "Likenew blogs, laundry tips, smart locker guides and service updates.",
+  description:
+    "Likenew blogs, laundry tips, smart locker guides and service updates.",
 };
 
 export default function BlogsPage() {
   return (
     <main className="min-h-screen bg-white px-5 py-28">
       <div className="max-w-6xl mx-auto">
+        <div className="mb-10">
+          <Link
+            href="/"
+            className="inline-flex items-center rounded-full border border-gray-200 bg-white px-5 py-2.5 text-sm font-bold text-[#662d8f] transition-all hover:border-[#662d8f] hover:bg-[#fbf8ff]"
+          >
+            ← Back to Home
+          </Link>
+        </div>
+
         <div className="text-center mb-14">
           <span className="text-[#662d8f] text-xs font-bold uppercase tracking-[0.25em]">
             Likenew Blog
@@ -37,6 +47,7 @@ export default function BlogsPage() {
                   src={blog.image}
                   alt={blog.title}
                   fill
+                  sizes="(max-width: 768px) 100vw, 33vw"
                   className="object-cover"
                 />
               </div>
