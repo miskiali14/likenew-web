@@ -1,4 +1,18 @@
 export const blogs = [
+  ,
+    {
+  slug: "likenew-creator-challenge",
+  title: "Likenew Creator Challenge",
+  category: "Campaign",
+  date: "June 2026",
+  image: "/blogs/EVENT.png",
+  desc: "Apply now to join the Likenew Creator Challenge.",
+  content: [
+    "Likenew is inviting content creators to join the Creator Challenge.",
+    "Apply with your skills, video links, Facebook and TikTok accounts.",
+    "Selected creators will be contacted by the Likenew team.",
+  ],
+},
   {
   slug: "likenew-creator-challenge-rules",
   title: "Habka Lagu Qiimaynayo, Shuruudaha & Abaalmarinta",
@@ -11,20 +25,7 @@ export const blogs = [
     "Kaliya 25 qof ayaa loo xulan doonaa wareegga hore.",
     "3-da qof ee hela views iyo engagement-ka ugu badan ayaa noqon doona guulaystayaasha.",
   ],
-},
-// //     {
-// //   slug: "likenew-creator-challenge",
-// //   title: "Likenew Creator Challenge",
-// //   category: "Campaign",
-// //   date: "June 2026",
-// //   image: "/blogs/EVENT.png",
-// //   desc: "Apply now to join the Likenew Creator Challenge.",
-// //   content: [
-// //     "Likenew is inviting content creators to join the Creator Challenge.",
-// //     "Apply with your skills, video links, Facebook and TikTok accounts.",
-// //     "Selected creators will be contacted by the Likenew team.",
-// //   ],
-// // },
+}
 //   {
 //     slug: "smart-lockers",
 //     title: "How Likenew Smart Lockers Work",
