@@ -1,13 +1,20 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export default function CreatorChallengePage() {
   return (
     <main className="min-h-screen bg-white py-28 px-5">
       <div className="max-w-7xl mx-auto">
+        <Link
+  href="/blogs"
+  className="inline-flex items-center rounded-full border border-gray-200 bg-white px-5 py-2.5 text-sm font-bold text-[#662d8f] transition-all hover:border-[#662d8f] hover:bg-[#fbf8ff]"
+>
+  ← Back to Blogs
+</Link>
 
         <div className="text-center mb-12">
           <span className="text-[#662d8f] text-xs font-black uppercase tracking-[0.25em]">
-            Likenew Creator Challenge
+            Likenew  Contant Creator Challenge
           </span>
 
           <h1 className="mt-4 text-4xl md:text-6xl font-black text-gray-900">
