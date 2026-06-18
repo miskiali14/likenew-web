@@ -1,6 +1,6 @@
 export const blogs = [
   {
-  slug: "likenew-creator-challenge",
+  slug: "likenew-content-creator-challenge",
   title: "Likenew Creator Challenge",
   category: "Campaign",
   date: "June 2026",
