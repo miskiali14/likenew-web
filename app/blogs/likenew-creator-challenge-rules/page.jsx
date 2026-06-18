@@ -227,7 +227,7 @@ export default function ChallengeRulesPage() {
           </p>
         </section>
 
-        {/* <div className="mt-12 flex flex-col md:flex-row gap-4 justify-center">
+        { <div className="mt-12 flex flex-col md:flex-row gap-4 justify-center">
           <Link
             href="/blogs/likenew-creator-challenge"
             className="rounded-full bg-[#662d8f] px-8 py-4 text-sm font-bold text-white hover:bg-[#825bac] transition-all"
@@ -241,7 +241,7 @@ export default function ChallengeRulesPage() {
           >
             View Blogs
           </Link>
-        </div> */}
+        </div> }
       </article>
     </main>
   );

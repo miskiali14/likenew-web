@@ -2,8 +2,11 @@ import Image from "next/image";
 
 export default function CreatorChallengePage() {
   return (
-    <main className="min-h-screen bg-white py-28 px-5">
-      <div className="max-w-7xl mx-auto">
+    <main className="min-h-screen bg-white px-5 py-28">
+      <article className="max-w-5xl mx-auto">
+        <Link href="/blogs" className="text-sm font-bold text-[#662d8f]">
+          ← Back to Blogs
+        </Link>
 
         <div className="text-center mb-12">
           <span className="text-[#662d8f] text-xs font-black uppercase tracking-[0.25em]">
@@ -41,7 +44,7 @@ export default function CreatorChallengePage() {
             Loading...
           </iframe>
         </div>
-      </div>
+    </article>
     </main>
   );
 }
