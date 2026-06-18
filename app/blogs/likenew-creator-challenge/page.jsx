@@ -14,7 +14,7 @@ export default function CreatorChallengePage() {
 
         <div className="text-center mb-12">
           <span className="text-[#662d8f] text-xs font-black uppercase tracking-[0.25em]">
-            Likenew  Contant Creator Challenge
+            Likenew  Content Creator Challenge
           </span>
 
           <h1 className="mt-4 text-4xl md:text-6xl font-black text-gray-900">
