@@ -46,7 +46,7 @@ export default function CreatorChallengePage() {
         </div>
 
         <div className="bg-white border border-gray-100 rounded-[2rem] overflow-hidden shadow-lg">
-          <iframe
+          {/* <iframe
             src="https://docs.google.com/forms/d/e/1FAIpQLScSDZ8Jn2nebGaNg7a6bnj-6BMt1DorjnscYM4P49pgi6MU1A/viewform?embedded=true"
             width="100%"
             height="1600"
@@ -55,7 +55,7 @@ export default function CreatorChallengePage() {
             marginWidth="0"
           >
             Loading...
-          </iframe>
+          </iframe> */}
         </div>
       </div>
     </main>
