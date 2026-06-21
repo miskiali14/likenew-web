@@ -2,8 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 
 export const metadata = {
-  title: "Likenew Content Creator Challenge",
-  description: "Apply for the Likenew Content Creator Challenge.",
+  title: "Likenew  Creator Challenge",
+  description: "Apply for the Likenew  Creator Challenge.",
 };
 
 export default function CreatorChallengePage() {
