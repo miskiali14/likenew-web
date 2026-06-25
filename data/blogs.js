@@ -22,19 +22,19 @@ export const blogs = [
      content: ["..."]
   },
 
-  {
-    slug: "likenew-creator-challenge",
-    title: "Likenew Creator Challenge",
-    category: "Campaign",
-    date: "June 2026",
-    image: "/blogs/EVENT.png",
-    desc: "Apply now to join the Likenew Creator Challenge.",
-    content: [
-      "Likenew is inviting content creators to join the Creator Challenge.",
-      "Apply with your skills, video links, Facebook and TikTok accounts.",
-      "Selected creators will be contacted by the Likenew team.",
-    ],
-  },
+  // {
+  //   slug: "likenew-creator-challenge",
+  //   title: "Likenew Creator Challenge",
+  //   category: "Campaign",
+  //   date: "June 2026",
+  //   image: "/blogs/EVENT.png",
+  //   desc: "Apply now to join the Likenew Creator Challenge.",
+  //   content: [
+  //     "Likenew is inviting content creators to join the Creator Challenge.",
+  //     "Apply with your skills, video links, Facebook and TikTok accounts.",
+  //     "Selected creators will be contacted by the Likenew team.",
+  //   ],
+  // },
   {
     slug: "likenew-creator-challenge-rules",
     title: "Habka Lagu Qiimaynayo, Shuruudaha & Abaalmarinta",
