@@ -1,30 +1,57 @@
 export const blogs = [
+   // ... blogs kale
   {
-  slug: "likenew-creator-challenge",
-  title: "Likenew Creator Challenge",
-  category: "Campaign",
-  date: "June 2026",
-  image: "/blogs/EVENT.png",
-  desc: "Apply now to join the Likenew Creator Challenge.",
-  content: [
-    "Likenew is inviting content creators to join the Creator Challenge.",
-    "Apply with your skills, video links, Facebook and TikTok accounts.",
-    "Selected creators will be contacted by the Likenew team.",
-  ],
-},
+    slug: "locker", // Tani waa furaha (slug)
+    title: "Kacaanka Daryeelka Dharka ee Soomaaliya: Wax Kasta Oo Aad U Baahan Tahay Inaad Ka Ogaato Likenew Smart Lockers",
+    category: "Smart Lockers",
+    date: "June 2026",
+    image: "/blogs/Locker3DRender.png",
+    desc: "Baro sida Likenew Smart Lockers ay noloshaada ugu fududaynayaan adeegga dhar dhaqista 24/7.",
+    content: ["..."]
+  },
+  // data/blogs.js
+
+
   {
-  slug: "likenew-creator-challenge-rules",
-  title: "Habka Lagu Qiimaynayo, Shuruudaha & Abaalmarinta",
-  category: "Content Creators Challenge",
-  date: "June 2026",
-  image: "/blogs/shuruudaha.png",
-  desc: "Akhri habka qiimaynta, shuruudaha codsiga iyo abaalmarinta Likenew Content Creators Challenge.",
-  content: [
-    "Tartankan wuxuu u furan yahay Content Creators, Video Editors iyo Motion Graphic Designers.",
-    "Kaliya 25 qof ayaa loo xulan doonaa wareegga hore.",
-    "3-da qof ee hela views iyo engagement-ka ugu badan ayaa noqon doona guulaystayaasha.",
-  ],
-},
+    slug: "saxafad",
+    title: "Shirkadda Likenew Smart Laundry oo daahfurtay 24/7 Smart Lockers, kana dhigtay caqabadihii saxmadda iyo waqtiga dhardhaqista taariikh.",
+    category: "War-saxaafadeed",
+    date: "25 June, 2026",
+    image: "/blogs/warsaxaafadeed-01.png",
+    desc: "Shirkadda Likenew Smart Laundry oo hormuud u ah casriyeynta adeegyada daryeelka dharka ee Soomaaliya, ayaa maanta si rasmi ah u daahfurtay nidaamkii ugu horreeyay ee noociisa ah oo dalka laga hirgeliyl: Likenew 24/7 Smart Lockers.",
+     content: ["..."]
+  },
+
+  {
+    slug: "likenew-creator-challenge",
+    title: "Likenew Creator Challenge",
+    category: "Campaign",
+    date: "June 2026",
+    image: "/blogs/EVENT.png",
+    desc: "Apply now to join the Likenew Creator Challenge.",
+    content: [
+      "Likenew is inviting content creators to join the Creator Challenge.",
+      "Apply with your skills, video links, Facebook and TikTok accounts.",
+      "Selected creators will be contacted by the Likenew team.",
+    ],
+  },
+  {
+    slug: "likenew-creator-challenge-rules",
+    title: "Habka Lagu Qiimaynayo, Shuruudaha & Abaalmarinta",
+    category: "Content Creators Challenge",
+    date: "June 2026",
+    image: "/blogs/shuruudaha.png",
+    desc: "Akhri habka qiimaynta, shuruudaha codsiga iyo abaalmarinta Likenew Content Creators Challenge.",
+    content: [
+      "Tartankan wuxuu u furan yahay Content Creators, Video Editors iyo Motion Graphic Designers.",
+      "Kaliya 25 qof ayaa loo xulan doonaa wareegga hore.",
+      "3-da qof ee hela views iyo engagement-ka ugu badan ayaa noqon doona guulaystayaasha.",
+    ],
+  },
+  
+ 
+
+
     
 //   {
 //     slug: "smart-lockers",
