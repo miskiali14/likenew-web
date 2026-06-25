@@ -2,6 +2,7 @@ import "./globals.css";
 import { Ubuntu } from "next/font/google";
 import Footer from "@/components/Footer";
 import Script from "next/script";
+import { Analytics } from "@vercel/analytics/next"; // <-- 1. Halkaan waa lagu soo daray
 
 const ubuntu = Ubuntu({
   subsets: ["latin"],
@@ -42,7 +43,6 @@ export default function RootLayout({
             if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
             n.queue=[];t=b.createElement(e);t.async=!0;
             t.src=v;s=b.getElementsByTagName(e)[0];
-            s=b.getElementsByTagName(e)[0];
             s.parentNode.insertBefore(t,s)}
             (window, document,'script',
             'https://connect.facebook.net/en_US/fbevents.js');
@@ -57,13 +57,15 @@ export default function RootLayout({
             height="1"
             width="1"
             style={{ display: "none" }}
-           src="https://www.facebook.com/tr?id=1486241396034108&ev=PageView&noscript=1"
+            src="https://www.facebook.com/tr?id=1486241396034108&ev=PageView&noscript=1"
           />
         </noscript>
 
         {children}
 
         <Footer />
+        
+        <Analytics /> {/* <-- 2. Halkaan ayaa lagu daray si uu u shaqeeyo */}
       </body>
     </html>
   );
