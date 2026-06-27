@@ -60,7 +60,16 @@ export default function SmartLockersPage() {
           </div>
 
           <h2 className="text-[#662d8f] font-black text-3xl">Sida Loo Isticmaalo Likenew Smart Lockers</h2>
-          <p>Daawo muuqaalkan si dhammaystiran kuugu sharraxaya isticmaalka iyo adeegsiga Likenew Smart Lockers (Embed youtube link).</p>
+          <p>Daawo muuqaalkan si dhammaystiran kuugu sharraxaya isticmaalka iyo adeegsiga Likenew Smart Lockers (<iframe 
+  width="560" 
+  height="315" 
+  src="https://www.youtube.com/embed/1-q7FAcPvAE?si=HgPbzWkgJ5rmNfrt" 
+  title="YouTube video player" 
+  frameBorder="0" 
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+  referrerPolicy="strict-origin-when-cross-origin" 
+  allowFullScreen
+></iframe>).</p>
 
           <h2 className="text-[#662d8f] font-black text-3xl">Goobaha Ay Hadda Yaallaan Lockers-ka</h2>
           <p>Si aan kuugu soo dhawayno adeegga, wajiga koowaad waxaan Lockers-ka casriga ah ka hirgelinnay labo xarumood oo muhiim ah:</p>
