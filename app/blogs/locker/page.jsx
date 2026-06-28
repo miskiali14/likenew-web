@@ -60,7 +60,7 @@ export default function SmartLockersPage() {
           </div>
 
           <h2 className="text-[#662d8f] font-black text-3xl">Sida Loo Isticmaalo Likenew Smart Lockers</h2>
-          <p>Daawo muuqaalkan si dhammaystiran kuugu sharraxaya isticmaalka iyo adeegsiga Likenew Smart Lockers (<iframe 
+          <p>Daawo muuqaalkan si dhammaystiran kuugu sharraxaya isticmaalka iyo adeegsiga Likenew Smart Lockers <iframe 
   width="560" 
   height="315" 
   src="https://www.youtube.com/embed/1-q7FAcPvAE?si=HgPbzWkgJ5rmNfrt" 
@@ -69,7 +69,7 @@ export default function SmartLockersPage() {
   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
   referrerPolicy="strict-origin-when-cross-origin" 
   allowFullScreen
-></iframe>).</p>
+></iframe></p>
 
           <h2 className="text-[#662d8f] font-black text-3xl">Goobaha Ay Hadda Yaallaan Lockers-ka</h2>
           <p>Si aan kuugu soo dhawayno adeegga, wajiga koowaad waxaan Lockers-ka casriga ah ka hirgelinnay labo xarumood oo muhiim ah:</p>
@@ -82,7 +82,7 @@ export default function SmartLockersPage() {
           <h2 className="text-[#662d8f] font-black text-3xl">Ammaan iyo Kalsooni Buuxda</h2>
           <p>Aammin ma tahay inaan dharkayga khaanad uga tago? Likenew Smart Lockers waxaa lagu dhisay nidaam difaac dijitaal ah.</p>
           <ul className="list-disc pl-6">
-            <li>Khaanad kasta waxay leedahay quful casri ah oo aan la jabin karin.</li>
+            <li>Khaanad kasta waxay leedahay nidaam amni ah oo aan la jabin karin.</li>
             <li>Dharkaaga waxaa furi kara keliya shaqaalaha loo xilsaaray marka la shaqaynayo, iyo adiga adeegsanaya Likenew app.</li>
             <li>Sidoo kale, waxaad tallaabo-tallaabo ugala socon kartaa halka ay shaqadu marayso (Track your order) adigoo isticmaalaya Likenew App.</li>
           </ul>

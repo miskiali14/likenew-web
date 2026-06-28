@@ -1,5 +1,25 @@
 export const blogs = [
+
+  {
+  slug: "SmartLockersPage",
+  title: "Likenew Smart Laundry Launches 'Likenew Smart Lockers', Introducing a New Era in Somalia's Laundry Services",
+  category: "News",
+  date: "25 June, 2026",
+  image: "/blogs/lockerswide.png",
+  desc: "Likenew Smart Laundry officially introduces the country's first 24/7 Smart Lockers, marking a new era in convenience and service delivery.",
+  content: ["..."]
+},
    // ... blogs kale
+   {
+  slug: "lockersenglish",
+  title: "Somalia's Laundry Revolution: Everything You Need to Know About Likenew Smart Lockers",
+  category: "Smart Lockers",
+  date: "June 25, 2026",
+  image: "/blogs/Locker3DRender.png",
+  desc: "Time is the most valuable asset we have. Likenew Smart Laundry has answered that challenge head-on, introducing a concept entirely new to Somalia: 24/7 Smart Lockers.",
+  content: ["..."]
+},
+  //
   {
     slug: "locker", // Tani waa furaha (slug)
     title: "Kacaanka Daryeelka Dharka ee Soomaaliya: Wax Kasta Oo Aad U Baahan Tahay Inaad Ka Ogaato Likenew Smart Lockers",
