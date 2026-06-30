@@ -5,7 +5,7 @@ import AppShowcase from "@/components/AppShowcase";
 import Lockers from "@/components/Lockers";
 import Services1page from "@/components/Services1page";
 import LatestBlogs from "@/components/LatestBlogs";
-// import GallerySection from "@/components/GallerySection";
+import GallerySection from "@/components/GallerySection";
 
 export default function Home() {
   return (
@@ -16,7 +16,7 @@ export default function Home() {
       <Services1page />
       <AppShowcase />
       <Lockers />
-      {/* <GallerySection /> */}
+      <GallerySection />
        <LatestBlogs />
     </main>
   );
