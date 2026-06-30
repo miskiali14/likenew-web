@@ -37,12 +37,12 @@ export default function GallerySection() {
           ))}
         </div>
 
-        <div >
+        <div className="text-center mt-10">
           <Link
             href="/gallery"
-          
+            className="inline-flex rounded-full bg-[#662d8f] px-7 py-3 text-white text-sm font-bold hover:bg-[#825bac] transition"
           >
-          
+            View Full Gallery
           </Link>
         </div>
       </div>
