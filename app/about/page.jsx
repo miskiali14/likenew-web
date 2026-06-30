@@ -29,7 +29,7 @@ export default function AboutPage() {
           className="absolute inset-0"
         >
           <img 
-            src="/images/slide2.png" 
+            src="/images/xarunta.jpeg" 
             alt="About Hero" 
             className="w-full h-full object-cover"
           />

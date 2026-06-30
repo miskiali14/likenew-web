@@ -10,7 +10,7 @@ const locations = [
     id: 1,
     name: "Waaberi Locker",
     address: "21 Oct Street, Waaberi",
-    image: "/images/locker1.png",
+    image: "/images/qanad1.jpeg",
     status: "24/7 Open",
     link: "https://maps.app.goo.gl/tTvbmD63yowVTdz69",
   },
@@ -18,7 +18,7 @@ const locations = [
     id: 2,
     name: "Hodan Locker",
     address: "KM4 Street, Hodan",
-    image: "/images/locker2.png",
+    image: "/images/qanad1.jpeg",
     status: "24/7 Open",
     link: "https://maps.app.goo.gl/EoL4JyeiVgUq5aYQ7",
   },
@@ -45,7 +45,7 @@ export default function LockerPage() {
           className="absolute inset-0"
         >
           <Image
-            src="/images/locker2.png"
+            src="/images/qanad2.jpeg"
             fill
             className="object-cover brightness-[0.35]"
             alt="Likenew Lockers"
@@ -138,7 +138,7 @@ export default function LockerPage() {
                   alt={locker.name}
                   sizes="(max-width: 768px) 100vw, 50vw"
                   onError={(e) => {
-                    e.currentTarget.src = "/images/hero.png";
+                    e.currentTarget.src = "/images/DSC09353.jpg";
                   }}
                 />
 

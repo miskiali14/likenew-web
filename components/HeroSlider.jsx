@@ -7,9 +7,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
 
 const HERO_SLIDES = [
-  { src: "/images/her.png", title: "Expert Care" },
-  { src: "/images/machine.png", title: "Fast Delivery" },
-  { src: "/images/collage.png", title: "Eco Friendly" },
+  { src: "/images/loogada.jpeg", title: "Expert Care" },
+  { src: "/images/xarunta.jpeg", title: "Fast Delivery" },
+  { src: "/images/xarunt2.jpeg", title: "Eco Friendly" },
 ];
 
 export default function HeroSlider() {
