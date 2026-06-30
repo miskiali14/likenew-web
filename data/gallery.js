@@ -1,6 +1,6 @@
 export const galleryImages = [
-  { src: "/gallery/mechine.jpeg", title: "opening locker", category: "lockers" },
-  { src: "/gallery/mechine.jpeg", title: "Ready clothes", category: "clothes" },
+  { src: "/gallery/machine.jpeg", title: "opening locker", category: "lockers" },
+  { src: "/gallery/machine.jpeg", title: "Ready clothes", category: "clothes" },
   { src: "/gallery/Likenew.jpeg", title: "Likenew", category: "Likenew" },
    { src: "/gallery/qanad2.jpeg", title: "Reception", category: "Reception" },
   { src: "/gallery/qanad2.jpeg", title: "24/7 Locker Service", category: "Lockers" },
