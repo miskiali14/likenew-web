@@ -25,50 +25,50 @@ export async function POST(request) {
     const token = process.env.TELEGRAM_BOT_TOKEN;
     const cleanCloudToken = process.env.NEXT_PUBLIC_CLEANCLOUD_TOKEN;
 
+    console.log("🔑 Checking Environment Variables:", { 
+      hasBotToken: !!token, 
+      hasCleanCloudToken: !!cleanCloudToken 
+    });
+
     let replyText = "";
 
     // Marka uu macmiilku qoro /start
     if (userMessage === '/start') {
-      replyText = "Ku soo dhowaw LikeNew Tracker! 🧺\n\nSi aad u ogaato heerka dalabkaaga, fadlan qor nambarka dalabka oo ku bilaabma LN (Tusaale: LN-8822).";
+      replyText = "Ku soo dhowaw LikeNew Tracker! 🧺\n\nSi aad u ogaato heerka dalabkaaga, fadlan qor nambarka dalabka oo ku bilaabma LN (Tusaale: LN-1024).";
     } 
-    // Marka uu macmiilku raadinayo dalab (Tusaale: LN-8822)
+    // Marka uu macmiilku raadinayo dalab (Tusaale: LN-1024)
     else if (userMessage.toUpperCase().startsWith('LN-')) {
       const orderIdOnly = userMessage.toUpperCase().replace('LN-', ''); 
 
       try {
-        console.log(`📡 Fetching from CleanCloud via getOrders for ID: ${orderIdOnly}`);
+        console.log(`📡 Fetching status from CleanCloud for Order ID: ${orderIdOnly}`);
+        
+        if (!cleanCloudToken) {
+          console.error("❌ ERROR: NEXT_PUBLIC_CLEANCLOUD_TOKEN is missing in Vercel Settings!");
+        }
 
+        // --- DESIGN CHANGE: CleanCloud uses POST and application/json ---
         const cleanCloudResponse = await fetch(`https://cleancloudapp.com/api/getOrders`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             api_token: cleanCloudToken,
-            orderID: orderIdOnly // Ama halkan u dhiib parameters-ka kale ee getOrders u baahan yahay siday taariikhda tahay
+            orderID: orderIdOnly
+            // Kaliya waxaan u diraynaa si uu noogu soo celiyo xogta dalabka isaga oo aan waxba laga beddelin
           })
         });
 
         const cleanCloudData = await cleanCloudResponse.json();
         console.log("📊 CleanCloud API Raw Response:", JSON.stringify(cleanCloudData));
 
-        // --- DESIGN HAGAAJIN: Maadaama uu getOrders yahay, xogtu waxay ku jirtaa Array ---
-        let targetOrder = null;
-
-        if (cleanCloudData) {
-          if (Array.isArray(cleanCloudData)) {
-            targetOrder = cleanCloudData[0]; // Haddii response-ku uu toos Array u yahay
-          } else if (cleanCloudData.orders && Array.isArray(cleanCloudData.orders)) {
-            targetOrder = cleanCloudData.orders[0]; // Haddii uu ku jiro shayga .orders
-          } else if (cleanCloudData.Success === "True" && cleanCloudData.status !== undefined) {
-            targetOrder = cleanCloudData; // Haddii uu hal shay oo toos ah soo celiyey
-          }
-        }
-
-        // Haddii aan helay dalabkii nidaamka ku jiray iyo status-kiisa
-        if (targetOrder && targetOrder.status !== undefined && targetOrder.status !== null) {
+        // Hubi haddii uu nidaamku leeyahay Success == "True" ama uu jiro status nambar ah
+        if (cleanCloudData && (cleanCloudData.Success === "True" || 'status' in cleanCloudData)) {
           let statusSomali = "";
-          const statusValue = String(targetOrder.status);
+          
+          // CleanCloud Status Codes siday dukumentiga ku qoran tahay:
+          // 0 = Cleaning, 1 = Ready, 2 = Completed, 4 = Awaiting Pickup, 5 = Detailing
+          const statusValue = String(cleanCloudData.status);
 
-          // Tarjumidda nambarada status-ka CleanCloud
           if (statusValue === '0' || statusValue === '5') {
             statusSomali = "Haddaa la dhaqayaa / Sifayn (In Progress) 🧼";
           } else if (statusValue === '4') {
@@ -83,9 +83,9 @@ export async function POST(request) {
 
           replyText = `📊 **Xogta Dalabkaaga LikeNew**\n\n🆔 Nambarka: LN-${orderIdOnly}\n📌 Heerka uu joogo: ${statusSomali}\n\nWaad ku mahadsan tahay doorashada LikeNew! 🧺`;
         } else {
-          // Haddii dalabka laga waayo liiska soo noqday
-          console.log("❌ Order details not found in array structures.");
-          replyText = `❌ Ma helin wax dalab oo firfircoon oo leh nambarka: LN-${orderIdOnly}.\n\nFadlan hubi nambarka rasiidhkaaga dhabta ah.`;
+          const errMsg = cleanCloudData?.Error || "Dalabka lama helin ama nambarku waa khaldan yahay.";
+          console.log(`⚠️ CleanCloud responded with error. Info: ${JSON.stringify(cleanCloudData)}`);
+          replyText = `❌ Ma helin wax dalab ah oo leh nambarka: LN-${orderIdOnly}.\n*(Faahfaahin: ${errMsg})*.\n\nFadlan hubi nambarka rasiidhkaaga.`;
         }
       } catch (apiError) {
         console.error("❌ CleanCloud API Fetch Error:", apiError);
@@ -93,10 +93,11 @@ export async function POST(request) {
       }
     } 
     else {
-      replyText = "Fadlan soo geli nambar dalab oo sax ah oo ku bilaabma LN- (Tusaale: LN-8822).";
+      replyText = "Fadlan soo geli nambar dalab oo sax ah oo ku bilaabma LN- (Tusaale: LN-1024).";
     }
 
     // Dib u dirista farriinta Telegram-ka macmiilka
+    console.log(`✉️ Sending message back to Telegram Chat ID: ${chatId}`);
     const telegramRes = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -106,6 +107,8 @@ export async function POST(request) {
         parse_mode: "Markdown"
       }),
     });
+    
+    console.log("🚀 Telegram Bot Response Status:", telegramRes.status);
 
     return NextResponse.json({ status: 'success' });
 
