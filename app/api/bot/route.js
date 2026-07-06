@@ -47,35 +47,45 @@ export async function POST(request) {
           console.error("❌ ERROR: NEXT_PUBLIC_CLEANCLOUD_TOKEN is missing in Vercel Settings!");
         }
 
-        const cleanCloudResponse = await fetch(`https://cleancloudapp.com/api/v1/order/status?api_token=${cleanCloudToken}&order_id=${orderIdOnly}`, {
-          method: 'GET',
-          headers: { 'Content-Type': 'application/json' }
+        // --- DESIGN CHANGE: CleanCloud uses POST and application/json ---
+        const cleanCloudResponse = await fetch(`https://cleancloudapp.com/api/updateOrder`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            api_token: cleanCloudToken,
+            orderID: orderIdOnly
+            // Kaliya waxaan u diraynaa si uu noogu soo celiyo xogta dalabka isaga oo aan waxba laga beddelin
+          })
         });
 
         const cleanCloudData = await cleanCloudResponse.json();
         console.log("📊 CleanCloud API Raw Response:", JSON.stringify(cleanCloudData));
 
-        // Ammaan dheeraad ah: Hubi haddii cleanCloudData uu jiro, uuna leeyahay status ka hor intaanan akhrin
-        if (cleanCloudData && typeof cleanCloudData === 'object' && 'status' in cleanCloudData && cleanCloudData.status) {
+        // Hubi haddii uu nidaamku leeyahay Success == "True" ama uu jiro status nambar ah
+        if (cleanCloudData && (cleanCloudData.Success === "True" || 'status' in cleanCloudData)) {
           let statusSomali = "";
-          const status = String(cleanCloudData.status).toLowerCase();
+          
+          // CleanCloud Status Codes siday dukumentiga ku qoran tahay:
+          // 0 = Cleaning, 1 = Ready, 2 = Completed, 4 = Awaiting Pickup, 5 = Detailing
+          const statusValue = String(cleanCloudData.status);
 
-          if (status === 'in progress' || status === 'cleaning') {
-            statusSomali = "Haddaa la dhaqayaa (In Progress) 🧼";
-          } else if (status === 'ready' || status === 'completed') {
+          if (statusValue === '0' || statusValue === '5') {
+            statusSomali = "Haddaa la dhaqayaa / Sifayn (In Progress) 🧼";
+          } else if (statusValue === '4') {
+            statusSomali = "Wuxuu sugayaa in la soo qaado (Awaiting Pickup) 🚚";
+          } else if (statusValue === '1') {
             statusSomali = "Waa diyaar, waad soo doonan kartaa! 🛍️✨";
-          } else if (status === 'collected') {
-            statusSomali = "Waa la qaatay (Horay ayaad u qaadatay) ✅";
+          } else if (statusValue === '2') {
+            statusSomali = "Waa la qaatay (Completed) ✅";
           } else {
-            statusSomali = cleanCloudData.status; 
+            statusSomali = `Gacanta ayaa lagu hayaa (Status: ${statusValue})`; 
           }
 
           replyText = `📊 **Xogta Dalabkaaga LikeNew**\n\n🆔 Nambarka: LN-${orderIdOnly}\n📌 Heerka uu joogo: ${statusSomali}\n\nWaad ku mahadsan tahay doorashada LikeNew! 🧺`;
         } else {
-          // Haddii CleanCloud uu soo celiyo error ama xog aan la aqoon
-          const errMsg = cleanCloudData?.error || cleanCloudData?.message || "Dalabka lama helin";
-          console.log(`⚠️ CleanCloud responded with no status. Info: ${JSON.stringify(cleanCloudData)}`);
-          replyText = `❌ Ma helin wax dalab ah oo leh nambarka: LN-${orderIdOnly}.\n*(Faahfaahin: ${errMsg})*.\n\nFadlan hubi nambarka rasiidhkaaga dhabta ah ee ku jira nidaamka CleanCloud.`;
+          const errMsg = cleanCloudData?.Error || "Dalabka lama helin ama nambarku waa khaldan yahay.";
+          console.log(`⚠️ CleanCloud responded with error. Info: ${JSON.stringify(cleanCloudData)}`);
+          replyText = `❌ Ma helin wax dalab ah oo leh nambarka: LN-${orderIdOnly}.\n*(Faahfaahin: ${errMsg})*.\n\nFadlan hubi nambarka rasiidhkaaga.`;
         }
       } catch (apiError) {
         console.error("❌ CleanCloud API Fetch Error:", apiError);
