@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-// 1. Kani wuxuu xallinayaa haddii Telegram ama browser uu qaab GET ah u soo garaaco endpoint-ka
+// 1. Kani wuxuu xallinayaa haddii Telegram ama browser uu GET ku soo garaaco
 export async function GET() {
   return NextResponse.json({ 
     status: 'online', 
@@ -14,7 +14,6 @@ export async function POST(request) {
     const body = await request.json();
     console.log("👉 Telegram Webhook Body Received:", JSON.stringify(body));
     
-    // Hubi haddii farriintu tahay mid sax ah oo qoraal leh
     if (!body || !body.message || !body.message.text) {
       console.log("⚠️ Ignored: Message body or text is missing.");
       return NextResponse.json({ status: 'ignored' });
@@ -48,7 +47,6 @@ export async function POST(request) {
           console.error("❌ ERROR: NEXT_PUBLIC_CLEANCLOUD_TOKEN is missing in Vercel Settings!");
         }
 
-        // URL-ka waa la saxay (api. waa laga saaray si uu CleanCloud u aqbalo)
         const cleanCloudResponse = await fetch(`https://cleancloudapp.com/api/v1/order/status?api_token=${cleanCloudToken}&order_id=${orderIdOnly}`, {
           method: 'GET',
           headers: { 'Content-Type': 'application/json' }
@@ -57,9 +55,10 @@ export async function POST(request) {
         const cleanCloudData = await cleanCloudResponse.json();
         console.log("📊 CleanCloud API Raw Response:", JSON.stringify(cleanCloudData));
 
-        if (cleanCloudData && cleanCloudData.status) {
+        // Ammaan dheeraad ah: Hubi haddii cleanCloudData uu jiro, uuna leeyahay status ka hor intaanan akhrin
+        if (cleanCloudData && typeof cleanCloudData === 'object' && 'status' in cleanCloudData && cleanCloudData.status) {
           let statusSomali = "";
-          const status = cleanCloudData.status.toLowerCase();
+          const status = String(cleanCloudData.status).toLowerCase();
 
           if (status === 'in progress' || status === 'cleaning') {
             statusSomali = "Haddaa la dhaqayaa (In Progress) 🧼";
@@ -73,7 +72,10 @@ export async function POST(request) {
 
           replyText = `📊 **Xogta Dalabkaaga LikeNew**\n\n🆔 Nambarka: LN-${orderIdOnly}\n📌 Heerka uu joogo: ${statusSomali}\n\nWaad ku mahadsan tahay doorashada LikeNew! 🧺`;
         } else {
-          replyText = `❌ Ma helin wax dalab ah oo leh nambarka: LN-${orderIdOnly}. Fadlan hubi nambarka rasiidhkaaga.`;
+          // Haddii CleanCloud uu soo celiyo error ama xog aan la aqoon
+          const errMsg = cleanCloudData?.error || cleanCloudData?.message || "Dalabka lama helin";
+          console.log(`⚠️ CleanCloud responded with no status. Info: ${JSON.stringify(cleanCloudData)}`);
+          replyText = `❌ Ma helin wax dalab ah oo leh nambarka: LN-${orderIdOnly}.\n*(Faahfaahin: ${errMsg})*.\n\nFadlan hubi nambarka rasiidhkaaga dhabta ah ee ku jira nidaamka CleanCloud.`;
         }
       } catch (apiError) {
         console.error("❌ CleanCloud API Fetch Error:", apiError);
