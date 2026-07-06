@@ -43,7 +43,13 @@ export async function POST(request) {
 
       try {
         console.log(`📡 Fetching status from CleanCloud for Order ID: ${orderIdOnly}`);
-        const cleanCloudResponse = await fetch(`https://api.cleancloudapp.com/api/v1/order/status?api_token=${cleanCloudToken}&order_id=${orderIdOnly}`, {
+        
+        if (!cleanCloudToken) {
+          console.error("❌ ERROR: NEXT_PUBLIC_CLEANCLOUD_TOKEN is missing in Vercel Settings!");
+        }
+
+        // URL-ka waa la saxay (api. waa laga saaray si uu CleanCloud u aqbalo)
+        const cleanCloudResponse = await fetch(`https://cleancloudapp.com/api/v1/order/status?api_token=${cleanCloudToken}&order_id=${orderIdOnly}`, {
           method: 'GET',
           headers: { 'Content-Type': 'application/json' }
         });
