@@ -48,7 +48,7 @@ export async function POST(request) {
         }
 
         // --- DESIGN CHANGE: CleanCloud uses POST and application/json ---
-        const cleanCloudResponse = await fetch(`https://cleancloudapp.com/api/updateOrder`, {
+        const cleanCloudResponse = await fetch(`https://cleancloudapp.com/api/getOrders`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
