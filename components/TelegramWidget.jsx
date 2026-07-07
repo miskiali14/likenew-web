@@ -35,7 +35,7 @@ export default function TelegramWidget() {
           <div className="text-center">
             <h4 className="text-lg font-bold text-gray-800 mb-2">LikeNew Tracker 🧺</h4>
             <p className="text-sm text-gray-600 mb-5">
-              Si aad u la socoto heerka dalabkaaga oo aad ogeysiis toos ah u hesho marka uu diyaaro, ku xir bot-kayaga.
+              Si aad u ogaato heerka dalabkaagu marayo, kaliya riix batoonka hoose oo si toos ah u weydii Likenew Bot!
             </p>
             
             {/* Link-ga saxda ah ee Telegram Bot-kaaga */}
