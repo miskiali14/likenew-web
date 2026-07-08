@@ -20,39 +20,55 @@ export async function POST(request) {
     }
 
     const chatId = body.message.chat.id;
-    const userMessage = body.message.text.trim();
+    const userMessage = body.message.text.trim().toUpperCase(); // Toos u weyneey xarfaha si shaqadu u fududaato
     
+    // === ENVIRONMENT VARIABLES ===
     const token = process.env.TELEGRAM_BOT_TOKEN;
-    const cleanCloudToken = process.env.NEXT_PUBLIC_CLEANCLOUD_TOKEN;
+    const tokenHQ = process.env.NEXT_PUBLIC_CLEANCLOUD_TOKEN; 
+    const tokenKM4 = process.env.CLEANCLOUD_TOKEN_KM4;
+    // =============================
 
     let replyText = "";
 
     // Marka uu macmiilku qoro /start
-    if (userMessage === '/start') {
-      replyText = "Ku soo dhowaw LikeNew Tracker! 🧺\n\nSi aad u ogaato heerka dalabkaaga, fadlan qor nambarka dalabka oo ku bilaabma LN (Tusaale: LN-8781).";
+    if (userMessage === '/START') {
+      replyText = "Ku soo dhowaw LikeNew Tracker! 🧺\n\nSi aad u ogaato heerka dalabkaaga, fadlan qor nambarka dalabka adoo raacinaya xarunta aad geysatay:\n\n* Xarunta HQ:* Qor **HQ-8781**\n* Xarunta KM4:* Qor **KM4-8781**";
     } 
-    // Marka uu macmiilku raadinayo dalab (Tusaale: LN-8781)
-    else if (userMessage.toUpperCase().startsWith('LN-')) {
-      const orderIdOnly = userMessage.toUpperCase().replace('LN-', ''); 
+    // Condition-ka labada xarunood (Haddii uu ku bilaabo HQ- ama KM4-)
+    else if (userMessage.startsWith('HQ-') || userMessage.startsWith('KM4-')) {
+      
+      let activeCleanCloudToken = "";
+      let branchName = "";
+      let orderIdOnly = "";
+
+      if (userMessage.startsWith('HQ-')) {
+        activeCleanCloudToken = tokenHQ;
+        branchName = "LikeNew HQ";
+        orderIdOnly = userMessage.replace('HQ-', '');
+      } else {
+        activeCleanCloudToken = tokenKM4;
+        branchName = "LikeNew KM4";
+        orderIdOnly = userMessage.replace('KM4-', '');
+      }
 
       try {
-        console.log(`📡 Fetching from CleanCloud via getOrders for ID: ${orderIdOnly}`);
+        console.log(`📡 Fetching from ${branchName} via getOrders for ID: ${orderIdOnly}`);
 
         const cleanCloudResponse = await fetch(`https://cleancloudapp.com/api/getOrders`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            api_token: cleanCloudToken,
+            api_token: activeCleanCloudToken,
             orderID: orderIdOnly
           })
         });
 
         const cleanCloudData = await fetchResponse(cleanCloudResponse);
-        console.log("📊 CleanCloud API Raw Response:", JSON.stringify(cleanCloudData));
+        console.log(`📊 ${branchName} API Raw Response:`, JSON.stringify(cleanCloudData));
 
         let targetOrder = null;
 
-        // Xallinta saxda ah ee JSON-ka CleanCloud uu soo celiyey (Orders oo Xaraf weyn ku bilaabma)
+        // Xallinta saxda ah ee JSON-ka CleanCloud (Orders oo Xaraf weyn ku bilaabma)
         if (cleanCloudData) {
           if (cleanCloudData.Orders && Array.isArray(cleanCloudData.Orders) && cleanCloudData.Orders.length > 0) {
             targetOrder = cleanCloudData.Orders[0];
@@ -85,18 +101,18 @@ export async function POST(request) {
             statusSomali = `Heerka uu joogo: (Status Code: ${statusValue})`; 
           }
 
-          replyText = `📊 **Xogta Dalabkaaga LikeNew**\n\n🆔 Nambarka: LN-${orderIdOnly}\n📌 Heerka uu joogo: ${statusSomali}\n\nWaad ku mahadsan tahay doorashada LikeNew! 🧺`;
+          replyText = `📊 **Xogta Dalabkaaga ${branchName}**\n\n🆔 Nambarka: ${userMessage}\n📌 Heerka uu joogo: ${statusSomali}\n\nWaad ku mahadsan tahay doorashada LikeNew! 🧺`;
         } else {
-          console.log("❌ Order details not found in CleanCloud response structure.");
-          replyText = `❌ Ma helin wax dalab oo firfircoon oo leh nambarka: LN-${orderIdOnly}.\n\nFadlan hubi nambarka rasiidhkaaga.`;
+          console.log(`❌ Order details not found in ${branchName} response structure.`);
+          replyText = `❌ Ma helin wax dalab oo firfircoon oo leh nambarka: ${userMessage} gudaha ${branchName}.\n\nFadlan hubi nambarka rasiidhkaaga.`;
         }
       } catch (apiError) {
-        console.error("❌ CleanCloud API Fetch Error:", apiError);
-        replyText = "⚠️ Cilad ayaa ku timid la xiriirka nidaamka CleanCloud. Fadlan dib isku day yar ka dib.";
+        console.error(`❌ ${branchName} API Fetch Error:`, apiError);
+        replyText = `⚠️ Cilad ayaa ku timid la xiriirka nidaamka ${branchName}. Fadlan dib isku day yar ka dib.`;
       }
     } 
     else {
-      replyText = "Fadlan soo geli nambar dalab oo sax ah oo ku bilaabma LN- (Tusaale: LN-8781).";
+      replyText = "Fadlan soo geli nambar dalab oo sax ah oo ku bilaabma horgalaha xarunta (Tusaale: HQ-8781 ama KM4-8781).";
     }
 
     // Dib u dirista farriinta dhanka Telegram Bot-ka
