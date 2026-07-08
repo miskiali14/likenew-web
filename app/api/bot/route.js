@@ -32,10 +32,10 @@ export async function POST(request) {
 
     // Marka uu macmiilku qoro /start
     if (userMessage === '/START') {
-      replyText = "Ku soo dhowaw LikeNew Tracker! 🧺\n\nSi aad u ogaato heerka dalabkaaga, fadlan qor nambarka dalabka adoo raacinaya xarunta aad geysatay:\n\n* Xarunta HQ:* Qor **HQ-8781**\n* Xarunta KM4:* Qor **KM4-8781**";
+      replyText = "Ku soo dhowaw LikeNew Tracker! 🧺\n\nSi aad u ogaato heerka dalabkaaga, fadlan qor nambarka dalabka adoo raacinaya xarunta aad geysatay:\n\n* Xarunta HQ:* Qor **HQ-8781**\n* Xarunta KM5:* Qor **KM5-8781**";
     } 
-    // Condition-ka labada xarunood (Haddii uu ku bilaabo HQ- ama KM4-)
-    else if (userMessage.startsWith('HQ-') || userMessage.startsWith('KM4-')) {
+    // Condition-ka labada xarunood (Haddii uu ku bilaabo HQ- ama 5-)
+    else if (userMessage.startsWith('HQ-') || userMessage.startsWith('KM5-')) {
       
       let activeCleanCloudToken = "";
       let branchName = "";
@@ -47,8 +47,8 @@ export async function POST(request) {
         orderIdOnly = userMessage.replace('HQ-', '');
       } else {
         activeCleanCloudToken = tokenKM4;
-        branchName = "LikeNew KM4";
-        orderIdOnly = userMessage.replace('KM4-', '');
+        branchName = "LikeNew KM5";
+        orderIdOnly = userMessage.replace('KM5-', '');
       }
 
       try {
@@ -112,7 +112,7 @@ export async function POST(request) {
       }
     } 
     else {
-      replyText = "Fadlan soo geli nambar dalab oo sax ah oo ku bilaabma horgalaha xarunta (Tusaale: HQ-8781 ama KM4-8781).";
+      replyText = "Fadlan soo geli nambar dalab oo sax ah oo ku bilaabma horgalaha xarunta (Tusaale: HQ-8781 ama KM5-8781).";
     }
 
     // Dib u dirista farriinta dhanka Telegram Bot-ka
