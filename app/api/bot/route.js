@@ -32,7 +32,7 @@ export async function POST(request) {
 
     // Marka uu macmiilku qoro /start
     if (userMessage === '/START') {
-      replyText = "Ku soo dhowaw LikeNew Tracker! 🧺\n\nSi aad u ogaato heerka dalabkaaga, fadlan qor nambarka dalabka adoo raacinaya xarunta aad geysatay:\n\n* Xarunta HQ:* Qor **HQ-8781**\n* Xarunta KM5:* Qor **KM5-8781**";
+      replyText = "Ku soo dhowaw Likenew Tracker! 🧺\n\nSi aad u ogaato heerka dalabkaaga, fadlan qor nambarka dalabka adoo raacinaya xarunta aad geysatay:\n\n* Xarunta HQ:* Qor **HQ-8781**\n* Xarunta KM5:* Qor **KM5-8781**";
     } 
     // Condition-ka labada xarunood (Haddii uu ku bilaabo HQ- ama 5-)
     else if (userMessage.startsWith('HQ-') || userMessage.startsWith('KM5-')) {
@@ -88,9 +88,9 @@ export async function POST(request) {
 
           // Tarjumidda nambarada status-ka CleanCloud ku saleysan dokumentiga rasmiga ah
           if (statusValue === '0') {
-            statusSomali = "Haddaa la dhaqayaa (Cleaning) 🧼";
+            statusSomali = "Haddaa la dhaqayaa (Cleaning) ";
           } else if (statusValue === '5') {
-            statusSomali = "Gacanta ayaa lagu hayaa oo la sifeynayaa (Detailing) ✨";
+            statusSomali = "Gacanta ayaa lagu hayaa oo la sifeynayaa (Detailing) ";
           } else if (statusValue === '4') {
             statusSomali = "Wuxuu sugayaa in la soo qaado (Awaiting Pickup) 🚚";
           } else if (statusValue === '1') {
@@ -101,7 +101,7 @@ export async function POST(request) {
             statusSomali = `Heerka uu joogo: (Status Code: ${statusValue})`; 
           }
 
-          replyText = `📊 **Xogta Dalabkaaga ${branchName}**\n\n🆔 Nambarka: ${userMessage}\n📌 Heerka uu joogo: ${statusSomali}\n\nWaad ku mahadsan tahay doorashada LikeNew! 🧺`;
+          replyText = ` **Xogta Dalabkaaga ${branchName}**\n\n🆔 Nambarka: ${userMessage}\n Heerka uu joogo: ${statusSomali}\n\nWaad ku mahadsan tahay doorashadaada LIKENEW! `;
         } else {
           console.log(`❌ Order details not found in ${branchName} response structure.`);
           replyText = `❌ Ma helin wax dalab oo firfircoon oo leh nambarka: ${userMessage} gudaha ${branchName}.\n\nFadlan hubi nambarka rasiidhkaaga.`;
