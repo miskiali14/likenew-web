@@ -32,6 +32,12 @@ export default function Footer() {
   >
     Blogs
   </Link>
+  <Link
+    href="/app"
+    className="inline-flex items-center rounded-full border border-gray-200 bg-white px-6 py-3 text-sm font-medium text-gray-600 transition-all duration-300 hover:border-[#662d8f] hover:text-[#662d8f]"
+  >
+    Application
+  </Link>
 </div>
 
         <div className="mt-12 w-full border-t border-gray-100 pt-6">

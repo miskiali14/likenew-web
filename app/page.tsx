@@ -6,6 +6,7 @@ import Lockers from "@/components/Lockers";
 import Services1page from "@/components/Services1page";
 import LatestBlogs from "@/components/LatestBlogs";
 import GallerySection from "@/components/GallerySection";
+import App from "@/components/App";
 
 export default function Home() {
   return (
@@ -16,8 +17,10 @@ export default function Home() {
       <Services1page />
       <AppShowcase />
       <Lockers />
+       <App />
       <GallerySection />
        <LatestBlogs />
+       
     </main>
   );
 }
