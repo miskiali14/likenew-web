@@ -84,24 +84,27 @@ export async function POST(request) {
         // Haddii la helay dalabka iyo status-ka rasmiga ah
         if (targetOrder && targetOrder.status !== undefined && targetOrder.status !== null) {
           let statusSomali = "";
+          let deliveryNote = ""; // Meeshan waxaa geli doona qoraalka dirista haddii uu ready yahay
           const statusValue = String(targetOrder.status);
 
           // Tarjumidda nambarada status-ka CleanCloud ku saleysan dokumentiga rasmiga ah
           if (statusValue === '0') {
-            statusSomali = "Haddaa la dhaqayaa (Cleaning) ";
+            statusSomali = "Haddaa la dhaqayaa (Cleaning) 🧼";
           } else if (statusValue === '5') {
-            statusSomali = "Gacanta ayaa lagu hayaa oo la sifeynayaa (Detailing) ";
+            statusSomali = "Gacanta ayaa lagu hayaa oo la sifeynayaa (Detailing) ✨";
           } else if (statusValue === '4') {
             statusSomali = "Wuxuu sugayaa in la soo qaado (Awaiting Pickup) 🚚";
           } else if (statusValue === '1') {
             statusSomali = "Waa diyaar, waad soo doonan kartaa! (Ready to Deliver) 🛍️";
+            // Qoraalka dhalmada haddii dharku ready yahay
+            deliveryNote = "\n\n*Haddii aad rabto in goobtaada laguugu keeno wac 2414* 📞";
           } else if (statusValue === '2') {
             statusSomali = "Waa la qaatay (Completed) ✅";
           } else {
             statusSomali = `Heerka uu joogo: (Status Code: ${statusValue})`; 
           }
 
-          replyText = ` **Xogta Dalabkaaga ${branchName}**\n\n🆔 Nambarka: ${userMessage}\n Heerka uu joogo: ${statusSomali}\n\nWaad ku mahadsan tahay doorashadaada LIKENEW! `;
+          replyText = ` **Xogta Dalabkaaga ${branchName}**\n\n🆔 Nambarka: ${userMessage}\n Heerka uu joogo: ${statusSomali}${deliveryNote}\n\nWaad ku mahadsan tahay doorashadaada LIKENEW! `;
         } else {
           console.log(`❌ Order details not found in ${branchName} response structure.`);
           replyText = `❌ Ma helin wax dalab oo firfircoon oo leh nambarka: ${userMessage} gudaha ${branchName}.\n\nFadlan hubi nambarka rasiidhkaaga.`;
