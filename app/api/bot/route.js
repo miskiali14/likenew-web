@@ -32,7 +32,7 @@ export async function POST(request) {
 
     // Marka uu macmiilku qoro /start
     if (userMessage === '/START') {
-      replyText = "Ku soo dhowaw Likenew Tracker! 🧺\n\nSi aad u ogaato heerka dalabkaaga, fadlan qor nambarka dalabka adoo raacinaya xarunta aad geysatay:\n\n* Xarunta HQ:* Qor **HQ-8781**\n* Xarunta KM5:* Qor **KM5-8781**";
+      replyText = "Ku soo dhowaw *Likenew Tracker*! 🧺\n\nSi aad u ogaato heerka dalabkaaga, fadlan qor nambarka dalabka adoo raacinaya xarunta aad geysatay:\n\n* Xarunta HQ:* Qor **HQ-8781**\n* Xarunta KM5:* Qor **KM5-8781**";
     } 
     // Condition-ka labada xarunood (Haddii uu ku bilaabo HQ- ama 5-)
     else if (userMessage.startsWith('HQ-') || userMessage.startsWith('KM5-')) {
@@ -89,33 +89,38 @@ export async function POST(request) {
 
           // Tarjumidda nambarada status-ka CleanCloud ku saleysan dokumentiga rasmiga ah
           if (statusValue === '0') {
-            statusSomali = "Haddaa la dhaqayaa (Cleaning) 🧼";
+            statusSomali = "Waxuu ku jiraa dhaqmo (Cleaning) 🧼";
           } else if (statusValue === '5') {
             statusSomali = "Gacanta ayaa lagu hayaa oo la sifeynayaa (Detailing) ✨";
           } else if (statusValue === '4') {
             statusSomali = "Wuxuu sugayaa in la soo qaado (Awaiting Pickup) 🚚";
           } else if (statusValue === '1') {
-            statusSomali = "Waa diyaar, waad soo doonan kartaa! (Ready to Deliver) 🛍️";
+            statusSomali = "Waa diyaar (Ready to Deliver) 🛍️";
             // Qoraalka dhalmada haddii dharku ready yahay
-            deliveryNote = "\n\n*Haddii aad rabto in goobtaada laguugu keeno wac 2414* 📞";
+            deliveryNote = "\n\nHaddii aad rabto in goobtaada laguugu keeno wac *2414* 📞";
           } else if (statusValue === '2') {
             statusSomali = "Waa la qaatay (Completed) ✅";
           } else {
             statusSomali = `Heerka uu joogo: (Status Code: ${statusValue})`; 
           }
 
-          replyText = ` **Xogta Dalabkaaga ${branchName}**\n\n🆔 Nambarka: ${userMessage}\n Heerka uu joogo: ${statusSomali}${deliveryNote}\n\nWaad ku mahadsan tahay doorashadaada LIKENEW! `;
+          // === HALKAN WAA ISBEDELKA QORAALKA (UX/UI FORMATTING) ===
+          replyText = `Xogta Dalabkaaga *LIKENEW ${branchName.replace('LikeNew ', '')}.*\n\n` +
+                      `*ID Nambarka*: ${userMessage}\n` +
+                      `*Heerka uu joogo*: ${statusSomali}${deliveryNote}\n\n` +
+                      `Waad ku mahadsan tahay doorashadaada LIKENEW!`;
+                      
         } else {
           console.log(`❌ Order details not found in ${branchName} response structure.`);
-          replyText = `❌ Ma helin wax dalab oo firfircoon oo leh nambarka: ${userMessage} gudaha ${branchName}.\n\nFadlan hubi nambarka rasiidhkaaga.`;
+          replyText = `❌ Ma helin wax dalab oo firfircoon oo leh nambarka: *${userMessage}* gudaha *${branchName}*.\n\nFadlan hubi nambarka rasiidhkaaga.`;
         }
       } catch (apiError) {
         console.error(`❌ ${branchName} API Fetch Error:`, apiError);
-        replyText = `⚠️ Cilad ayaa ku timid la xiriirka nidaamka ${branchName}. Fadlan dib isku day yar ka dib.`;
+        replyText = `⚠️ Cilad ayaa ku timid la xiriirka nidaamka *${branchName}*. Fadlan dib isku day yar ka dib.`;
       }
     } 
     else {
-      replyText = "Fadlan soo geli nambar dalab oo sax ah oo ku bilaabma horgalaha xarunta (Tusaale: HQ-8781 ama KM5-8781).";
+      replyText = "Fadlan soo geli nambar dalab oo sax ah oo ku bilaabma horgalaha xarunta.\n\n*(Tusaale: HQ-8781 ama KM5-8781)*";
     }
 
     // Dib u dirista farriinta dhanka Telegram Bot-ka
