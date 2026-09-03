@@ -2,7 +2,7 @@ import "./globals.css";
 import { Ubuntu } from "next/font/google";
 import Footer from "@/components/Footer";
 import { Analytics } from "@vercel/analytics/next";
-import TelegramWidget from "@/components/TelegramWidget"; 
+import TrackOrderWidget from "@/components/TrackOrderWidget";
 
 const ubuntu = Ubuntu({
   subsets: ["latin"],
@@ -43,7 +43,7 @@ export default function RootLayout({
         
         <Analytics />
         
-        <TelegramWidget /> 
+        <TrackOrderWidget />
       </body>
     </html>
   );
