@@ -103,6 +103,11 @@ export async function POST(request) {
         success: false,
         error: 'MISSING_ORDER_ID',
         order_id: null,
+        _debug: {
+          content_type: request.headers.get('content-type') || null,
+          received_keys: Object.keys(body),
+          received_body: body,
+        },
       });
     }
 
