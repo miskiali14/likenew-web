@@ -43,12 +43,59 @@ export async function GET() {
   });
 }
 
+// Ka soo saar order_id / whatsapp_phone qaab kasta oo codsiga (JSON, form,
+// query string) — Astra/WATI mararqaar si kala duwan ayey u dirsadaan.
+async function readInput(request) {
+  const out = {};
+
+  // Query string
+  try {
+    const url = new URL(request.url);
+    for (const [k, v] of url.searchParams.entries()) out[k] = v;
+  } catch {
+    // ignore
+  }
+
+  const contentType = (request.headers.get('content-type') || '').toLowerCase();
+
+  try {
+    if (contentType.includes('application/json')) {
+      Object.assign(out, await request.json());
+    } else if (
+      contentType.includes('application/x-www-form-urlencoded') ||
+      contentType.includes('multipart/form-data')
+    ) {
+      const form = await request.formData();
+      for (const [k, v] of form.entries()) out[k] = v;
+    } else {
+      // Content-Type lama sheegin — isku day JSON, kadib text
+      const text = await request.text();
+      if (text) {
+        try {
+          Object.assign(out, JSON.parse(text));
+        } catch {
+          const params = new URLSearchParams(text);
+          for (const [k, v] of params.entries()) out[k] = v;
+        }
+      }
+    }
+  } catch {
+    // ignore — waxaan isticmaalnaa waxa aan hore u helnay
+  }
+
+  return out;
+}
+
 export async function POST(request) {
   try {
-    const body = await request.json().catch(() => ({}));
+    const body = await readInput(request);
 
-    const rawOrderId = String(body.order_id || '').trim();
-    const whatsappPhone = body.whatsapp_phone ? String(body.whatsapp_phone).trim() : null;
+    const rawOrderId = String(body.order_id ?? body.orderID ?? body.orderId ?? '').trim();
+    const whatsappPhone = body.whatsapp_phone
+      ? String(body.whatsapp_phone).trim()
+      : body.whatsappPhone
+        ? String(body.whatsappPhone).trim()
+        : null;
 
     // 1. Order ID maqan
     if (!rawOrderId) {
