@@ -1,41 +1,49 @@
 import { NextResponse } from 'next/server';
 
 /*
- * WATI Action: ORDER_TRACKER_API
+ * WhatsApp Order Tracker endpoint
  * Method: POST
- * Body: { "order_id": "HQ-8781", "whatsapp_phone": "2526xxxxxxx" }
+ * Body (mid kasta way shaqeynaysaa):
+ *   { "order_id": "HQ-8781", "whatsapp_phone": "2526xxxxxxx" }
+ *   { "message": "HQ-8781" }                 <- WATI catch-all flow
+ *   { "text": "track my order HQ-8781" }
  *
- * Waa isla nidaamkii Telegram bot-ka (app/api/bot/route.js), laakiin halkii
- * la diri lahaa farriin Telegram, wuxuu ku celinayaa JSON oo WATI AI Agent
- * uu isticmaalayo. Response-kan ayaa ah ISHA KELIYA EE RUNTA AH.
+ * Jawaab kasta waxay leedahay `reply` field = qoraal WhatsApp diyaar ah.
+ * WATI Chatbot: API Request -> Send message {{reply}}. Laba node oo kaliya.
  */
 
-// Status codes CleanCloud -> friendly text (English + Somali)
 const STATUS_MAP = {
-  '0': {
-    en: 'Cleaning',
-    so: 'Waxuu ku jiraa dhaqmo (Cleaning) 🧼',
-  },
+  '0': { en: 'Cleaning', so: 'Waxuu ku jiraa dhaqmo (Cleaning) 🧼' },
   '1': {
     en: 'Ready to Deliver',
     so: 'Waa diyaar (Ready to Deliver) 🛍️',
     deliveryNote: 'Haddii aad rabto in goobtaada laguugu keeno wac 2414 📞',
   },
-  '2': {
-    en: 'Completed',
-    so: 'Waa la qaatay (Completed) ✅',
-  },
-  '4': {
-    en: 'Awaiting Pickup',
-    so: 'Wuxuu sugayaa in la soo qaado (Awaiting Pickup) 🚚',
-  },
-  '5': {
-    en: 'Detailing',
-    so: 'Gacanta ayaa lagu hayaa oo la sifeynayaa (Detailing) ✨',
-  },
+  '2': { en: 'Completed', so: 'Waa la qaatay (Completed) ✅' },
+  '4': { en: 'Awaiting Pickup', so: 'Wuxuu sugayaa in la soo qaado (Awaiting Pickup) 🚚' },
+  '5': { en: 'Detailing', so: 'Gacanta ayaa lagu hayaa oo la sifeynayaa (Detailing) ✨' },
 };
 
-// Health check
+const WELCOME =
+  'Ku soo dhowow LikeNew Tracker! 🧺\n\n' +
+  'Si aad u hubiso dalabkaaga, fadlan ii soo dir Order ID-ga oo ay la socoto xarunta aad dalabka geysay.\n\n' +
+  'Tusaale:\n📍 HQ: HQ-8781\n📍 KM5: KM5-8781';
+
+const INVALID =
+  'Fadlan isticmaal Order ID-ga oo ay la socoto xarunta.\n\n' +
+  'Tusaale:\n📍 HQ-8781\n📍 KM5-8781';
+
+const ERROR_MSG =
+  '⚠️ Waan ka xumahay, hadda ma hubin karo dalabkaaga.\n\n' +
+  'Fadlan isku day mar kale wax yar kadib.';
+
+const GREETING_RE = /^(hi|hey|hello|start|salaan|asc|assalamu|iska warran|war|haye|hai)\b/i;
+const ORDER_RE = /\b(HQ|KM5)-\d+\b/i;
+
+function json(payload, extra) {
+  return NextResponse.json({ ...payload, ...extra });
+}
+
 export async function GET() {
   return NextResponse.json({
     status: 'online',
@@ -43,21 +51,17 @@ export async function GET() {
   });
 }
 
-// Ka soo saar order_id / whatsapp_phone qaab kasta oo codsiga (JSON, form,
-// query string) — Astra/WATI mararqaar si kala duwan ayey u dirsadaan.
+// Ka soo saar input-ka qaab kasta oo codsiga (JSON, form, query, raw text)
 async function readInput(request) {
   const out = {};
-
-  // Query string
   try {
     const url = new URL(request.url);
     for (const [k, v] of url.searchParams.entries()) out[k] = v;
   } catch {
-    // ignore
+    /* ignore */
   }
 
   const contentType = (request.headers.get('content-type') || '').toLowerCase();
-
   try {
     if (contentType.includes('application/json')) {
       Object.assign(out, await request.json());
@@ -68,7 +72,6 @@ async function readInput(request) {
       const form = await request.formData();
       for (const [k, v] of form.entries()) out[k] = v;
     } else {
-      // Content-Type lama sheegin — isku day JSON, kadib text
       const text = await request.text();
       if (text) {
         try {
@@ -80,9 +83,8 @@ async function readInput(request) {
       }
     }
   } catch {
-    // ignore — waxaan isticmaalnaa waxa aan hore u helnay
+    /* ignore */
   }
-
   return out;
 }
 
@@ -90,30 +92,29 @@ export async function POST(request) {
   try {
     const body = await readInput(request);
 
-    const rawOrderId = String(body.order_id ?? body.orderID ?? body.orderId ?? '').trim();
-    const whatsappPhone = body.whatsapp_phone
-      ? String(body.whatsapp_phone).trim()
-      : body.whatsappPhone
-        ? String(body.whatsappPhone).trim()
-        : null;
+    // Raw message-ka (WATI catch-all) ama order_id toos ah
+    const rawText = String(
+      body.order_id ?? body.orderID ?? body.orderId ?? body.message ?? body.text ?? body.body ?? '',
+    ).trim();
 
-    // 1. Order ID maqan
-    if (!rawOrderId) {
-      return NextResponse.json({
-        success: false,
-        error: 'MISSING_ORDER_ID',
-        order_id: null,
-        _debug: {
-          content_type: request.headers.get('content-type') || null,
-          received_keys: Object.keys(body),
-          received_body: body,
-        },
-      });
+    const whatsappPhone =
+      (body.whatsapp_phone && String(body.whatsapp_phone).trim()) ||
+      (body.whatsappPhone && String(body.whatsappPhone).trim()) ||
+      (body.waId && String(body.waId).trim()) ||
+      null;
+
+    // 1. Farriin madhan ama salaan -> welcome
+    if (!rawText || GREETING_RE.test(rawText)) {
+      return json({ success: false, error: 'GREETING', reply: WELCOME });
     }
 
-    const orderId = rawOrderId.toUpperCase();
+    // 2. Ka soo bixi Order ID-ga farriinta (xitaa haddii jumlad dheer tahay)
+    const match = rawText.match(ORDER_RE);
+    if (!match) {
+      return json({ success: false, error: 'INVALID_ORDER_ID', reply: INVALID });
+    }
 
-    // 2. Hubi qaabka + aqoonso xarunta
+    const orderId = match[0].toUpperCase();
     let cleanCloudToken = '';
     let branch = '';
     let orderIdOnly = '';
@@ -122,33 +123,15 @@ export async function POST(request) {
       cleanCloudToken = process.env.NEXT_PUBLIC_CLEANCLOUD_TOKEN;
       branch = 'HQ';
       orderIdOnly = orderId.slice(3);
-    } else if (orderId.startsWith('KM5-')) {
+    } else {
       cleanCloudToken = process.env.CLEANCLOUD_TOKEN_KM4;
       branch = 'KM5';
       orderIdOnly = orderId.slice(4);
-    } else {
-      return NextResponse.json({
-        success: false,
-        error: 'INVALID_ORDER_ID',
-        order_id: orderId,
-      });
-    }
-
-    if (!orderIdOnly || !/^\d+$/.test(orderIdOnly)) {
-      return NextResponse.json({
-        success: false,
-        error: 'INVALID_ORDER_ID',
-        order_id: orderId,
-      });
     }
 
     if (!cleanCloudToken) {
-      console.error(`❌ Missing CleanCloud token for branch ${branch}`);
-      return NextResponse.json({
-        success: false,
-        error: 'INTERNAL_ERROR',
-        order_id: orderId,
-      });
+      console.error(`Missing CleanCloud token for branch ${branch}`);
+      return json({ success: false, error: 'INTERNAL_ERROR', order_id: orderId, reply: ERROR_MSG });
     }
 
     // 3. Weydii CleanCloud
@@ -157,22 +140,15 @@ export async function POST(request) {
       const res = await fetch('https://cleancloudapp.com/api/getOrders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          api_token: cleanCloudToken,
-          orderID: orderIdOnly,
-        }),
+        body: JSON.stringify({ api_token: cleanCloudToken, orderID: orderIdOnly }),
       });
       cleanCloudData = await res.json().catch(() => null);
     } catch (apiError) {
-      console.error(`❌ CleanCloud fetch error (${branch}):`, apiError);
-      return NextResponse.json({
-        success: false,
-        error: 'INTERNAL_ERROR',
-        order_id: orderId,
-      });
+      console.error(`CleanCloud fetch error (${branch}):`, apiError);
+      return json({ success: false, error: 'INTERNAL_ERROR', order_id: orderId, reply: ERROR_MSG });
     }
 
-    // 4. Ka soo saar dalabka JSON-ka CleanCloud (qaababka kala duwan)
+    // 4. Ka soo saar dalabka
     let targetOrder = null;
     if (cleanCloudData) {
       if (Array.isArray(cleanCloudData.Orders) && cleanCloudData.Orders.length > 0) {
@@ -186,40 +162,43 @@ export async function POST(request) {
       }
     }
 
-    // 5. Dalab lama helin
+    // 5. Lama helin
     if (!targetOrder || targetOrder.status === undefined || targetOrder.status === null) {
-      return NextResponse.json({
+      return json({
         success: false,
         error: 'ORDER_NOT_FOUND',
         order_id: orderId,
+        reply:
+          `❌ Ma helin dalab leh nambarka *${orderId}*.\n\n` +
+          'Fadlan hubi nambarka rasiidhkaaga oo mar kale isku day.',
       });
     }
 
-    // 6. Tarjun status-ka
+    // 6. Status
     const statusCode = String(targetOrder.status);
     const mapped = STATUS_MAP[statusCode];
+    const statusSo = mapped ? mapped.so : `Heerka uu joogo: (Status Code ${statusCode})`;
+    const deliveryNote = mapped && mapped.deliveryNote ? `\n\n${mapped.deliveryNote}` : '';
 
-    const responsePayload = {
+    const reply =
+      `Xogta Dalabkaaga *LIKENEW ${branch}* 🧺\n\n` +
+      `*ID Nambarka:* ${orderId}\n\n` +
+      `*Heerka uu joogo:* ${statusSo}${deliveryNote}\n\n` +
+      'Waad ku mahadsan tahay doorashadaada LIKENEW! ❤️';
+
+    return json({
       success: true,
       order_id: orderId,
       branch,
       status_code: statusCode,
       status: mapped ? mapped.en : `Status Code ${statusCode}`,
-      status_somali: mapped ? mapped.so : `Heerka uu joogo: (Status Code ${statusCode})`,
+      status_somali: statusSo,
       whatsapp_phone: whatsappPhone,
-    };
-
-    if (mapped && mapped.deliveryNote) {
-      responsePayload.delivery_note = mapped.deliveryNote;
-    }
-
-    return NextResponse.json(responsePayload);
-  } catch (error) {
-    console.error('💥 order-tracker crash:', error);
-    return NextResponse.json({
-      success: false,
-      error: 'INTERNAL_ERROR',
-      order_id: null,
+      ...(mapped && mapped.deliveryNote ? { delivery_note: mapped.deliveryNote } : {}),
+      reply,
     });
+  } catch (error) {
+    console.error('order-tracker crash:', error);
+    return json({ success: false, error: 'INTERNAL_ERROR', reply: ERROR_MSG });
   }
 }
