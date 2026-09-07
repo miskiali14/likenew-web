@@ -6,15 +6,14 @@ const BRAND = '#4421a3';
 
 // Nambarka WhatsApp ee LikeNew (beddel haddii loo baahdo)
 const WA_NUMBER = '252610311877';
-const WA_TEXT = 'Dalabkayga ii hubi';
 const TELEGRAM_URL = 'https://t.me/likenew_order_bot';
 
 export default function TrackOrderWidget() {
   const [isOpen, setIsOpen] = useState(false);
 
   const openWhatsApp = () => {
-    const url = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(WA_TEXT)}`;
-    window.open(url, '_blank', 'noopener,noreferrer');
+    // Farriin horay loo buuxiyay ma jirto — sanduuqu wuu banaan yahay
+    window.open(`https://wa.me/${WA_NUMBER}`, '_blank', 'noopener,noreferrer');
     setIsOpen(false);
   };
 
