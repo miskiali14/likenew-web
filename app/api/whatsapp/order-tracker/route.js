@@ -192,18 +192,28 @@ async function sendWatiMessage(waId, text) {
     return { sent: false, reason: 'not_configured' };
   }
   const auth = token.startsWith('Bearer ') ? token : `Bearer ${token}`;
+  const base = endpoint.replace(/\/$/, '');
   const url =
-    `${endpoint.replace(/\/$/, '')}/api/v1/sendSessionMessage/${encodeURIComponent(waId)}` +
+    `${base}/api/v1/sendSessionMessage/${encodeURIComponent(waId)}` +
     `?messageText=${encodeURIComponent(text)}`;
 
   try {
+    // WATI v1 sendSessionMessage: messageText waa query param, body iyo
+    // Content-Type looma baahna (mararqaar Content-Type: application/json
+    // oo body la'aan ah wuxuu keenaa 400).
     const res = await fetch(url, {
       method: 'POST',
-      headers: { Authorization: auth, 'Content-Type': 'application/json' },
+      headers: { Authorization: auth, accept: '*/*' },
     });
-    const data = await res.json().catch(() => null);
-    if (!res.ok) {
-      console.error('WATI send failed', res.status, data);
+    const raw = await res.text();
+    let data = null;
+    try {
+      data = JSON.parse(raw);
+    } catch {
+      data = raw;
+    }
+    if (!res.ok || (data && data.result === false)) {
+      console.error('WATI send failed', res.status, raw.slice(0, 300));
       return { sent: false, status: res.status, data };
     }
     return { sent: true, data };
