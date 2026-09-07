@@ -98,8 +98,10 @@ const NOT_FOUND = {
 const ORDER_RE = /\b(HQ|KM5)-\d+\b/i;
 const GREETING_RE =
   /^(hi+|hey+|hello|hallo|start|menu|salaan|salam|asc|a\.s\.c|assalamu|salamu|iska warran|war|haye|hai|good (morning|afternoon|evening))\b/i;
+// Salaanta ("hi", "hello") waa luqad-labeed — kuma jiraan halkan.
+// English kaliya marka farriintu leedahay eray Ingiriisi cad.
 const EN_HINT_RE =
-  /\b(my order|track|where('?s| is)|status|help|complaint|refund|branch|locker|hello|hi|please|thanks|thank you)\b/i;
+  /\b(my order|track my|where('?s| is)|order status|need help|customer help|i have a complaint|refund|damaged|missing|payment|your branch|the locker|nearest|please help|thank you)\b/i;
 const SO_HINT_RE =
   /\b(salaan|asc|dalab|dalabkayga|hubi|xaggee|diyaar|caawi|caawimaad|cabasho|dhibaato|xarun|goob|lacag|dhar)\b/i;
 
