@@ -233,20 +233,35 @@ export async function POST(request) {
   try {
     const body = await readInput(request);
 
+    // Duub payload-ka WATI (Vercel logs)
+    console.log('[order-bot] incoming:', JSON.stringify(body).slice(0, 800));
+
     // ===== HAB 1: WATI inbound webhook =====
-    if (body.waId && (body.eventType || body.owner !== undefined)) {
-      // Loop-ka ka hortag: kaliya inbound customer text
-      if (!isWatiInbound(body)) {
+    if (body.waId) {
+      const eventType = String(body.eventType || body.type || '').toLowerCase();
+      const isOwnerOutbound = body.owner === true || body.owner === 'true';
+      // Loop-ka ka hortag: ha ka jawaabin farriimaha business-ku diray
+      if (isOwnerOutbound || eventType === 'sessionmessagesent' || eventType === 'templatemessagesent') {
+        console.log('[order-bot] ignored (outbound/owner)');
         return NextResponse.json({ ok: true, ignored: true });
       }
+
       const msgType = String(body.type || 'text').toLowerCase();
       const text =
-        msgType === 'text'
-          ? String(body.text || body.message || '').trim()
-          : ''; // media/other -> menu
+        msgType === 'text' || msgType === 'message' || msgType === ''
+          ? String(
+              body.text ?? body.message ?? body.messageText ?? body.body ?? '',
+            ).trim()
+          : '';
 
+      const waId = String(body.waId).trim();
       const result = await computeReply(text);
-      const sendRes = await sendWatiMessage(String(body.waId), result.reply);
+      const sendRes = await sendWatiMessage(waId, result.reply);
+      console.log(
+        `[order-bot] waId=${waId} text="${text}" intent=${result.intent || 'order'} sent=${sendRes.sent} ${
+          sendRes.sent ? '' : JSON.stringify(sendRes).slice(0, 300)
+        }`,
+      );
 
       return NextResponse.json({ ok: true, intent: result.intent || null, sent: sendRes.sent });
     }
