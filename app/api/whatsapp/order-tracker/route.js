@@ -105,7 +105,8 @@ const EN_HINT_RE =
 const SO_HINT_RE =
   /\b(salaan|asc|dalab|dalabkayga|hubi|xaggee|diyaar|caawi|caawimaad|cabasho|dhibaato|xarun|goob|lacag|dhar)\b/i;
 
-const OPT1_RE = /^(1|1️⃣)$|\b(track|order tracker|dalab|dalabkayga|la socod|order-?kayga)\b/i;
+const OPT1_RE =
+  /^(1|1️⃣)$|\b(track|tracking|order|orders|status|dalab|dalabka|dalabkayga|la socod|order-?kayga|xaggee|marayaa|diyaar baa)\b/i;
 const OPT2_RE = /^(2|2️⃣)$|\b(help|support|customer help|caawi|caawimaad|taageero)\b/i;
 const OPT3_RE =
   /^(3|3️⃣)$|\b(complaint|cabasho|dhibaato|refund|damaged|missing|lost|payment dispute|lacag|dhar (khaldan|maqan|luntay))\b/i;
