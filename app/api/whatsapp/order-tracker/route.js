@@ -191,16 +191,20 @@ async function sendWatiMessage(waId, text) {
     console.error('WATI_API_ENDPOINT / WATI_API_TOKEN lama dejin');
     return { sent: false, reason: 'not_configured' };
   }
-  const auth = token.startsWith('Bearer ') ? token : `Bearer ${token}`;
-  const base = endpoint.replace(/\/$/, '');
-  const url =
-    `${base}/api/v1/sendSessionMessage/${encodeURIComponent(waId)}` +
-    `?messageText=${encodeURIComponent(text)}`;
+  // Nadiifi token-ka: ka saar xaraf kasta oo aan ASCII-la-daabici-karin
+  // (•, newline, iwn) si header-ku ByteString cilad u keenin.
+  let clean = String(token).replace(/[^\x20-\x7E]/g, '').trim();
+  if (!/^bearer\s/i.test(clean)) clean = `Bearer ${clean}`;
+  const auth = clean;
+
+  const base = endpoint.replace(/[^\x20-\x7E]/g, '').replace(/\/$/, '');
+  const digits = String(waId).replace(/\D/g, '');
+
+  // messageText -> query param (URLSearchParams = encoding hubaal ah)
+  const qs = new URLSearchParams({ messageText: String(text) }).toString();
+  const url = `${base}/api/v1/sendSessionMessage/${digits}?${qs}`;
 
   try {
-    // WATI v1 sendSessionMessage: messageText waa query param, body iyo
-    // Content-Type looma baahna (mararqaar Content-Type: application/json
-    // oo body la'aan ah wuxuu keenaa 400).
     const res = await fetch(url, {
       method: 'POST',
       headers: { Authorization: auth, accept: '*/*' },
@@ -213,12 +217,12 @@ async function sendWatiMessage(waId, text) {
       data = raw;
     }
     if (!res.ok || (data && data.result === false)) {
-      console.error('WATI send failed', res.status, raw.slice(0, 300));
+      console.error('WATI send failed', res.status, String(raw).slice(0, 300));
       return { sent: false, status: res.status, data };
     }
     return { sent: true, data };
   } catch (e) {
-    console.error('WATI send error', e);
+    console.error('WATI send error', String(e), '| authLen=', auth.length, '| base=', base);
     return { sent: false, error: String(e) };
   }
 }
