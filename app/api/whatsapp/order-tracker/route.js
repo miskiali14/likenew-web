@@ -1,15 +1,19 @@
 import { NextResponse } from 'next/server';
 
 /*
- * WhatsApp Order Bot endpoint
+ * LikeNew WhatsApp Order Bot
  * Method: POST
- * Body (mid kasta way shaqeynaysaa):
- *   { "message": "HQ-8781" }                 <- WATI chatbot (first_incoming_message)
- *   { "order_id": "HQ-8781", "whatsapp_phone": "2526xxxxxxx" }
- *   { "text": "track my order HQ-8781" }
  *
- * Jawaab kasta waxay leedahay `reply` field = qoraal WhatsApp diyaar ah.
- * WATI Chatbot: Webhook -> Send message {{order_reply}}.
+ * Laba hab ayey u shaqeysaa:
+ *
+ * 1) WATI "message received" webhook (habka rasmiga ah):
+ *    WATI wuxuu farriin kasta oo soo gasha u soo diraa payload
+ *    ({ eventType:"message", owner:false, text:"HQ-8781", waId:"2526..." }).
+ *    Backend-ku jawaabta ayuu si toos ah ugu celiyaa WATI send API.
+ *    Env vars loo baahan yahay: WATI_API_ENDPOINT, WATI_API_TOKEN
+ *
+ * 2) Direct/test ({ "message": "HQ-8781" }): wuxuu soo celiyaa
+ *    { reply: "...", ... } JSON.
  */
 
 const STATUS_MAP = {
@@ -98,8 +102,6 @@ const NOT_FOUND = {
 const ORDER_RE = /\b(HQ|KM5)-\d+\b/i;
 const GREETING_RE =
   /^(hi+|hey+|hello|hallo|start|menu|salaan|salam|asc|a\.s\.c|assalamu|salamu|iska warran|war|haye|hai|good (morning|afternoon|evening))\b/i;
-// Salaanta ("hi", "hello") waa luqad-labeed — kuma jiraan halkan.
-// English kaliya marka farriintu leedahay eray Ingiriisi cad.
 const EN_HINT_RE =
   /\b(my order|track my|where('?s| is)|order status|need help|customer help|i have a complaint|refund|damaged|missing|payment|your branch|the locker|nearest|please help|thank you)\b/i;
 const SO_HINT_RE =
@@ -112,20 +114,17 @@ const OPT3_RE =
   /^(3|3️⃣)$|\b(complaint|cabasho|dhibaato|refund|damaged|missing|lost|payment dispute|lacag|dhar (khaldan|maqan|luntay))\b/i;
 const OPT4_RE = /^(4|4️⃣)$|\b(branch|branches|locker|lockers|xarun|xarumaha|goob|location|address|cinwaan)\b/i;
 
-function json(payload) {
-  return NextResponse.json(payload);
-}
-
 function pickLang(text) {
   if (SO_HINT_RE.test(text)) return 'so';
   if (EN_HINT_RE.test(text) && !/[؀-ۿ]/.test(text)) return 'en';
-  return 'so'; // default Somali
+  return 'so';
 }
 
 export async function GET() {
   return NextResponse.json({
     status: 'online',
     message: 'LikeNew WhatsApp Order Bot API is running.',
+    wati_configured: Boolean(process.env.WATI_API_ENDPOINT && process.env.WATI_API_TOKEN),
   });
 }
 
@@ -165,10 +164,94 @@ async function readInput(request) {
   return out;
 }
 
+// ---- Logic-ga: farriin -> { reply, meta } ----
+async function computeReply(rawTextIn) {
+  const rawText = String(rawTextIn || '').trim();
+  const lang = pickLang(rawText);
+
+  const match = rawText.match(ORDER_RE);
+  if (match) {
+    return await lookupOrder(match[0].toUpperCase(), lang);
+  }
+  if (!rawText || GREETING_RE.test(rawText)) {
+    return { success: false, intent: 'MENU', reply: MENU[lang] };
+  }
+  if (OPT1_RE.test(rawText)) return { success: false, intent: 'ASK_ORDER_ID', reply: ASK_ID[lang] };
+  if (OPT2_RE.test(rawText)) return { success: false, intent: 'CUSTOMER_HELP', reply: HELP[lang] };
+  if (OPT3_RE.test(rawText)) return { success: false, intent: 'COMPLAINT', reply: COMPLAINT[lang] };
+  if (OPT4_RE.test(rawText)) return { success: false, intent: 'BRANCHES', reply: BRANCHES[lang] };
+  return { success: false, intent: 'FALLBACK', reply: MENU[lang] };
+}
+
+// ---- WATI send API ----
+async function sendWatiMessage(waId, text) {
+  const endpoint = process.env.WATI_API_ENDPOINT; // e.g. https://live-mt-server.wati.io/10233063
+  const token = process.env.WATI_API_TOKEN; // "Bearer eyJ..." ama "eyJ..."
+  if (!endpoint || !token) {
+    console.error('WATI_API_ENDPOINT / WATI_API_TOKEN lama dejin');
+    return { sent: false, reason: 'not_configured' };
+  }
+  const auth = token.startsWith('Bearer ') ? token : `Bearer ${token}`;
+  const url =
+    `${endpoint.replace(/\/$/, '')}/api/v1/sendSessionMessage/${encodeURIComponent(waId)}` +
+    `?messageText=${encodeURIComponent(text)}`;
+
+  try {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { Authorization: auth, 'Content-Type': 'application/json' },
+    });
+    const data = await res.json().catch(() => null);
+    if (!res.ok) {
+      console.error('WATI send failed', res.status, data);
+      return { sent: false, status: res.status, data };
+    }
+    return { sent: true, data };
+  } catch (e) {
+    console.error('WATI send error', e);
+    return { sent: false, error: String(e) };
+  }
+}
+
+// ---- Aqoonso WATI inbound webhook ----
+function isWatiInbound(body) {
+  const eventType = String(body.eventType || body.type || '').toLowerCase();
+  const owner = body.owner;
+  const isOwnerOutbound = owner === true || owner === 'true';
+  // Kaliya farriimaha macmiilku soo diray (owner=false) oo nooca "message" ah
+  return (
+    Boolean(body.waId) &&
+    !isOwnerOutbound &&
+    (eventType === 'message' ||
+      eventType === 'newcontactmessagereceived' ||
+      eventType === 'session_message' ||
+      eventType === '')
+  );
+}
+
 export async function POST(request) {
   try {
     const body = await readInput(request);
 
+    // ===== HAB 1: WATI inbound webhook =====
+    if (body.waId && (body.eventType || body.owner !== undefined)) {
+      // Loop-ka ka hortag: kaliya inbound customer text
+      if (!isWatiInbound(body)) {
+        return NextResponse.json({ ok: true, ignored: true });
+      }
+      const msgType = String(body.type || 'text').toLowerCase();
+      const text =
+        msgType === 'text'
+          ? String(body.text || body.message || '').trim()
+          : ''; // media/other -> menu
+
+      const result = await computeReply(text);
+      const sendRes = await sendWatiMessage(String(body.waId), result.reply);
+
+      return NextResponse.json({ ok: true, intent: result.intent || null, sent: sendRes.sent });
+    }
+
+    // ===== HAB 2: Direct / test =====
     const rawText = String(
       body.order_id ??
         body.orderID ??
@@ -180,48 +263,15 @@ export async function POST(request) {
         '',
     ).trim();
 
-    const whatsappPhone =
-      (body.whatsapp_phone && String(body.whatsapp_phone).trim()) ||
-      (body.whatsappPhone && String(body.whatsappPhone).trim()) ||
-      (body.waId && String(body.waId).trim()) ||
-      null;
-
-    const lang = pickLang(rawText);
-
-    // 1. Order ID (mudnaan) — xitaa haddii jumlad dheer tahay
-    const match = rawText.match(ORDER_RE);
-    if (match) {
-      return await lookupOrder(match[0].toUpperCase(), whatsappPhone, lang);
-    }
-
-    // 2. Farriin madhan ama salaan / menu -> MAIN MENU
-    if (!rawText || GREETING_RE.test(rawText)) {
-      return json({ success: false, intent: 'MENU', reply: MENU[lang] });
-    }
-
-    // 3. Ikhtiyaarrada menu-ga
-    if (OPT1_RE.test(rawText)) {
-      return json({ success: false, intent: 'ASK_ORDER_ID', reply: ASK_ID[lang] });
-    }
-    if (OPT2_RE.test(rawText)) {
-      return json({ success: false, intent: 'CUSTOMER_HELP', reply: HELP[lang] });
-    }
-    if (OPT3_RE.test(rawText)) {
-      return json({ success: false, intent: 'COMPLAINT', reply: COMPLAINT[lang] });
-    }
-    if (OPT4_RE.test(rawText)) {
-      return json({ success: false, intent: 'BRANCHES', reply: BRANCHES[lang] });
-    }
-
-    // 4. Waxba lama fahmin -> dib u tus menu-ga
-    return json({ success: false, intent: 'FALLBACK', reply: MENU[lang] });
+    const result = await computeReply(rawText);
+    return NextResponse.json(result);
   } catch (error) {
     console.error('order-bot crash:', error);
-    return json({ success: false, error: 'INTERNAL_ERROR', reply: ERROR_MSG.so });
+    return NextResponse.json({ success: false, error: 'INTERNAL_ERROR', reply: ERROR_MSG.so });
   }
 }
 
-async function lookupOrder(orderId, whatsappPhone, lang) {
+async function lookupOrder(orderId, lang) {
   let cleanCloudToken = '';
   let branch = '';
   let orderIdOnly = '';
@@ -238,7 +288,7 @@ async function lookupOrder(orderId, whatsappPhone, lang) {
 
   if (!cleanCloudToken) {
     console.error(`Missing CleanCloud token for branch ${branch}`);
-    return json({ success: false, error: 'INTERNAL_ERROR', order_id: orderId, reply: ERROR_MSG[lang] });
+    return { success: false, error: 'INTERNAL_ERROR', order_id: orderId, reply: ERROR_MSG[lang] };
   }
 
   let cleanCloudData = null;
@@ -251,7 +301,7 @@ async function lookupOrder(orderId, whatsappPhone, lang) {
     cleanCloudData = await res.json().catch(() => null);
   } catch (apiError) {
     console.error(`CleanCloud fetch error (${branch}):`, apiError);
-    return json({ success: false, error: 'INTERNAL_ERROR', order_id: orderId, reply: ERROR_MSG[lang] });
+    return { success: false, error: 'INTERNAL_ERROR', order_id: orderId, reply: ERROR_MSG[lang] };
   }
 
   let targetOrder = null;
@@ -268,12 +318,12 @@ async function lookupOrder(orderId, whatsappPhone, lang) {
   }
 
   if (!targetOrder || targetOrder.status === undefined || targetOrder.status === null) {
-    return json({
+    return {
       success: false,
       error: 'ORDER_NOT_FOUND',
       order_id: orderId,
       reply: NOT_FOUND[lang](orderId),
-    });
+    };
   }
 
   const statusCode = String(targetOrder.status);
@@ -293,15 +343,14 @@ async function lookupOrder(orderId, whatsappPhone, lang) {
         `*Heerka uu joogo:* ${statusSo}${note}\n\n` +
         'Waad ku mahadsan tahay doorashadaada LIKENEW! ❤️';
 
-  return json({
+  return {
     success: true,
     order_id: orderId,
     branch,
     status_code: statusCode,
     status: statusEn,
     status_somali: statusSo,
-    whatsapp_phone: whatsappPhone,
     ...(mapped && mapped.deliveryNote ? { delivery_note: mapped.deliveryNote } : {}),
     reply,
-  });
+  };
 }
