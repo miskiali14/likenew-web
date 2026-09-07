@@ -191,40 +191,44 @@ async function sendWatiMessage(waId, text) {
     console.error('WATI_API_ENDPOINT / WATI_API_TOKEN lama dejin');
     return { sent: false, reason: 'not_configured' };
   }
-  // Nadiifi token-ka: ka saar xaraf kasta oo aan ASCII-la-daabici-karin
-  // (•, newline, iwn) si header-ku ByteString cilad u keenin.
-  let clean = String(token).replace(/[^\x20-\x7E]/g, '').trim();
-  if (!/^bearer\s/i.test(clean)) clean = `Bearer ${clean}`;
-  const auth = clean;
-
+  // Nadiifi token-ka: ka saar xaraf kasta oo aan ASCII ahayn (•, newline).
+  const rawTok = String(token).replace(/[^\x20-\x7E]/g, '').trim();
+  const bare = rawTok.replace(/^bearer\s+/i, ''); // token-ka oo qura
   const base = endpoint.replace(/[^\x20-\x7E]/g, '').replace(/\/$/, '');
   const digits = String(waId).replace(/\D/g, '');
 
-  // messageText -> query param (URLSearchParams = encoding hubaal ah)
   const qs = new URLSearchParams({ messageText: String(text) }).toString();
   const url = `${base}/api/v1/sendSessionMessage/${digits}?${qs}`;
 
-  try {
-    const res = await fetch(url, {
-      method: 'POST',
-      headers: { Authorization: auth, accept: '*/*' },
-    });
-    const raw = await res.text();
-    let data = null;
+  // Isku day "Bearer <tok>" marka hore, haddii 401 -> isku day "<tok>" qura
+  const attempts = [`Bearer ${bare}`, bare];
+  let last = null;
+  for (const auth of attempts) {
     try {
-      data = JSON.parse(raw);
-    } catch {
-      data = raw;
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { Authorization: auth, accept: '*/*' },
+      });
+      const raw = await res.text();
+      let data = null;
+      try {
+        data = JSON.parse(raw);
+      } catch {
+        data = raw;
+      }
+      if (res.ok && !(data && data.result === false)) {
+        return { sent: true, data };
+      }
+      last = { sent: false, status: res.status, data: String(raw).slice(0, 200) };
+      console.error('WATI send failed', res.status, String(raw).slice(0, 200));
+      if (res.status !== 401 && res.status !== 403) break; // 401/403 kaliya ku celi
+    } catch (e) {
+      last = { sent: false, error: String(e) };
+      console.error('WATI send error', String(e), '| base=', base);
+      break;
     }
-    if (!res.ok || (data && data.result === false)) {
-      console.error('WATI send failed', res.status, String(raw).slice(0, 300));
-      return { sent: false, status: res.status, data };
-    }
-    return { sent: true, data };
-  } catch (e) {
-    console.error('WATI send error', String(e), '| authLen=', auth.length, '| base=', base);
-    return { sent: false, error: String(e) };
   }
+  return last || { sent: false };
 }
 
 // ---- Aqoonso WATI inbound webhook ----
