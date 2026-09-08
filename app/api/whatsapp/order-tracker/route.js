@@ -37,7 +37,8 @@ const MENU = {
     '1️⃣ 📦 Dalabkayga la socod\n' +
     '2️⃣ 🎧 Caawimaad macmiil\n' +
     '3️⃣ 😠 Cabasho ama dhibaato\n' +
-    '4️⃣ 📍 Xarumaheena / Lockers-ka\n\n' +
+    '4️⃣ 📍 Xarumaheena / Lockers-ka\n' +
+    '5️⃣ 🎒 Waxyaabaha la helay (Lost & Found)\n\n' +
     'Waxaad qori kartaa numberka (tusaale "1") ama qoraalka rabtaada.',
   en:
     'Hi 👋 Welcome to LikeNew! 🧺\n\n' +
@@ -45,7 +46,8 @@ const MENU = {
     '1️⃣ 📦 Track my order\n' +
     '2️⃣ 🎧 Customer Help\n' +
     '3️⃣ 😠 Complaint\n' +
-    '4️⃣ 📍 Our branches / lockers\n\n' +
+    '4️⃣ 📍 Our branches / lockers\n' +
+    '5️⃣ 🎒 Lost & Found\n\n' +
     'You can type the number (e.g. "1") or just tell me what you need.',
 };
 
@@ -85,6 +87,17 @@ const BRANCHES = {
     'Check the Lockers page on our website, or call 📞 2414 for the nearest one.',
 };
 
+const LOST_FOUND = {
+  so:
+    'Waxyaabaha macaamiisha ay ku dhex tageen dharka (jeebabka: lacag, furayaal, taleefan, kaararka, iwm) waxaad ka fiirin kartaa halkan: 🎒\n\n' +
+    '🔗 https://found.likenew.so\n\n' +
+    'Haddii aad wax lumisay oo aadan bogga ka helin, wac 📞 2414.',
+  en:
+    'Items customers left in their clothes (pockets: cash, keys, phone, cards, etc.) can be viewed here: 🎒\n\n' +
+    '🔗 https://found.likenew.so\n\n' +
+    "If you can't find your lost item on the page, call 📞 2414.",
+};
+
 const ERROR_MSG = {
   so: '⚠️ Waan ka xumahay, hadda ma hubin karo dalabkaaga.\n\nFadlan isku day mar kale wax yar kadib.',
   en: "⚠️ Sorry, I'm unable to check your order right now.\n\nPlease try again shortly.",
@@ -111,8 +124,10 @@ const OPT1_RE =
   /^(1|1️⃣)$|\b(track|tracking|order|orders|status|dalab|dalabka|dalabkayga|la socod|order-?kayga|xaggee|marayaa|diyaar baa)\b/i;
 const OPT2_RE = /^(2|2️⃣)$|\b(help|support|customer help|caawi|caawimaad|taageero)\b/i;
 const OPT3_RE =
-  /^(3|3️⃣)$|\b(complaint|cabasho|dhibaato|refund|damaged|missing|lost|payment dispute|lacag|dhar (khaldan|maqan|luntay))\b/i;
+  /^(3|3️⃣)$|\b(complaint|cabasho|dhibaato|refund|damaged|payment dispute|dhar (khaldan|maqan|luntay))\b/i;
 const OPT4_RE = /^(4|4️⃣)$|\b(branch|branches|locker|lockers|xarun|xarumaha|goob|location|address|cinwaan)\b/i;
+const OPT5_RE =
+  /^(5|5️⃣)$|\b(lost ?(and|&) ?found|found items?|lumay|lumiyay|luntay|jeeb|jeebka|jeebabka|boorso|wallet|purse|keys?|fure|furayaal|taleefan|phone|watch|saacad|ring|kaatun|id card|kaarka|passport|baasaboor|left in (my|the)|iga tagay|iga hadhay|iga baxay|la iga waayay)\b/i;
 
 function pickLang(text) {
   if (SO_HINT_RE.test(text)) return 'so';
@@ -178,6 +193,8 @@ async function computeReply(rawTextIn) {
   }
   if (OPT1_RE.test(rawText)) return { success: false, intent: 'ASK_ORDER_ID', reply: ASK_ID[lang] };
   if (OPT2_RE.test(rawText)) return { success: false, intent: 'CUSTOMER_HELP', reply: HELP[lang] };
+  // OPT5 (lost & found) OPT3 ka hor — "lost wallet" -> Lost&Found, maaha Complaint
+  if (OPT5_RE.test(rawText)) return { success: false, intent: 'LOST_FOUND', reply: LOST_FOUND[lang] };
   if (OPT3_RE.test(rawText)) return { success: false, intent: 'COMPLAINT', reply: COMPLAINT[lang] };
   if (OPT4_RE.test(rawText)) return { success: false, intent: 'BRANCHES', reply: BRANCHES[lang] };
   return { success: false, intent: 'FALLBACK', reply: MENU[lang] };
