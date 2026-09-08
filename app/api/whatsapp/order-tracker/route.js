@@ -112,6 +112,24 @@ const ERROR_MSG = {
   en: "⚠️ Sorry, I'm unable to check your order right now.\n\nPlease try again shortly.",
 };
 
+// Su'aal ka baxsan hadafka bot-ka (qiimo, saacado, delivery, sheeko guud, iwm)
+const UNKNOWN = {
+  so:
+    'Ka xumee, si buuxda uma fahmin. 🤔\n\n' +
+    'Waxaan kaa caawin karaa:\n' +
+    '📦 La socodka dalabka (ii soo dir Order ID: HQ-8781 / KM5-8781)\n' +
+    '🎒 Waxyaabaha la helay (qor magacaaga / ID-gaaga)\n' +
+    '😠 Cabasho\n📍 Xarumaha / Lockers-ka\n\n' +
+    'Su’aalaha kale (qiimaha, saacadaha, delivery, iwm) fadlan wac 📞 2414.',
+  en:
+    "Sorry, I didn't quite get that. 🤔\n\n" +
+    'I can help with:\n' +
+    '📦 Order tracking (send your Order ID: HQ-8781 / KM5-8781)\n' +
+    '🎒 Lost & Found (type your name / ID)\n' +
+    '😠 Complaints\n📍 Branches / lockers\n\n' +
+    'For anything else (prices, hours, delivery, etc.) please call 📞 2414.',
+};
+
 const NOT_FOUND = {
   so: (id) =>
     `❌ Ma helin dalab leh nambarka *${id}*.\n\nFadlan hubi nambarka rasiidhkaaga oo mar kale isku day.`,
@@ -247,7 +265,8 @@ async function computeReply(rawTextIn) {
     if (r) return r;
   }
 
-  return { success: false, intent: 'FALLBACK', reply: MENU[lang] };
+  // Su'aal ka baxsan hadafka bot-ka
+  return { success: false, intent: 'UNKNOWN', reply: UNKNOWN[lang] };
 }
 
 // ---- WATI send API ----
