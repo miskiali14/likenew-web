@@ -89,13 +89,22 @@ const BRANCHES = {
 
 const LOST_FOUND = {
   so:
-    'Waxyaabaha macaamiisha ay ku dhex tageen dharka (jeebabka: lacag, furayaal, taleefan, kaararka, iwm) waxaad ka fiirin kartaa halkan: 🎒\n\n' +
-    '🔗 https://found.likenew.so\n\n' +
-    'Haddii aad wax lumisay oo aadan bogga ka helin, wac 📞 2414.',
+    'Waxyaabaha macaamiisha ay ku dhex tageen dharka (jeebabka: lacag, furayaal, taleefan, kaararka, iwm) 🎒\n\n' +
+    'Si aan halkan kuugu raadiyo, ii soo dir:\n' +
+    '*found* + magacaaga / ID-gaaga / nambarkaaga\n\n' +
+    'Tusaale:\n• found Ahmed Zaki\n• found 11250\n• found 0615123456\n\n' +
+    'Ama booqo 🔗 https://found.likenew.so',
   en:
-    'Items customers left in their clothes (pockets: cash, keys, phone, cards, etc.) can be viewed here: 🎒\n\n' +
-    '🔗 https://found.likenew.so\n\n' +
-    "If you can't find your lost item on the page, call 📞 2414.",
+    'Items customers left in their clothes (pockets: cash, keys, phone, cards, etc.) 🎒\n\n' +
+    'To search here, send me:\n' +
+    '*found* + your name / ID / phone number\n\n' +
+    'Example:\n• found Ahmed Zaki\n• found 11250\n• found 0615123456\n\n' +
+    'Or visit 🔗 https://found.likenew.so',
+};
+
+const LF_STATUS = {
+  CLAIMED: { so: 'Waa la qaatay ✅', en: 'Already claimed ✅' },
+  HELD: { so: 'Xarunta ayaa lagu hayaa 🏬', en: 'Held at branch 🏬' },
 };
 
 const ERROR_MSG = {
@@ -128,6 +137,8 @@ const OPT3_RE =
 const OPT4_RE = /^(4|4️⃣)$|\b(branch|branches|locker|lockers|xarun|xarumaha|goob|location|address|cinwaan)\b/i;
 const OPT5_RE =
   /^(5|5️⃣)$|\b(lost ?(and|&) ?found|found items?|lumay|lumiyay|luntay|jeeb|jeebka|jeebabka|boorso|wallet|purse|keys?|fure|furayaal|taleefan|phone|watch|saacad|ring|kaatun|id card|kaarka|passport|baasaboor|left in (my|the)|iga tagay|iga hadhay|iga baxay|la iga waayay)\b/i;
+// "found Ahmed Zaki" / "la helay 11250" / "raadi 0615..." -> raadin haadlinks
+const LF_SEARCH_RE = /^(found|la\s?helay|laga\s?helay|raadi|search|waxyaabaha)\b[\s:,-]*(.{2,})$/i;
 
 function pickLang(text) {
   if (SO_HINT_RE.test(text)) return 'so';
@@ -193,6 +204,11 @@ async function computeReply(rawTextIn) {
   }
   if (OPT1_RE.test(rawText)) return { success: false, intent: 'ASK_ORDER_ID', reply: ASK_ID[lang] };
   if (OPT2_RE.test(rawText)) return { success: false, intent: 'CUSTOMER_HELP', reply: HELP[lang] };
+  // "found <query>" -> raadi haadlinks (OPT5 ka hor)
+  const lf = rawText.match(LF_SEARCH_RE);
+  if (lf && lf[2] && lf[2].trim().length >= 2) {
+    return await searchLostFound(lf[2].trim(), lang);
+  }
   // OPT5 (lost & found) OPT3 ka hor — "lost wallet" -> Lost&Found, maaha Complaint
   if (OPT5_RE.test(rawText)) return { success: false, intent: 'LOST_FOUND', reply: LOST_FOUND[lang] };
   if (OPT3_RE.test(rawText)) return { success: false, intent: 'COMPLAINT', reply: COMPLAINT[lang] };
@@ -319,6 +335,66 @@ export async function POST(request) {
     console.error('order-bot crash:', error);
     return NextResponse.json({ success: false, error: 'INTERNAL_ERROR', reply: ERROR_MSG.so });
   }
+}
+
+// ---- Lost & Found: raadi haadlinks ----
+async function searchLostFound(query, lang) {
+  let items = null;
+  try {
+    const res = await fetch(
+      `https://www.haadlinks.com/api/public/customer-items/search?q=${encodeURIComponent(query)}`,
+      { headers: { accept: 'application/json' } },
+    );
+    const data = await res.json().catch(() => null);
+    if (res.ok && Array.isArray(data)) items = data;
+    else if (res.ok && data && Array.isArray(data.items)) items = data.items;
+  } catch (e) {
+    console.error('haadlinks search error', String(e));
+    return { success: false, intent: 'LF_ERROR', reply: ERROR_MSG[lang] };
+  }
+
+  if (!items || items.length === 0) {
+    return {
+      success: false,
+      intent: 'LF_NONE',
+      reply:
+        lang === 'en'
+          ? `🔎 No items found for *"${query}"*.\n\nPlease check the name/ID or visit your branch. 📞 2414`
+          : `🔎 Wax lama helin *"${query}"*.\n\nFadlan hubi magaca/ID-ga ama booqo xarunta. 📞 2414`,
+    };
+  }
+
+  const shown = items.slice(0, 5);
+  const lines = shown.map((it, i) => {
+    const st = LF_STATUS[String(it.status || '').toUpperCase()];
+    const statusTxt = st ? st[lang] : it.status || '';
+    const meta = [it.branch && `${it.branch}`, it.customerId && `ID ${it.customerId}`, it.date]
+      .filter(Boolean)
+      .join(' · ');
+    return (
+      `${i + 1}) *${it.customerName || query}*\n` +
+      (meta ? `   ${meta}\n` : '') +
+      (statusTxt ? `   ${statusTxt}\n` : '') +
+      (it.description ? `   ${it.description}` : '')
+    ).trim();
+  });
+
+  const head =
+    lang === 'en'
+      ? `🎒 Lost & Found — "${query}"\n\n`
+      : `🎒 Waxyaabaha la helay — "${query}"\n\n`;
+  const foot =
+    lang === 'en'
+      ? `\n\nFor held items, please visit your branch to collect. 📞 2414`
+      : `\n\nAlaabta la hayo, fadlan booqo xarunta si aad u qaadato. 📞 2414`;
+  const more =
+    items.length > shown.length
+      ? lang === 'en'
+        ? `\n\n(+${items.length - shown.length} more — see https://found.likenew.so)`
+        : `\n\n(+${items.length - shown.length} kale — eeg https://found.likenew.so)`
+      : '';
+
+  return { success: true, intent: 'LF_RESULTS', count: items.length, reply: head + lines.join('\n\n') + more + foot };
 }
 
 async function lookupOrder(orderId, lang) {
