@@ -115,7 +115,7 @@ const ERROR_MSG = {
 // Su'aal ka baxsan hadafka bot-ka (qiimo, saacado, delivery, sheeko guud, iwm)
 const UNKNOWN = {
   so:
-    'Ka xumee, si buuxda uma fahmin. 🤔\n\n' +
+    'Waan ka xumahay, si buuxda uma fahmin. 🤔\n\n' +
     'Waxaan kaa caawin karaa:\n' +
     '📦 La socodka dalabka (ii soo dir Order ID: HQ-8781 / KM5-8781)\n' +
     '🎒 Waxyaabaha la helay (qor magacaaga / ID-gaaga)\n' +
