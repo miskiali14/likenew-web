@@ -124,10 +124,22 @@ const NOT_FOUND = {
 const ORDER_RE = /\b(HQ|KM5)-\d+\b/i;
 const GREETING_RE =
   /^(hi+|hey+|hello|hallo|start|menu|salaan|salam|asc|a\.s\.c|assalamu|salamu|iska warran|war|haye|hai|good (morning|afternoon|evening))\b/i;
-const EN_HINT_RE =
-  /\b(my order|track my|where('?s| is)|order status|need help|customer help|i have a complaint|refund|damaged|missing|payment|your branch|the locker|nearest|please help|thank you)\b/i;
-const SO_HINT_RE =
-  /\b(salaan|asc|dalab|dalabkayga|hubi|xaggee|diyaar|caawi|caawimaad|cabasho|dhibaato|xarun|goob|lacag|dhar)\b/i;
+// Erayo qeexan oo luqad kasta — lagu qiimeeyo af farriinta
+const SO_WORDS = new Set(
+  ('waa waan waxaan waxa wuxuu waxay waxaad aan oo ku ka kaga u ii iga igu kuu noo uu ay iyo ' +
+    'maya haa sidee maxay maxaa xaggee halkee goorma imisa fadlan mahadsanid walaal abaayo adeer ' +
+    'dalab dalabka dalabkayga dalabkaaga hubi diyaar xarun xarunta goobta lacag dhar jeeb jeebka ' +
+    'lumay lumiyay luntay raadi soo dir kayga kaaga tahay yahay miyaa anigu adigu ma haye ' +
+    'ii iiga oo an baa ayaa waaye moo caawi caawimaad cabasho dhibaato ka warran')
+    .split(/\s+/),
+);
+const EN_WORDS = new Set(
+  ('the is are was were am my mine your yours you we they where when how what why which whose ' +
+    "please could would should still not don't can't won't isn't aren't i'm it's that this these " +
+    'those there here have has had do does did will shall about from into with for and but or ' +
+    'thanks thank morning afternoon evening hello hey want need know tell give show')
+    .split(/\s+/),
+);
 
 const OPT1_RE =
   /^(1|1️⃣)$|\b(track|tracking|order|orders|status|dalab|dalabka|dalabkayga|la socod|order-?kayga|xaggee|marayaa|diyaar baa)\b/i;
@@ -140,10 +152,21 @@ const OPT5_RE =
 // "found Ahmed Zaki" / "la helay 11250" / "raadi 0615..." -> raadin haadlinks
 const LF_SEARCH_RE = /^(found|la\s?helay|laga\s?helay|raadi|search|waxyaabaha)\b[\s:,-]*(.{2,})$/i;
 
+// Aqoonso afka farriinta: qiimee erayada Soomaali vs Ingiriisi.
+// Isku-mid ama midna la'aan -> Soomaali (macmiisha badankood).
 function pickLang(text) {
-  if (SO_HINT_RE.test(text)) return 'so';
-  if (EN_HINT_RE.test(text) && !/[؀-ۿ]/.test(text)) return 'en';
-  return 'so';
+  const t = String(text || '').toLowerCase();
+  if (/[؀-ۿ]/.test(t)) return 'so'; // far Carabi -> xaalad Soomaali
+  const words = t.match(/[a-z']+/g) || [];
+  let so = 0;
+  let en = 0;
+  for (const w of words) {
+    if (SO_WORDS.has(w)) so += 1;
+    if (EN_WORDS.has(w)) en += 1;
+  }
+  if (so > en) return 'so';
+  if (en > so) return 'en';
+  return en > 0 ? 'en' : 'so';
 }
 
 export async function GET() {
