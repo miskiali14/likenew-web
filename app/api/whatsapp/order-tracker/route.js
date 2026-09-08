@@ -213,6 +213,17 @@ async function computeReply(rawTextIn) {
   if (OPT5_RE.test(rawText)) return { success: false, intent: 'LOST_FOUND', reply: LOST_FOUND[lang] };
   if (OPT3_RE.test(rawText)) return { success: false, intent: 'COMPLAINT', reply: COMPLAINT[lang] };
   if (OPT4_RE.test(rawText)) return { success: false, intent: 'BRANCHES', reply: BRANCHES[lang] };
+
+  // FALLBACK ka hor: text-ku ma u eg yahay magac / telefoon / ID?
+  // -> isku day raadin Lost & Found (silent: wax lama helin -> menu)
+  const looksLikeName = /^[\p{L}][\p{L}\s.'’-]{3,40}$/u.test(rawText) && /\s/.test(rawText);
+  const looksLikePhone = /^\+?\d[\d\s-]{5,14}\d$/.test(rawText);
+  const looksLikeId = /^\d{3,8}$/.test(rawText);
+  if (looksLikeName || looksLikePhone || looksLikeId) {
+    const r = await searchLostFound(rawText, lang, true);
+    if (r) return r;
+  }
+
   return { success: false, intent: 'FALLBACK', reply: MENU[lang] };
 }
 
@@ -338,7 +349,8 @@ export async function POST(request) {
 }
 
 // ---- Lost & Found: raadi haadlinks ----
-async function searchLostFound(query, lang) {
+// silentIfEmpty: haddii run oo wax lama helin -> null (caller -> menu)
+async function searchLostFound(query, lang, silentIfEmpty = false) {
   let items = null;
   try {
     const res = await fetch(
@@ -350,10 +362,12 @@ async function searchLostFound(query, lang) {
     else if (res.ok && data && Array.isArray(data.items)) items = data.items;
   } catch (e) {
     console.error('haadlinks search error', String(e));
+    if (silentIfEmpty) return null;
     return { success: false, intent: 'LF_ERROR', reply: ERROR_MSG[lang] };
   }
 
   if (!items || items.length === 0) {
+    if (silentIfEmpty) return null;
     return {
       success: false,
       intent: 'LF_NONE',
