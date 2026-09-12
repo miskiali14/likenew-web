@@ -84,13 +84,32 @@ const HUMAN_SUPPORT = {
   en: 'I can connect you with our customer support team. 📞 2414 👨‍💼',
 };
 
+// Xogta lockers-ka waa xaqiiqo — ka soo qaatay components/Lockers.jsx
 const BRANCHES = {
   so:
-    'Waxaan xarumo iyo lockers ku leenahay Muqdisho. 📍\n\n' +
-    'Booqo bogga Lockers ee website-kayaga, ama wac 📞 2414 si aad u ogaato tan kuu dhow.',
+    'Xarumaheena / Lockers-ka LikeNew 📍\n\n' +
+    '1️⃣ *Waaberi Locker*\n' +
+    '   📍 21 Oct Street, Waaberi\n' +
+    '   🕐 24/7 Furan\n' +
+    '   🗺️ https://maps.app.goo.gl/tTvbmD63yowVTdz69\n\n' +
+    '2️⃣ *Hodan Locker*\n' +
+    '   📍 KM4 Street, Hodan\n' +
+    '   🕐 24/7 Furan\n' +
+    '   🗺️ https://maps.app.goo.gl/EoL4JyeiVgUq5aYQ7\n\n' +
+    'Liiska buuxa + khariidad: 🔗 https://www.likenew.so/lockers\n\n' +
+    'Su\'aal dheeraad ah → 📞 2414',
   en:
-    'We have branches and lockers around Mogadishu. 📍\n\n' +
-    'Check the Lockers page on our website, or call 📞 2414 for the nearest one.',
+    'LikeNew Branches / Lockers 📍\n\n' +
+    '1️⃣ *Waaberi Locker*\n' +
+    '   📍 21 Oct Street, Waaberi\n' +
+    '   🕐 Open 24/7\n' +
+    '   🗺️ https://maps.app.goo.gl/tTvbmD63yowVTdz69\n\n' +
+    '2️⃣ *Hodan Locker*\n' +
+    '   📍 KM4 Street, Hodan\n' +
+    '   🕐 Open 24/7\n' +
+    '   🗺️ https://maps.app.goo.gl/EoL4JyeiVgUq5aYQ7\n\n' +
+    'Full list + map: 🔗 https://www.likenew.so/lockers\n\n' +
+    'More questions → 📞 2414',
 };
 
 const LOST_FOUND = {
