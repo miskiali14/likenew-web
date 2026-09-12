@@ -214,7 +214,7 @@ const OPT1_RE =
   /^(1|1️⃣)$|\b(track|tracking|order|orders|status|dalab|dalabka|dalabkayga|la socod|order-?kayga|xaggee|marayaa|diyaar baa)\b/i;
 const OPT2_RE = /^(2|2️⃣)$|\b(help|support|customer help|caawi|caawimaad|taageero)\b/i;
 const OPT3_RE =
-  /^(3|3️⃣)$|\b(complaint|cabasho|dhibaato|refund|damaged|payment dispute|dhar (khaldan|maqan|luntay))\b/i;
+  /^(3|3️⃣)$|\b(complaint|cabasho|dhibaato|refund|damaged|payment dispute|dhar (khaldan|maqan|luntay)|lacag(ta)? celin|celi(ya)? lacag(ta)?)\b/i;
 const OPT4_RE = /^(4|4️⃣)$|\b(branch|branches|locker|lockers|xarun|xarumaha|goob|location|address|cinwaan)\b/i;
 const OPT5_RE =
   /^(5|5️⃣)$|\b(lost ?(and|&) ?found|found items?|lumay|lumiyay|luntay|jeeb|jeebka|jeebabka|boorso|wallet|purse|keys?|fure|furayaal|taleefan|phone|watch|saacad|ring|kaatun|id card|kaarka|passport|baasaboor|left in (my|the)|iga tagay|iga hadhay|iga baxay|la iga waayay)\b/i;
@@ -224,7 +224,7 @@ const LF_SEARCH_RE = /^(found|la\s?helay|laga\s?helay|raadi|search|waxyaabaha)\b
 // FAQ xaqiiqo ah (soo qaatay website-ka) — waa in ay ka horreeyaan OPT3/OPT5
 // si "refund policy" aanu u dhicin Complaint, "saacad" aanu u dhicin Lost&Found.
 const HOURS_RE =
-  /\b(saacadaha( shaqada)?|waqtiga shaqada|working ?hours|opening ?hours|what time (do you|are you)|when (do you|are you) open|when.*(open|close)|delivery time|pickup time|free delivery|geli (goorma|waqtiga))\b/i;
+  /\b(hours?|saacadaha( shaqada)?|waqtiga shaqada|working ?hours|opening ?hours|what time (do you|are you)|when (do you|are you) open|when.*(open|close)|delivery time|pickup time|free delivery|geli (goorma|waqtiga))\b/i;
 const REFUND_POLICY_RE =
   /\b(refund policy|policy (on|for) refund|siyaasadd?a (lacag ?celinta|celinta)|refund ?policy)\b/i;
 const PRICE_RE = /\b(price|prices|pricing|cost|how much (is|does|are)|qiime|qiimaha|imisa (ayay|buu|bay|baa))\b/i;
