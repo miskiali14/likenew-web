@@ -224,14 +224,15 @@ const SO_WORDS = new Set(
     'maya haa sidee maxay maxaa xaggee halkee goorma imisa fadlan mahadsanid walaal abaayo adeer ' +
     'dalab dalabka dalabkayga dalabkaaga hubi diyaar xarun xarunta goobta lacag dhar jeeb jeebka ' +
     'lumay lumiyay luntay raadi soo dir kayga kaaga tahay yahay miyaa anigu adigu ma haye ' +
-    'ii iiga oo an baa ayaa waaye moo caawi caawimaad cabasho dhibaato ka warran')
+    'ii iiga oo an baa ayaa waaye moo caawi caawimaad cabasho dhibaato ka warran ' +
+    'asc salaan salam assalamu salamu')
     .split(/\s+/),
 );
 const EN_WORDS = new Set(
   ('the is are was were am my mine your yours you we they where when how what why which whose ' +
     "please could would should still not don't can't won't isn't aren't i'm it's that this these " +
     'those there here have has had do does did will shall about from into with for and but or ' +
-    'thanks thank morning afternoon evening hello hey want need know tell give show')
+    'thanks thank morning afternoon evening hello hey hi want need know tell give show order orders')
     .split(/\s+/),
 );
 
