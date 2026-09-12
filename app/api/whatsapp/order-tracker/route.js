@@ -322,11 +322,18 @@ async function computeReply(rawTextIn) {
   if (OPT4_RE.test(rawText)) return { success: false, intent: 'BRANCHES', reply: BRANCHES[lang] };
 
   // FALLBACK ka hor: text-ku ma u eg yahay magac / telefoon / ID?
-  // -> isku day raadin Lost & Found (silent: wax lama helin -> menu)
+  // -> isku day raadin Lost & Found
   const looksLikeName = /^[\p{L}][\p{L}\s.'’-]{3,40}$/u.test(rawText) && /\s/.test(rawText);
   const looksLikePhone = /^\+?\d[\d\s-]{5,14}\d$/.test(rawText);
   const looksLikeId = /^\d{3,8}$/.test(rawText);
-  if (looksLikeName || looksLikePhone || looksLikeId) {
+
+  // Telefoon/ID = calaamad adag (aan macno kale lahayn) -> had iyo jeer
+  // jawaab gaar ah ("wax lama helin"), ha noqon menu guud.
+  if (looksLikePhone || looksLikeId) {
+    return await searchLostFound(rawText, lang, false);
+  }
+  // Magac (2+ eray) = calaamad ka daciifsan -> silent (wax lama helin -> menu)
+  if (looksLikeName) {
     const r = await searchLostFound(rawText, lang, true);
     if (r) return r;
   }
