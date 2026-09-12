@@ -78,6 +78,12 @@ const COMPLAINT = {
     "Please contact our customer support team on 📞 2414 and they'll help you right away.",
 };
 
+// Instruction.md -> "HUMAN SUPPORT": marka macmiilku si cad u weydiisto qof dhab ah
+const HUMAN_SUPPORT = {
+  so: 'Arrintaas waxaan kuu gudbin karaa kooxda adeegga macaamiisha. 📞 2414 👨‍💼',
+  en: 'I can connect you with our customer support team. 📞 2414 👨‍💼',
+};
+
 const BRANCHES = {
   so:
     'Waxaan xarumo iyo lockers ku leenahay Muqdisho. 📍\n\n' +
@@ -213,6 +219,9 @@ const EN_WORDS = new Set(
 const OPT1_RE =
   /^(1|1️⃣)$|\b(track|tracking|order|orders|status|dalab|dalabka|dalabkayga|la socod|order-?kayga|xaggee|marayaa|diyaar baa)\b/i;
 const OPT2_RE = /^(2|2️⃣)$|\b(help|support|customer help|caawi|caawimaad|taageero)\b/i;
+// Instruction.md "HUMAN SUPPORT" — macmiil si cad u weydiisanaya qof dhab ah
+const HUMAN_RE =
+  /\b(human|real person|an agent|a representative|talk to (someone|somebody|a person)|speak to (someone|somebody|a human|an agent)|customer service (rep|representative)|qof dhab ah|la hadal (qof|shaqaale)|i la xidhiidhi qof|wac shaqaale)\b/i;
 const OPT3_RE =
   /^(3|3️⃣)$|\b(complaint|cabasho|dhibaato|refund|damaged|payment dispute|dhar (khaldan|maqan|luntay)|lacag(ta)? celin|celi(ya)? lacag(ta)?)\b/i;
 const OPT4_RE = /^(4|4️⃣)$|\b(branch|branches|locker|lockers|xarun|xarumaha|goob|location|address|cinwaan)\b/i;
@@ -304,6 +313,8 @@ async function computeReply(rawTextIn) {
   }
   if (OPT1_RE.test(rawText)) return { success: false, intent: 'ASK_ORDER_ID', reply: ASK_ID[lang] };
   if (OPT2_RE.test(rawText)) return { success: false, intent: 'CUSTOMER_HELP', reply: HELP[lang] };
+  // "I want to talk to a human" -> joojii tracking flow-ka, bixi human support
+  if (HUMAN_RE.test(rawText)) return { success: false, intent: 'HUMAN_SUPPORT', reply: HUMAN_SUPPORT[lang] };
   // "found <query>" -> raadi haadlinks (OPT5 ka hor)
   const lf = rawText.match(LF_SEARCH_RE);
   if (lf && lf[2] && lf[2].trim().length >= 2) {
