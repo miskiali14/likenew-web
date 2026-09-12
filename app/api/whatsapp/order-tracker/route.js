@@ -433,7 +433,12 @@ export async function POST(request) {
         }`,
       );
 
-      return NextResponse.json({ ok: true, intent: result.intent || null, sent: sendRes.sent });
+      return NextResponse.json({
+        ok: true,
+        intent: result.intent || null,
+        sent: sendRes.sent,
+        ...(sendRes.sent ? {} : { debug: sendRes }),
+      });
     }
 
     // ===== HAB 2: Direct / test =====
