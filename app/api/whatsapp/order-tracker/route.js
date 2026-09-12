@@ -280,6 +280,9 @@ export async function GET() {
     status: 'online',
     message: 'LikeNew WhatsApp Order Bot API is running.',
     wati_configured: Boolean(process.env.WATI_API_ENDPOINT && process.env.WATI_API_TOKEN),
+    // Commit-ka live ah — si loo hubiyo Production wuu cusboonaaday
+    git_commit: process.env.VERCEL_GIT_COMMIT_SHA || null,
+    deployed_at: process.env.VERCEL_GIT_COMMIT_MESSAGE || null,
   });
 }
 
