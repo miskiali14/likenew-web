@@ -107,6 +107,57 @@ const LF_STATUS = {
   HELD: { so: 'Xarunta ayaa lagu hayaa 🏬', en: 'Held at branch 🏬' },
 };
 
+// ---- FAQ xaqiiqo ah (ka soo qaatay website-ka — /delivery, /refund-policy) ----
+
+const HOURS_INFO = {
+  so:
+    'Qaadista iyo dhigista waa **bilaash** 🚚\n\n' +
+    '🕘 Waqtiga: 9:00 AM – 10:00 PM (maalin kasta)\n' +
+    'Waxaan idinku soo geli doonaa 2-saacadood gudahood (10 AM – 10 PM) si aan alaabta u qaadano.\n\n' +
+    '⚡ Express: dhar-kaaga wuxuu kuu soo noqonayaa ku dhawaad 24 saacadood.\n\n' +
+    'Su\'aal dheeraad ah → 📞 2414',
+  en:
+    'Pickup & delivery is **free** 🚚\n\n' +
+    '🕘 Hours: 9:00 AM – 10:00 PM (daily)\n' +
+    "We'll arrive within a 2-hour window (10 AM – 10 PM) to collect your items.\n\n" +
+    '⚡ Express: your clothes come back in about 24 hours.\n\n' +
+    'More questions → 📞 2414',
+};
+
+const REFUND_POLICY_INFO = {
+  so:
+    '📋 *Refund Policy — LikeNew*\n\n' +
+    'Lacagta waa la celin karaa haddii:\n' +
+    '• Adeegga aan la geynin\n' +
+    '• Dalabka si khaldan loo geliyay\n' +
+    '• Lacag laba jeer la bixiyay\n\n' +
+    'Lacag lama celiyo haddii:\n' +
+    '• Khalad ka dhashay xogta aad gelisay\n' +
+    '• Alaabta la qaatay iyada oo aan cabasho la keenin\n\n' +
+    'La xiriir: 📞 2414 / info@likenew.so',
+  en:
+    '📋 *Refund Policy — LikeNew*\n\n' +
+    'Eligible for a refund:\n' +
+    '• Service not delivered\n' +
+    '• Incorrect order processing\n' +
+    '• Duplicate payment\n\n' +
+    'Not eligible:\n' +
+    '• Customer error in order details\n' +
+    '• Items collected and accepted without complaint\n\n' +
+    'Contact: 📞 2414 / info@likenew.so',
+};
+
+const PRICE_INFO = {
+  so:
+    'Qiimaha adeegyada wuu kala duwan yahay (nooca dharka + Express/caadi ah). 💲\n\n' +
+    'Eeg qiimo buuxa oo cusub bogga: 🔗 https://www.likenew.so/services1page\n\n' +
+    'Ama wac 📞 2414 si aad u ogaato qiimaha alaabta gaarka ah.',
+  en:
+    'Prices vary by item type and service (Express/standard). 💲\n\n' +
+    'See the full, up-to-date price list here: 🔗 https://www.likenew.so/services1page\n\n' +
+    'Or call 📞 2414 for a specific item price.',
+};
+
 const ERROR_MSG = {
   so: '⚠️ Waan ka xumahay, hadda ma hubin karo dalabkaaga.\n\nFadlan isku day mar kale wax yar kadib.',
   en: "⚠️ Sorry, I'm unable to check your order right now.\n\nPlease try again shortly.",
@@ -119,15 +170,15 @@ const UNKNOWN = {
     'Waxaan kaa caawin karaa:\n' +
     '📦 La socodka dalabka (ii soo dir Order ID: HQ-8781 / KM5-8781)\n' +
     '🎒 Waxyaabaha la helay (qor magacaaga / ID-gaaga)\n' +
-    '😠 Cabasho\n📍 Xarumaha / Lockers-ka\n\n' +
-    'Su’aalaha kale (qiimaha, saacadaha, delivery, iwm) fadlan wac 📞 2414.',
+    '😠 Cabasho\n📍 Xarumaha / Lockers-ka\n💲 Qiimaha · 🕘 Saacadaha/Delivery · 📋 Refund Policy\n\n' +
+    'Su’aalo kale → fadlan wac 📞 2414.',
   en:
     "Sorry, I didn't quite get that. 🤔\n\n" +
     'I can help with:\n' +
     '📦 Order tracking (send your Order ID: HQ-8781 / KM5-8781)\n' +
     '🎒 Lost & Found (type your name / ID)\n' +
-    '😠 Complaints\n📍 Branches / lockers\n\n' +
-    'For anything else (prices, hours, delivery, etc.) please call 📞 2414.',
+    '😠 Complaints\n📍 Branches / lockers\n💲 Prices · 🕘 Hours/Delivery · 📋 Refund Policy\n\n' +
+    'Anything else → please call 📞 2414.',
 };
 
 const NOT_FOUND = {
@@ -169,6 +220,14 @@ const OPT5_RE =
   /^(5|5️⃣)$|\b(lost ?(and|&) ?found|found items?|lumay|lumiyay|luntay|jeeb|jeebka|jeebabka|boorso|wallet|purse|keys?|fure|furayaal|taleefan|phone|watch|saacad|ring|kaatun|id card|kaarka|passport|baasaboor|left in (my|the)|iga tagay|iga hadhay|iga baxay|la iga waayay)\b/i;
 // "found Ahmed Zaki" / "la helay 11250" / "raadi 0615..." -> raadin haadlinks
 const LF_SEARCH_RE = /^(found|la\s?helay|laga\s?helay|raadi|search|waxyaabaha)\b[\s:,-]*(.{2,})$/i;
+
+// FAQ xaqiiqo ah (soo qaatay website-ka) — waa in ay ka horreeyaan OPT3/OPT5
+// si "refund policy" aanu u dhicin Complaint, "saacad" aanu u dhicin Lost&Found.
+const HOURS_RE =
+  /\b(saacadaha( shaqada)?|waqtiga shaqada|working ?hours|opening ?hours|what time (do you|are you)|when (do you|are you) open|when.*(open|close)|delivery time|pickup time|free delivery|geli (goorma|waqtiga))\b/i;
+const REFUND_POLICY_RE =
+  /\b(refund policy|policy (on|for) refund|siyaasadd?a (lacag ?celinta|celinta)|refund ?policy)\b/i;
+const PRICE_RE = /\b(price|prices|pricing|cost|how much (is|does|are)|qiime|qiimaha|imisa (ayay|buu|bay|baa))\b/i;
 
 // Aqoonso afka farriinta: qiimee erayada Soomaali vs Ingiriisi.
 // Isku-mid ama midna la'aan -> Soomaali (macmiisha badankood).
@@ -250,6 +309,13 @@ async function computeReply(rawTextIn) {
   if (lf && lf[2] && lf[2].trim().length >= 2) {
     return await searchLostFound(lf[2].trim(), lang);
   }
+  // FAQ xaqiiqo ah — ka hor OPT3/OPT5 si "refund policy"/"saacad" aanay u
+  // dhicin Complaint/Lost&Found qalad ah.
+  if (HOURS_RE.test(rawText)) return { success: false, intent: 'HOURS', reply: HOURS_INFO[lang] };
+  if (REFUND_POLICY_RE.test(rawText))
+    return { success: false, intent: 'REFUND_POLICY', reply: REFUND_POLICY_INFO[lang] };
+  if (PRICE_RE.test(rawText)) return { success: false, intent: 'PRICE', reply: PRICE_INFO[lang] };
+
   // OPT5 (lost & found) OPT3 ka hor — "lost wallet" -> Lost&Found, maaha Complaint
   if (OPT5_RE.test(rawText)) return { success: false, intent: 'LOST_FOUND', reply: LOST_FOUND[lang] };
   if (OPT3_RE.test(rawText)) return { success: false, intent: 'COMPLAINT', reply: COMPLAINT[lang] };
