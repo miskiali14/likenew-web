@@ -285,7 +285,7 @@ const OPT1_RE =
 const OPT2_RE = /^(2|2️⃣)$|\b(help|support|customer help|caawi|caawimaad|taageero)\b/i;
 // Macmiil wuxuu rabaa inuu joojiyo dalab — bot-ku si toos ah uma joojin
 // karo (CleanCloud API lama bedelo), gudbi 2414.
-const CANCEL_RE = /\b(cancel\w*|joojin\w*|baajin\w*)\b/i;
+const CANCEL_RE = /\b(cancel\w*|jooji\w*|baaji\w*)\b/i;
 // Macmiil wuxuu rabaa inuu sameeyo dalab CUSUB — maaha la socodka mid jira.
 const NEW_ORDER_RE =
   /\b(new order|place an? order|how (do|can) i order|sameeyo dalab|dalab cusub|dalbo adeeg|order online)\b/i;
