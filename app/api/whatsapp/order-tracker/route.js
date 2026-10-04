@@ -72,14 +72,14 @@ const HELP = {
 const COMPLAINT = {
   so:
     'Waan ka xunnahay dhibaatada kugu dhacday 😔.\n\n' +
-    'Fadlan ii soo dir faahfaahinta hal fariin ah, oo ku bilow erayga *cabasho*:\n\n' +
-    'Tusaale:\n*cabasho: dalabkaygii HQ-8781 waa la jebiyay*\n\n' +
+    'Fadlan ii sheeg maxaa dhacay (fariinta xigta waan diiwaangelin doonaa). Haddii uu la xiriiro dalab gaar ah, ku dar Order ID-ga.\n\n' +
+    'Tusaale: *dalabkaygii HQ-8781 waa la jebiyay*\n\n' +
     'Waxaan si toos ah u diiwaangelin doonaa oo qaybta daryeelka macaamiisha ayaa kula soo xiriiri doonta.\n\n' +
     'Ama kala xiriir 📞 2414 haddii aad doonayso in degdeg loola hadlo.',
   en:
     'Sorry to hear that 😔.\n\n' +
-    'Please send me the details in one message, starting with the word *complaint*:\n\n' +
-    'Example:\n*complaint: my order HQ-8781 was damaged*\n\n' +
+    "Please tell me what happened (I'll log your next message). Include your Order ID if it relates to a specific order.\n\n" +
+    'Example: *my order HQ-8781 was damaged*\n\n' +
     "I'll log it right away and our customer care team will follow up with you.\n\n" +
     'Or call 📞 2414 if you need to speak with someone right now.',
 };
@@ -380,6 +380,18 @@ async function readInput(request) {
 async function computeReply(rawTextIn, waId) {
   const rawText = String(rawTextIn || '').trim();
   const lang = pickLang(rawText);
+  const hasRealWaId = waId && waId !== 'unknown' && waId !== 'test';
+
+  // Qofkan hore ayaa loo weydiiyay cabasho — jawaabtan ayaa ah faahfaahinta,
+  // ha ahaato "cabasho:" oo bilow ah toona. Had iyo jeer waa la "consume"-gareeyaa
+  // (si state-ku aanu u hadhin), laakin salaan/fariin madhan looma qaato
+  // cabasho — si qofku aanu ugu xirnaanin haddii uu doonayo inuu bilaabo mar kale.
+  if (hasRealWaId) {
+    const awaiting = await consumeSession(waId);
+    if (awaiting === 'COMPLAINT' && rawText && !GREETING_RE.test(rawText)) {
+      return await submitComplaint(rawText, waId, lang);
+    }
+  }
 
   // "complaint: <details>" / "cabasho: <faahfaahin>" -> diiwaangeli toos ah,
   // ka hor inta aan ORDER_RE u fasirin in Order ID la weydiinayo oo keliya.
@@ -417,7 +429,10 @@ async function computeReply(rawTextIn, waId) {
 
   // OPT5 (lost & found) OPT3 ka hor — "lost wallet" -> Lost&Found, maaha Complaint
   if (OPT5_RE.test(rawText)) return { success: false, intent: 'LOST_FOUND', reply: LOST_FOUND[lang] };
-  if (OPT3_RE.test(rawText)) return { success: false, intent: 'COMPLAINT', reply: COMPLAINT[lang] };
+  if (OPT3_RE.test(rawText)) {
+    if (hasRealWaId) await setSession(waId, 'COMPLAINT');
+    return { success: false, intent: 'COMPLAINT', reply: COMPLAINT[lang] };
+  }
   if (OPT4_RE.test(rawText)) return { success: false, intent: 'BRANCHES', reply: BRANCHES[lang] };
 
   // FALLBACK ka hor: text-ku ma u eg yahay magac / telefoon / ID?
@@ -656,6 +671,40 @@ async function submitComplaint(details, waId, lang) {
   } catch (e) {
     console.error('complaint submit error', String(e));
     return { success: false, intent: 'COMPLAINT_SAVE_FAILED', reply: COMPLAINT_SAVE_FAILED[lang] };
+  }
+}
+
+// ---- Session: "waxaan weydiiyay, jawaabta xigta waa faahfaahinta" ----
+// WATI webhook-ku stateless ayuu yahay (fariin kasta si gaar ah ayaa loo
+// maareeyaa) — BotSession (likenew-laundry) ayaa xusuusta in qofkan la
+// weydiiyay, si jawaabta xigta loogu qaato cabashada iyada oo aan loo
+// baahnayn "cabasho:" oo bilow ah.
+const BOT_SESSION_URL = 'https://www.haadlinks.com/api/public/bot-session';
+
+async function consumeSession(waId) {
+  try {
+    const res = await fetch(BOT_SESSION_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ waId, action: 'consume' }),
+    });
+    const data = await res.json().catch(() => null);
+    return data?.awaiting || null;
+  } catch (e) {
+    console.error('session consume error', String(e));
+    return null;
+  }
+}
+
+async function setSession(waId, awaiting) {
+  try {
+    await fetch(BOT_SESSION_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ waId, action: 'set', awaiting }),
+    });
+  } catch (e) {
+    console.error('session set error', String(e));
   }
 }
 
