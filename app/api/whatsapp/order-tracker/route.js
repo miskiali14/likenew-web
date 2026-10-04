@@ -210,6 +210,28 @@ const ERROR_MSG = {
   en: "⚠️ Sorry, I'm unable to check your order right now.\n\nPlease try again shortly.",
 };
 
+const NEW_ORDER = {
+  so:
+    'Si aad dalab cusub u sameyso 🧺\n\n' +
+    '🔗 https://www.likenew.so/order ama app-ka LikeNew\n\n' +
+    'Haddii aad horey dalab u dirtay oo aad rabto inaad la socoto, ii soo dir Order ID-ga (tusaale HQ-8781).',
+  en:
+    'To place a new order 🧺\n\n' +
+    '🔗 https://www.likenew.so/order or the LikeNew app\n\n' +
+    'If you already have an order and want to track it, send me your Order ID (e.g. HQ-8781).',
+};
+
+// Bot-ku si toos ah uma joojin karo dalab (CleanCloud API lama bedelo) —
+// gudbi 2414 si degdeg ah loogu caawiyo.
+const CANCEL_ORDER = {
+  so:
+    'Dalabyada lama joojin karo si toos ah halkan. 😔\n\n' +
+    'Fadlan wac 📞 2414 dhaqso si aad dalabkaaga u joojiso (haddii aanu weli bilaabmin).',
+  en:
+    "Orders can't be cancelled automatically here. 😔\n\n" +
+    'Please call 📞 2414 right away to cancel your order (if it hasn’t started yet).',
+};
+
 // Su'aal ka baxsan hadafka bot-ka (qiimo, saacado, delivery, sheeko guud, iwm)
 const UNKNOWN = {
   so:
@@ -259,8 +281,15 @@ const EN_WORDS = new Set(
 );
 
 const OPT1_RE =
-  /^(1|1️⃣)$|\b(track|tracking|order|orders|status|dalab|dalabka|dalabkayga|la socod|order-?kayga|xaggee|marayaa|diyaar baa)\b/i;
+  /^(1|1️⃣)$|\b(track|tracking|order|orders|status|dalabk\w*|la socod|order-?kayga|xaggee|marayaa|diyaar\b)\b/i;
 const OPT2_RE = /^(2|2️⃣)$|\b(help|support|customer help|caawi|caawimaad|taageero)\b/i;
+// Macmiil wuxuu rabaa inuu joojiyo dalab — bot-ku si toos ah uma joojin
+// karo (CleanCloud API lama bedelo), gudbi 2414.
+const CANCEL_RE =
+  /\b(cancel(l?ation)?|canceli|joojin|joojiyo|joojiyay)\b/i;
+// Macmiil wuxuu rabaa inuu sameeyo dalab CUSUB — maaha la socodka mid jira.
+const NEW_ORDER_RE =
+  /\b(new order|place an? order|how (do|can) i order|sameeyo dalab|dalab cusub|dalbo adeeg|order online)\b/i;
 // Instruction.md "HUMAN SUPPORT" — macmiil si cad u weydiisanaya qof dhab ah
 const HUMAN_RE =
   /\b(human|real person|an agent|a representative|talk to (someone|somebody|a person)|speak to (someone|somebody|a human|an agent)|customer service (rep|representative)|qof dhab ah|la hadal (qof|shaqaale)|i la xidhiidhi qof|wac shaqaale)\b/i;
@@ -269,7 +298,8 @@ const OPT3_RE =
 // "complaint: <details>" / "cabasho: <faahfaahin>" -> diiwaangeli si toos
 // ah, halkii la soo celin lahaa jawaabta guud ee COMPLAINT.
 const COMPLAINT_SUBMIT_RE = /^(complaint|cabasho)\s*[:\-,]?\s*(.{8,})$/i;
-const OPT4_RE = /^(4|4️⃣)$|\b(branch|branches|locker|lockers|xarun|xarumaha|goob|location|address|cinwaan)\b/i;
+const OPT4_RE =
+  /^(4|4️⃣)$|\b(branch|branches|locker|lockers|xarun|xarumaha|goob|location|address|cinwaan|halkee|where are you|your location|where.*(branch|shop|store))\b/i;
 const OPT5_RE =
   /^(5|5️⃣)$|\b(lost ?(and|&) ?found|found items?|lumay|lumiyay|luntay|jeeb|jeebka|jeebabka|boorso|wallet|purse|keys?|fure|furayaal|taleefan|phone|watch|saacad|ring|kaatun|id card|kaarka|passport|baasaboor|left in (my|the)|iga tagay|iga hadhay|iga baxay|la iga waayay)\b/i;
 // "found Ahmed Zaki" / "la helay 11250" / "raadi 0615..." -> raadin haadlinks
@@ -278,7 +308,7 @@ const LF_SEARCH_RE = /^(found|la\s?helay|laga\s?helay|raadi|search|waxyaabaha)\b
 // FAQ xaqiiqo ah (soo qaatay website-ka) — waa in ay ka horreeyaan OPT3/OPT5
 // si "refund policy" aanu u dhicin Complaint, "saacad" aanu u dhicin Lost&Found.
 const HOURS_RE =
-  /\b(hours?|saacadaha( shaqada)?|waqtiga shaqada|working ?hours|opening ?hours|what time (do you|are you)|when (do you|are you) open|when.*(open|close)|delivery time|pickup time|free delivery|geli (goorma|waqtiga))\b/i;
+  /\b(hours?|saacadaha( shaqada)?|waqtiga shaqada|working ?hours|opening ?hours|what time (do you|are you)|when (do you|are you) open|when.*(open|close)|delivery time|pickup time|free delivery|geli (goorma|waqtiga)|pick ?up (from|at)|soo qaad.*guriga|guriga.*(qaad|keen)|do you deliver)\b/i;
 const REFUND_POLICY_RE =
   /\b(refund policy|policy (on|for) refund|siyaasadd?a (lacag ?celinta|celinta)|refund ?policy)\b/i;
 const PRICE_RE = /\b(price|prices|pricing|cost|how much (is|does|are)|qiime|qiimaha|imisa (ayay|buu|bay|baa))\b/i;
@@ -366,6 +396,10 @@ async function computeReply(rawTextIn, waId) {
   if (!rawText || GREETING_RE.test(rawText)) {
     return { success: false, intent: 'MENU', reply: MENU[lang] };
   }
+  // CANCEL/NEW_ORDER waa in ay OPT1 ka horreeyaan — "dalab cusub"/"cancel
+  // my order" si khaldan uguma dhicin "send me your Order ID".
+  if (CANCEL_RE.test(rawText)) return { success: false, intent: 'CANCEL_ORDER', reply: CANCEL_ORDER[lang] };
+  if (NEW_ORDER_RE.test(rawText)) return { success: false, intent: 'NEW_ORDER', reply: NEW_ORDER[lang] };
   if (OPT1_RE.test(rawText)) return { success: false, intent: 'ASK_ORDER_ID', reply: ASK_ID[lang] };
   if (OPT2_RE.test(rawText)) return { success: false, intent: 'CUSTOMER_HELP', reply: HELP[lang] };
   // "I want to talk to a human" -> joojii tracking flow-ka, bixi human support
