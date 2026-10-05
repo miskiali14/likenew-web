@@ -17,61 +17,61 @@ import { NextResponse } from 'next/server';
  */
 
 const STATUS_MAP = {
-  '0': { en: 'Cleaning', so: 'Waxuu ku jiraa dhaqmo (Cleaning) 🧼' },
+  '0': { en: 'Cleaning', so: 'Waxuu ku jiraa dhaqmo (Cleaning)' },
   '1': {
     en: 'Ready to Deliver',
-    so: 'Waa diyaar (Ready to Deliver) 🛍️',
+    so: 'Waa diyaar (Ready to Deliver)',
     deliveryNote: 'Haddii aad rabto in goobtaada laguugu keeno wac 2414 📞',
   },
-  '2': { en: 'Completed', so: 'Waa la qaatay (Completed) ✅' },
-  '4': { en: 'Awaiting Pickup', so: 'Wuxuu sugayaa in la soo qaado (Awaiting Pickup) 🚚' },
-  '5': { en: 'Detailing', so: 'Gacanta ayaa lagu hayaa oo la sifeynayaa (Detailing) ✨' },
+  '2': { en: 'Completed', so: 'Waa la qaatay (Completed)' },
+  '4': { en: 'Awaiting Pickup', so: 'Wuxuu sugayaa in la soo qaado (Awaiting Pickup)' },
+  '5': { en: 'Detailing', so: 'Gacanta ayaa lagu hayaa oo la sifeynayaa (Detailing)' },
 };
 
 // ---- Farriimaha diyaarka ah (Somali + English) ----
 
 const MENU = {
   so:
-    'Salaam macmiil 👋 Ku soo dhowoow Likenew Smart Laundry!\n\n' +
+    'Salaam macmiil Ku soo dhowoow Likenew Smart Laundry!\n\n' +
     'Sidee kuu caawin karaa maanta? Fadlan dooro mid:\n\n' +
-    '1️⃣ Ogow heerka dalabkaagu marayo\n' +
-    '2️⃣ Dalbo caawinaad\n' +
-    '3️⃣ Gudbi cabasho\n' +
-    '4️⃣ Baro Likenew Smart Lockers\n' +
-    '5️⃣ Raadi alaab aad ku ilawday jeebabka dharkaaga\n' +
+    '1. Ogow heerka dalabkaagu marayo\n' +
+    '2. Dalbo caawinaad\n' +
+    '3. Gudbi cabasho\n' +
+    '4. Baro Likenew Smart Lockers\n' +
+    '5. Raadi alaab aad ku ilawday jeebabka dharkaaga\n' +
     'qor numberka qodobka aad rabto inaan kaa caawiyo (tusaale "1").',
   en:
-    'Hi 👋 Welcome to Likenew! \n\n' +
+    'Hi Welcome to Likenew!\n\n' +
     'How can I help you today? Please choose:\n\n' +
-    '1️⃣  Track my order\n' +
-    '2️⃣  Customer Help\n' +
-    '3️⃣  Complaint\n' +
-    '4️⃣  Our branches / lockers\n' +
-    '5️⃣  Lost & Found\n\n' +
+    '1. Track my order\n' +
+    '2. Customer Help\n' +
+    '3. Complaint\n' +
+    '4. Our branches / lockers\n' +
+    '5. Lost & Found\n\n' +
     'You can type the number (e.g. "1") or just tell me what you need.',
 };
 
 const ASK_ID = {
   so:
     'Fadlan ii soo dir Order ID-ga dalabkaaga oo ay la socoto xarunta.\n\n' +
-    'Tusaale:\n📍 HQ-8781\n📍 KM5-8781',
+    'Tusaale:\nHQ-8781\nKM5-8781',
   en:
     'Please send me your Order ID together with the branch prefix.\n\n' +
-    'Example:\n📍 HQ-8781\n📍 KM5-8781',
+    'Example:\nHQ-8781\nKM5-8781',
 };
 
 const HELP = {
   so:
-    'Mahadsanid macmiil waxaan kuu gudbiyay qaybta adeega macaamiisha si ay kuu caawiyaan, fadlan sug waqti kooban 🎧.\n\n' +
+    'Mahadsanid macmiil waxaan kuu gudbiyay qaybta adeega macaamiisha si ay kuu caawiyaan, fadlan sug waqti kooban.\n\n' +
     'Ama kala xiriir kooxda 📞 2414',
   en:
-    "We're happy to help 🎧.\n\n" +
+    "We're happy to help.\n\n" +
     'Call our support team on 📞 2414, or ask me your question here.',
 };
 
 const COMPLAINT = {
   so:
-    'Waan ka xunnahay inaad nagala kulantay qibrad aan wanaagsanayn, si dhaqso ah baan wax uga qaban doonnnaa cabashadaada 😔.\n\n' +
+    'Waan ka xunnahay inaad nagala kulantay qibrad aan wanaagsanayn, si dhaqso ah baan wax uga qaban doonnnaa cabashadaada.\n\n' +
     'Fadlan ii sheeg maxaa dhacay (waan diwaangelin doonnaa si maamulka ay u gaarto fariintaadu).\n' +
     'Haddii cabashadaadu la xiriirto dalab aad keensatay Likenew fadlan ila wadaag lanbarka kuu diwaangashan ama Order ID-ga.\n\n' +
     'Tusaale: dalabkayga 6154555555 ama HQ-8781 waa la iga daahiyay.\n\n' +
@@ -87,17 +87,17 @@ const COMPLAINT = {
 
 const COMPLAINT_SAVED = {
   so:
-    'Waa la diiwaangeliyay cabashaada ✅\n\n' +
+    'Waa la diiwaangeliyay cabashaada\n\n' +
     'Qaybta daryeelka macaamiisha ayaa kulasoo xiriiri doontaa waxaana loo xallin doonnaa si dhaqso ah.\n' +
-    'Mahadsanid 🙏',
+    'Mahadsanid',
   en:
-    'Your complaint has been logged ✅\n\n' +
-    'Our customer care team will follow up with you shortly. Thank you 🙏',
+    'Your complaint has been logged\n\n' +
+    'Our customer care team will follow up with you shortly. Thank you',
 };
 
 const COMPLAINT_SAVE_FAILED = {
-  so: '⚠️ Waan ka xumahay, cabashaada ma diwaangelin karo, waxaa jirta cillad farsamo.\n\nFadlan la xiriir 📞 2414.',
-  en: "⚠️ Sorry, I couldn't log your complaint right now.\n\nPlease call 📞 2414.",
+  so: 'Waan ka xumahay, cabashaada ma diwaangelin karo, waxaa jirta cillad farsamo.\n\nFadlan la xiriir 📞 2414.',
+  en: "Sorry, I couldn't log your complaint right now.\n\nPlease call 📞 2414.",
 };
 
 // Instruction.md -> "HUMAN SUPPORT": marka macmiilku si cad u weydiisto qof dhab ah
@@ -109,49 +109,49 @@ const HUMAN_SUPPORT = {
 // Xogta lockers-ka waa xaqiiqo — ka soo qaatay components/Lockers.jsx
 const BRANCHES = {
   so:
-    'Likenew Smart Laundry hadda waxay ka hawlgashaa 2 bo xarumood, sidoo kalee addeegena lockers waxay yaallaan keliya xarumaha Likenew📍\n\n' +
-    '1️⃣ *Waaberi Locker*\n' +
-    '   📍 21 Oct Street, Waaberi\n' +
-    '   🕐 24/7 Furan\n' +
-    '   🗺️ https://maps.app.goo.gl/tTvbmD63yowVTdz69\n\n' +
-    '2️⃣ *Hodan Locker*\n' +
-    '   📍 KM4 Street, Hodan\n' +
-    '   🕐 24/7 Furan\n' +
-    '   🗺️ https://maps.app.goo.gl/EoL4JyeiVgUq5aYQ7\n\n' +
-    'Halkan ka arag Mapka xarumaheenna: 🔗 https://www.likenew.so/lockers\n\n' +
+    'Likenew Smart Laundry hadda waxay ka hawlgashaa 2 bo xarumood, sidoo kalee addeegena lockers waxay yaallaan keliya xarumaha Likenew\n\n' +
+    '1. *Waaberi Locker*\n' +
+    '   21 Oct Street, Waaberi\n' +
+    '   24/7 Furan\n' +
+    '   https://maps.app.goo.gl/tTvbmD63yowVTdz69\n\n' +
+    '2. *Hodan Locker*\n' +
+    '   KM4 Street, Hodan\n' +
+    '   24/7 Furan\n' +
+    '   https://maps.app.goo.gl/EoL4JyeiVgUq5aYQ7\n\n' +
+    'Halkan ka arag Mapka xarumaheenna: https://www.likenew.so/lockers\n\n' +
     'Macluumaad dheeraad ah fadlan wac → 📞 2414',
   en:
-    'LikeNew Branches / Lockers 📍\n\n' +
-    '1️⃣ *Waaberi Locker*\n' +
-    '   📍 21 Oct Street, Waaberi\n' +
-    '   🕐 Open 24/7\n' +
-    '   🗺️ https://maps.app.goo.gl/tTvbmD63yowVTdz69\n\n' +
-    '2️⃣ *Hodan Locker*\n' +
-    '   📍 KM4 Street, Hodan\n' +
-    '   🕐 Open 24/7\n' +
-    '   🗺️ https://maps.app.goo.gl/EoL4JyeiVgUq5aYQ7\n\n' +
-    'Full list + map: 🔗 https://www.likenew.so/lockers\n\n' +
+    'LikeNew Branches / Lockers\n\n' +
+    '1. *Waaberi Locker*\n' +
+    '   21 Oct Street, Waaberi\n' +
+    '   Open 24/7\n' +
+    '   https://maps.app.goo.gl/tTvbmD63yowVTdz69\n\n' +
+    '2. *Hodan Locker*\n' +
+    '   KM4 Street, Hodan\n' +
+    '   Open 24/7\n' +
+    '   https://maps.app.goo.gl/EoL4JyeiVgUq5aYQ7\n\n' +
+    'Full list + map: https://www.likenew.so/lockers\n\n' +
     'More questions → 📞 2414',
 };
 
 const LOST_FOUND = {
   so:
-    'Waxyaabaha macaamiisha ay ku ddhex illaaween dharkooda (jeebabka: lacag, furayaal, taleefan, kaararka, iwm) 🎒\n\n' +
+    'Waxyaabaha macaamiisha ay ku ddhex illaaween dharkooda (jeebabka: lacag, furayaal, taleefan, kaararka, iwm)\n\n' +
     'Si aan kuugu raadiyo alaab aad ku dhex illawday dharkaaga fadlan, ii soo dir:\n' +
-    '*found* + nambarkaaga / ID-gaaga \n\n' +
+    '*found* + nambarkaaga / ID-gaaga\n\n' +
     'Tusaale:\n• found 0610311877\n• found 6787\n\n' +
-    'Ama booqo 🔗 https://found.likenew.so kadib geli lanbarkaaga oo hel macluumaad ku saabsan alaabta aa raadinayso.',
+    'Ama booqo https://found.likenew.so kadib geli lanbarkaaga oo hel macluumaad ku saabsan alaabta aa raadinayso.',
   en:
-    'Items customers left in their clothes (pockets: cash, keys, phone, cards, etc.) 🎒\n\n' +
+    'Items customers left in their clothes (pockets: cash, keys, phone, cards, etc.)\n\n' +
     'To search here, send me:\n' +
     '*found* + your name / ID / phone number\n\n' +
     'Example:\n• found Ahmed Zaki\n• found 11250\n• found 0615123456\n\n' +
-    'Or visit 🔗 https://found.likenew.so',
+    'Or visit https://found.likenew.so',
 };
 
 const LF_STATUS = {
-  CLAIMED: { so: 'Waa la qaatay ✅', en: 'Already claimed ✅' },
-  HELD: { so: 'Xarunta ayaa lagu hayaa 🏬', en: 'Held at branch 🏬' },
+  CLAIMED: { so: 'Waa la qaatay', en: 'Already claimed' },
+  HELD: { so: 'Xarunta ayaa lagu hayaa', en: 'Held at branch' },
 };
 
 // ---- FAQ xaqiiqo ah (ka soo qaatay website-ka — /delivery, /refund-policy) ----
@@ -161,19 +161,19 @@ const HOURS_INFO = {
     'Macmiil addeggeenna qaadiska iyo keenista (Pickup & Delivery) waa bilaash.\n\n' +
     'Waqtiga: 9:00 AM – 10:00 PM (maalin kasta)\n' +
     'Waxaan kugu soo gaari doonnaa ugu badnaan saacad gudaheed si aan alaab kaaga soo qaadno ama kuugu keenno.\n\n' +
-    '⚡ Express: haddii dharkaaga aad si degdeg ah u rabtid addeegena dhaqmada degdega ah waa 6 saacadood.\n\n' +
+    'Express: haddii dharkaaga aad si degdeg ah u rabtid addeegena dhaqmada degdega ah waa 6 saacadood.\n\n' +
     'Waxii faahfaahina la xiriir → 📞 2414',
   en:
-    'Pickup & delivery is **free** 🚚\n\n' +
-    '🕘 Hours: 9:00 AM – 10:00 PM (daily)\n' +
+    'Pickup & delivery is **free**\n\n' +
+    'Hours: 9:00 AM – 10:00 PM (daily)\n' +
     "We'll arrive within a 2-hour window (10 AM – 10 PM) to collect your items.\n\n" +
-    '⚡ Express: your clothes come back in about 24 hours.\n\n' +
+    'Express: your clothes come back in about 24 hours.\n\n' +
     'More questions → 📞 2414',
 };
 
 const REFUND_POLICY_INFO = {
   so:
-    '📋 *Refund Policy — LikeNew*\n\n' +
+    '*Refund Policy — LikeNew*\n\n' +
     'Lacagta waa la celin karaa haddii:\n' +
     '• Adeegga aan la geynin\n' +
     '• Dalabka si khaldan loo geliyay\n' +
@@ -183,7 +183,7 @@ const REFUND_POLICY_INFO = {
     '• Alaabta la qaatay iyada oo aan cabasho la keenin\n\n' +
     'La xiriir: 📞 2414 / info@likenew.so',
   en:
-    '📋 *Refund Policy — LikeNew*\n\n' +
+    '*Refund Policy — LikeNew*\n\n' +
     'Eligible for a refund:\n' +
     '• Service not delivered\n' +
     '• Incorrect order processing\n' +
@@ -196,28 +196,28 @@ const REFUND_POLICY_INFO = {
 
 const PRICE_INFO = {
   so:
-    'Qiimaha adeegyada wuu kala duwan yahay sida nooca dharka iyo adeegga aad dooratay (Clean & Press, Press Only, Wash & Fold, ama Bed & Bath). 💲\n\n' +
-    'Eeg qiimo buuxa oo cusub bogga: 🔗 https://www.likenew.so/services1page\n\n' +
+    'Qiimaha adeegyada wuu kala duwan yahay sida nooca dharka iyo adeegga aad dooratay (Clean & Press, Press Only, Wash & Fold, ama Bed & Bath).\n\n' +
+    'Eeg qiimo buuxa oo cusub bogga: https://www.likenew.so/services1page\n\n' +
     'Ama wac 📞 2414 si aad u ogaato qiimaha alaabta gaarka ah.',
   en:
-    'Prices vary by item type and service (Clean & Press, Press Only, Wash & Fold, or Bed & Bath). 💲\n\n' +
-    'See the full, up-to-date price list here: 🔗 https://www.likenew.so/services1page\n\n' +
+    'Prices vary by item type and service (Clean & Press, Press Only, Wash & Fold, or Bed & Bath).\n\n' +
+    'See the full, up-to-date price list here: https://www.likenew.so/services1page\n\n' +
     'Or call 📞 2414 for a specific item price.',
 };
 
 const ERROR_MSG = {
-  so: '⚠️ Waan ka xumahay, hadda ma hubin karo dalabkaaga.\n\nFadlan isku day mar kale wax yar kadib.',
-  en: "⚠️ Sorry, I'm unable to check your order right now.\n\nPlease try again shortly.",
+  so: 'Waan ka xumahay, hadda ma hubin karo dalabkaaga.\n\nFadlan isku day mar kale wax yar kadib.',
+  en: "Sorry, I'm unable to check your order right now.\n\nPlease try again shortly.",
 };
 
 const NEW_ORDER = {
   so:
-    'Si aad dalab cusub u sameyso 🧺\n\n' +
-    '🔗 https://www.likenew.so/order ama app-ka LikeNew\n\n' +
+    'Si aad dalab cusub u sameyso\n\n' +
+    'https://www.likenew.so/order ama app-ka LikeNew\n\n' +
     'Haddii aad horey dalab u dirtay oo aad rabto inaad la socoto, ii soo dir Order ID-ga (tusaale HQ-8781).',
   en:
-    'To place a new order 🧺\n\n' +
-    '🔗 https://www.likenew.so/order or the LikeNew app\n\n' +
+    'To place a new order\n\n' +
+    'https://www.likenew.so/order or the LikeNew app\n\n' +
     'If you already have an order and want to track it, send me your Order ID (e.g. HQ-8781).',
 };
 
@@ -225,36 +225,36 @@ const NEW_ORDER = {
 // gudbi 2414 si degdeg ah loogu caawiyo.
 const CANCEL_ORDER = {
   so:
-    'Dalabyada lama joojin karo si toos ah halkan. 😔\n\n' +
+    'Dalabyada lama joojin karo si toos ah halkan.\n\n' +
     'Fadlan wac 📞 2414 dhaqso si aad dalabkaaga u joojiso (haddii aanu weli bilaabmin).',
   en:
-    "Orders can't be cancelled automatically here. 😔\n\n" +
+    "Orders can't be cancelled automatically here.\n\n" +
     'Please call 📞 2414 right away to cancel your order (if it hasn’t started yet).',
 };
 
 // Su'aal ka baxsan hadafka bot-ka (qiimo, saacado, delivery, sheeko guud, iwm)
 const UNKNOWN = {
   so:
-    'Waan ka xumahay, si buuxda uma fahmin. 🤔\n\n' +
+    'Waan ka xumahay, si buuxda uma fahmin.\n\n' +
     'Waxaan kaa caawin karaa:\n' +
-    '📦 La socodka dalabka (ii soo dir Order ID: HQ-8781 / KM5-8781)\n' +
-    '🎒 Waxyaabaha la helay (qor magacaaga / ID-gaaga)\n' +
-    '😠 Cabasho\n📍 Xarumaha / Lockers-ka\n💲 Qiimaha · 🕘 Saacadaha/Delivery · 📋 Refund Policy\n\n' +
+    'La socodka dalabka (ii soo dir Order ID: HQ-8781 / KM5-8781)\n' +
+    'Waxyaabaha la helay (qor magacaaga / ID-gaaga)\n' +
+    'Cabasho\nXarumaha / Lockers-ka\nQiimaha · Saacadaha/Delivery · Refund Policy\n\n' +
     'Su’aalo kale → fadlan wac 📞 2414.',
   en:
-    "Sorry, I didn't quite get that. 🤔\n\n" +
+    "Sorry, I didn't quite get that.\n\n" +
     'I can help with:\n' +
-    '📦 Order tracking (send your Order ID: HQ-8781 / KM5-8781)\n' +
-    '🎒 Lost & Found (type your name / ID)\n' +
-    '😠 Complaints\n📍 Branches / lockers\n💲 Prices · 🕘 Hours/Delivery · 📋 Refund Policy\n\n' +
+    'Order tracking (send your Order ID: HQ-8781 / KM5-8781)\n' +
+    'Lost & Found (type your name / ID)\n' +
+    'Complaints\nBranches / lockers\nPrices · Hours/Delivery · Refund Policy\n\n' +
     'Anything else → please call 📞 2414.',
 };
 
 const NOT_FOUND = {
   so: (id) =>
-    `❌ Ma helin dalab leh nambarka *${id}*.\n\nFadlan hubi Order nambarka ku qoran farriinta whatsapp ee kuusoo dhacday markii la abuuray dalabkaaga.`,
+    `Ma helin dalab leh nambarka *${id}*.\n\nFadlan hubi Order nambarka ku qoran farriinta whatsapp ee kuusoo dhacday markii la abuuray dalabkaaga.`,
   en: (id) =>
-    `❌ I couldn't find an order with the ID *${id}*.\n\nPlease check your receipt and try again.`,
+    `I couldn't find an order with the ID *${id}*.\n\nPlease check your receipt and try again.`,
 };
 
 // ---- Kala-sooc (regex) ----
@@ -281,8 +281,8 @@ const EN_WORDS = new Set(
 );
 
 const OPT1_RE =
-  /^(1|1️⃣)$|\b(track|tracking|order|orders|status|dalabk\w*|la socod|order-?kayga|xaggee|marayaa|diyaar\b)\b/i;
-const OPT2_RE = /^(2|2️⃣)$|\b(help|support|customer help|caawi|caawimaad|taageero)\b/i;
+  /^(1|1.)$|\b(track|tracking|order|orders|status|dalabk\w*|la socod|order-?kayga|xaggee|marayaa|diyaar\b)\b/i;
+const OPT2_RE = /^(2|2.)$|\b(help|support|customer help|caawi|caawimaad|taageero)\b/i;
 // Macmiil wuxuu rabaa inuu joojiyo dalab — bot-ku si toos ah uma joojin
 // karo (CleanCloud API lama bedelo), gudbi 2414.
 const CANCEL_RE = /\b(cancel\w*|jooji\w*|baaji\w*)\b/i;
@@ -293,14 +293,14 @@ const NEW_ORDER_RE =
 const HUMAN_RE =
   /\b(human|real person|an agent|a representative|talk to (someone|somebody|a person)|speak to (someone|somebody|a human|an agent)|customer service (rep|representative)|qof dhab ah|la hadal (qof|shaqaale)|i la xidhiidhi qof|wac shaqaale)\b/i;
 const OPT3_RE =
-  /^(3|3️⃣)$|\b(complaint|cabasho|dhibaato|refund|damaged|payment dispute|dhar (khaldan|maqan|luntay)|lacag(ta)? celin|celi(ya)? lacag(ta)?)\b/i;
+  /^(3|3.)$|\b(complaint|cabasho|dhibaato|refund|damaged|payment dispute|dhar (khaldan|maqan|luntay)|lacag(ta)? celin|celi(ya)? lacag(ta)?)\b/i;
 // "complaint: <details>" / "cabasho: <faahfaahin>" -> diiwaangeli si toos
 // ah, halkii la soo celin lahaa jawaabta guud ee COMPLAINT.
 const COMPLAINT_SUBMIT_RE = /^(complaint|cabasho)\s*[:\-,]?\s*(.{8,})$/i;
 const OPT4_RE =
-  /^(4|4️⃣)$|\b(branch|branches|locker|lockers|xarun|xarumaha|goob|location|address|cinwaan|halkee|where are you|your location|where.*(branch|shop|store))\b/i;
+  /^(4|4.)$|\b(branch|branches|locker|lockers|xarun|xarumaha|goob|location|address|cinwaan|halkee|where are you|your location|where.*(branch|shop|store))\b/i;
 const OPT5_RE =
-  /^(5|5️⃣)$|\b(lost ?(and|&) ?found|found items?|lumay|lumiyay|luntay|jeeb|jeebka|jeebabka|boorso|wallet|purse|keys?|fure|furayaal|taleefan|phone|watch|saacad|ring|kaatun|id card|kaarka|passport|baasaboor|left in (my|the)|iga tagay|iga hadhay|iga baxay|la iga waayay)\b/i;
+  /^(5|5.)$|\b(lost ?(and|&) ?found|found items?|lumay|lumiyay|luntay|jeeb|jeebka|jeebabka|boorso|wallet|purse|keys?|fure|furayaal|taleefan|phone|watch|saacad|ring|kaatun|id card|kaarka|passport|baasaboor|left in (my|the)|iga tagay|iga hadhay|iga baxay|la iga waayay)\b/i;
 // "found Ahmed Zaki" / "la helay 11250" / "raadi 0615..." -> raadin haadlinks
 const LF_SEARCH_RE = /^(found|la\s?helay|laga\s?helay|raadi|search|waxyaabaha)\b[\s:,-]*(.{2,})$/i;
 
@@ -622,8 +622,8 @@ async function searchLostFound(query, lang, silentIfEmpty = false) {
       intent: 'LF_NONE',
       reply:
         lang === 'en'
-          ? `🔎 No items found for *"${query}"*.\n\nPlease check the name/ID or visit your branch. 📞 2414`
-          : `🔎 Wax lama helin *"${query}"*.\n\nFadlan hubi magaca/ID-ga ama booqo xarunta. 📞 2414`,
+          ? `No items found for *"${query}"*.\n\nPlease check the name/ID or visit your branch. 📞 2414`
+          : `Wax lama helin *"${query}"*.\n\nFadlan hubi magaca/ID-ga ama booqo xarunta. 📞 2414`,
     };
   }
 
@@ -644,8 +644,8 @@ async function searchLostFound(query, lang, silentIfEmpty = false) {
 
   const head =
     lang === 'en'
-      ? `🎒 Lost & Found — "${query}"\n\n`
-      : `🎒 Waxyaabaha la helay — "${query}"\n\n`;
+      ? `Lost & Found — "${query}"\n\n`
+      : `Waxyaabaha la helay — "${query}"\n\n`;
   const foot =
     lang === 'en'
       ? `\n\nFor held items, please visit your branch to collect. 📞 2414`
@@ -786,14 +786,14 @@ async function lookupOrder(orderId, lang) {
 
   const reply =
     lang === 'en'
-      ? `Your LikeNew Order Information 🧺\n\n` +
+      ? `Your LikeNew Order Information\n\n` +
         `*Order ID:* ${orderId}\n\n` +
         `*Current Status:* ${statusEn}${note}\n\n` +
-        'Thank you for choosing LikeNew! ❤️'
-      : `Xogta Dalabkaaga *LIKENEW ${branch}* 🧺\n\n` +
+        'Thank you for choosing LikeNew!'
+      : `Xogta Dalabkaaga *LIKENEW ${branch}*\n\n` +
         `*ID Nambarka:* ${orderId}\n\n` +
         `*Heerka uu joogo:* ${statusSo}${note}\n\n` +
-        'Waad ku mahadsan tahay doorashadaada LIKENEW! ❤️';
+        'Waad ku mahadsan tahay doorashadaada LIKENEW!';
 
   return {
     success: true,
