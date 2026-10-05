@@ -41,13 +41,13 @@ const MENU = {
     '5️⃣ Raadi alaab aad ku ilawday jeebabka dharkaaga\n' +
     'qor numberka qodobka aad rabto inaan kaa caawiyo (tusaale "1").',
   en:
-    'Hi 👋 Welcome to LikeNew! 🧺\n\n' +
+    'Hi 👋 Welcome to Likenew! \n\n' +
     'How can I help you today? Please choose:\n\n' +
-    '1️⃣ 📦 Track my order\n' +
-    '2️⃣ 🎧 Customer Help\n' +
-    '3️⃣ 😠 Complaint\n' +
-    '4️⃣ 📍 Our branches / lockers\n' +
-    '5️⃣ 🎒 Lost & Found\n\n' +
+    '1️⃣  Track my order\n' +
+    '2️⃣  Customer Help\n' +
+    '3️⃣  Complaint\n' +
+    '4️⃣  Our branches / lockers\n' +
+    '5️⃣  Lost & Found\n\n' +
     'You can type the number (e.g. "1") or just tell me what you need.',
 };
 
@@ -78,7 +78,7 @@ const COMPLAINT = {
     'Si dhaqso ah ayay farriintaada u gaaraysaa qaybteenna daryeelka adeegga macaamiisha\n' +
     'Ama kala xiriir 📞 2414 haddii aad doonayso in degdeg loola hadlo.',
   en:
-    'Sorry to hear that 😔.\n\n' +
+    'Sorry to hear that.\n\n' +
     "Please tell me what happened (I'll log your next message). Include your Order ID if it relates to a specific order.\n\n" +
     'Example: *my order HQ-8781 was damaged*\n\n' +
     "I'll log it right away and our customer care team will follow up with you.\n\n" +
@@ -537,6 +537,13 @@ export async function POST(request) {
         return NextResponse.json({ ok: true, ignored: true });
       }
 
+      // Wicitaan (voice call) — amuso gebi ahaanba, waxba ha dirin. WATI/providers
+      // kale waxay isticmaalaan magacyo sida "call", "voiceCall", "missedCall".
+      if (eventType.includes('call')) {
+        console.log('[order-bot] ignored (call event, staying silent):', eventType);
+        return NextResponse.json({ ok: true, ignored: true, reason: 'call_event' });
+      }
+
       const msgType = String(body.type || 'text').toLowerCase();
       const text =
         msgType === 'text' || msgType === 'message' || msgType === ''
@@ -547,6 +554,14 @@ export async function POST(request) {
 
       const waId = String(body.waId).trim();
       const result = await computeReply(text, waId);
+
+      // Su'aal aan LikeNew la xidhiidhin (UNKNOWN) — amuso, waxba ha dirin,
+      // halkii fariin "ma fahmin" ah la soo celin lahaa.
+      if (result.intent === 'UNKNOWN') {
+        console.log(`[order-bot] waId=${waId} text="${text}" intent=UNKNOWN — staying silent`);
+        return NextResponse.json({ ok: true, intent: 'UNKNOWN', sent: false, silent: true });
+      }
+
       const sendRes = await sendWatiMessage(waId, result.reply);
       console.log(
         `[order-bot] waId=${waId} text="${text}" intent=${result.intent || 'order'} sent=${sendRes.sent} ${
