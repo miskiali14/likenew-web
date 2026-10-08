@@ -185,7 +185,7 @@ export default function ExpressCleaningPage() {
             <div>
               <h4 className="font-black text-purple-950 uppercase text-sm mb-2 tracking-widest">Place Your Order Seamlessly</h4>
               <p className="text-sm text-purple-800/70 font-medium leading-relaxed max-w-3xl">
-                Ready to experience speed? Call our priority line at <span className="font-black text-purple-950">+252 617372514</span> or use the mobile app. Select "Express VIP" to ensure your order gets 24-hour priority.
+                Ready to experience speed? Call our priority line at <span className="font-black text-purple-950">+252615311877</span> or use the mobile app. Select "Express VIP" to ensure your order gets 24-hour priority.
               </p>
             </div>
           </motion.div>
