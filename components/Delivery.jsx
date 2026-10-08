@@ -86,18 +86,32 @@ export default function DeliveryPage() {
           </motion.div>
 
           {/* Right Content */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             className="relative flex justify-center lg:justify-end"
           >
-            <motion.img 
+            <motion.div
               animate={{ x: [0, 10, 0] }}
               transition={{ repeat: Infinity, duration: 5, ease: "easeInOut" }}
-              src="images/delivery.png" 
-              alt="Delivery Service"
-              className="w-full max-w-lg drop-shadow-2xl object-contain"
-            />
+              className="relative w-full max-w-lg"
+            >
+              <img
+                src="images/delivery.png"
+                alt="Delivery Service"
+                className="w-full drop-shadow-2xl object-contain"
+              />
+              {/* Patch: sawirka gaariga wuxuu leeyahay nambar duug ah oo ku
+                  daabacan — halkan ayaa lagu daboolayaa nambarka saxda ah */}
+              <div
+                className="absolute bg-white px-2 py-0.5 rounded-sm shadow-sm flex items-center justify-center"
+                style={{ top: '58%', left: '48%', transform: 'translate(-50%, -50%)' }}
+              >
+                <span className="text-purple-900 font-black text-[9px] sm:text-[11px] md:text-xs tracking-tight whitespace-nowrap">
+                  TEL: 615311877
+                </span>
+              </div>
+            </motion.div>
           </motion.div>
         </div>
       </section>
