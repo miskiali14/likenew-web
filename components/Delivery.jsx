@@ -105,7 +105,7 @@ export default function DeliveryPage() {
                   daabacan — halkan ayaa lagu daboolayaa nambarka saxda ah */}
               <div
                 className="absolute bg-white px-2 py-0.5 rounded-sm shadow-sm flex items-center justify-center"
-                style={{ top: '58%', left: '48%', transform: 'translate(-50%, -50%)' }}
+                style={{ top: '57%', left: '65%', transform: 'translate(-50%, -50%)' }}
               >
                 <span className="text-purple-900 font-black text-[9px] sm:text-[11px] md:text-xs tracking-tight whitespace-nowrap">
                   TEL: 615311877
