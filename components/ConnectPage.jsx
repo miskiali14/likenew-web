@@ -1,36 +1,45 @@
 "use client";
 import Navbar from "@/components/Navbar";
 
+const APP_STORE_URL =
+  "https://apps.apple.com/us/app/likenew-laundry-and-dryclean/id6746805480";
+const PLAY_STORE_URL =
+  "https://play.google.com/store/apps/details?id=com.cleancloudapp.likenew";
+
 // ---- Xogta links-ka muhiimka ah (xaqiiqo ah — ka soo qaatay koodhka jira) ----
+// Qaab icon-grid ah oo la mid ah social media-ga — 6 ikhtiyaar, saf 3-geljir ah.
 const MAIN_LINKS = [
   {
     key: "order",
-    title: "Samee Dalab Website-ka",
-    subtitle: "Dooro adeegga aad rabto, dalab si fudud u samee",
+    title: "Samee Dalab",
     href: "/services1page",
     color: "#4421a3",
     icon: "cart",
   },
   {
-    key: "app",
-    title: "Soo Dejiso LikeNew App",
-    subtitle: "App Store · Google Play",
-    href: null, // laba link oo gaar ah, eeg App Store/Play Store hoose
-    color: "#4421a3",
-    icon: "logo",
+    key: "appstore",
+    title: "App Store",
+    href: APP_STORE_URL,
+    color: "#000000",
+    icon: "apple",
+  },
+  {
+    key: "googleplay",
+    title: "Google Play",
+    href: PLAY_STORE_URL,
+    color: "#01875f",
+    icon: "play",
   },
   {
     key: "whatsapp",
-    title: "La Socod Dalabkaaga — WhatsApp",
-    subtitle: "Bot-ka WhatsApp ee degdega ah",
+    title: "WhatsApp Tracker",
     href: "https://wa.me/252610311877",
     color: "#25D366",
     icon: "whatsapp",
   },
   {
     key: "telegram",
-    title: "La Socod Dalabkaaga — Telegram",
-    subtitle: "Bot-ka Telegram",
+    title: "Telegram Tracker",
     href: "https://t.me/likenew_order_bot",
     color: "#24A1DE",
     icon: "telegram",
@@ -38,7 +47,6 @@ const MAIN_LINKS = [
   {
     key: "lockers",
     title: "LikeNew Lockers",
-    subtitle: "Xarumaha 24/7 ee Muqdisho",
     href: "/lockers",
     color: "#662d8f",
     icon: "locker-photo",
@@ -54,11 +62,6 @@ const SOCIAL_LINKS = [
   { key: "linkedin", title: "LinkedIn", href: "PENDING", color: "#0A66C2", icon: "linkedin" },
   { key: "snapchat", title: "Snapchat", href: "PENDING", color: "#FFFC00", icon: "snapchat" },
 ];
-
-const APP_STORE_URL =
-  "https://apps.apple.com/us/app/likenew-laundry-and-dryclean/id6746805480";
-const PLAY_STORE_URL =
-  "https://play.google.com/store/apps/details?id=com.cleancloudapp.likenew";
 
 function Icon({ name, size = 22 }) {
   const common = { width: size, height: size, viewBox: "0 0 24 24", fill: "currentColor" };
@@ -137,90 +140,27 @@ function Icon({ name, size = 22 }) {
   return null;
 }
 
-function PendingBadge() {
-  return (
-    <span className="ml-auto shrink-0 text-[10px] font-bold uppercase tracking-wide text-gray-500 bg-gray-100 px-2.5 py-1 rounded-full">
-      Dhawaan
-    </span>
-  );
-}
-
-function MainLinkCard({ item }) {
+// IconTile — hal component oo labada qaybood (main links + social) isticmaalaan.
+function IconTile({ item, size = "lg" }) {
   const isPending = item.href === "PENDING" || item.href === null;
   const external = item.href && item.href.startsWith("http");
-
-  const inner = (
-    <>
-      <div
-        className="shrink-0 w-12 h-12 rounded-2xl flex items-center justify-center text-white shadow-md overflow-hidden"
-        style={{ backgroundColor: item.color }}
-      >
-        <Icon name={item.icon} size={22} />
-      </div>
-      <div className="min-w-0 flex-1">
-        <p className="font-extrabold text-gray-900 text-[15px] leading-tight truncate">
-          {item.title}
-        </p>
-        <p className="text-gray-500 text-xs mt-0.5 truncate">{item.subtitle}</p>
-      </div>
-    </>
-  );
-
-  const baseClass =
-    "group flex items-center gap-4 w-full rounded-2xl p-4 bg-white border border-gray-200 shadow-sm transition-all duration-200 hover:border-[#4421a3]/40 hover:shadow-lg hover:-translate-y-0.5";
-
-  if (item.key === "app") {
-    return (
-      <div className={baseClass}>
-        {inner}
-        <div className="flex gap-2 ml-2 shrink-0">
-          <a
-            href={APP_STORE_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-9 h-9 rounded-xl bg-gray-100 hover:bg-[#4421a3] hover:text-white flex items-center justify-center text-gray-700 transition-colors"
-            aria-label="App Store"
-          >
-            <Icon name="apple" size={18} />
-          </a>
-          <a
-            href={PLAY_STORE_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-9 h-9 rounded-xl bg-gray-100 hover:bg-[#4421a3] hover:text-white flex items-center justify-center text-gray-700 transition-colors"
-            aria-label="Google Play"
-          >
-            <Icon name="play" size={18} />
-          </a>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <a
-      href={item.href}
-      target={external ? "_blank" : undefined}
-      rel={external ? "noopener noreferrer" : undefined}
-      className={baseClass}
-    >
-      {inner}
-    </a>
-  );
-}
-
-function SocialIcon({ item }) {
-  const isPending = item.href === "PENDING";
+  const boxSize = size === "lg" ? "w-16 h-16" : "w-14 h-14";
+  const iconSize = size === "lg" ? 26 : 24;
 
   const content = (
-    <div className="flex flex-col items-center gap-2">
+    <div className="flex flex-col items-center gap-2 text-center">
       <div
-        className="w-14 h-14 rounded-2xl flex items-center justify-center text-white shadow-sm transition-transform group-hover:scale-105"
-        style={{ backgroundColor: item.color, color: item.key === "snapchat" ? "#000" : "#fff" }}
+        className={`${boxSize} rounded-2xl flex items-center justify-center shadow-sm overflow-hidden transition-transform group-hover:scale-105`}
+        style={{
+          backgroundColor: item.color,
+          color: item.key === "snapchat" ? "#000" : "#fff",
+        }}
       >
-        <Icon name={item.icon} size={24} />
+        <Icon name={item.icon} size={iconSize} />
       </div>
-      <span className="text-[11px] font-semibold text-gray-600">{item.title}</span>
+      <span className="text-[11px] font-bold text-gray-700 leading-tight max-w-[72px]">
+        {item.title}
+      </span>
       {isPending && <span className="text-[9px] text-gray-400">Dhawaan</span>}
     </div>
   );
@@ -232,8 +172,8 @@ function SocialIcon({ item }) {
   return (
     <a
       href={item.href}
-      target="_blank"
-      rel="noopener noreferrer"
+      target={external ? "_blank" : undefined}
+      rel={external ? "noopener noreferrer" : undefined}
       className="group"
     >
       {content}
@@ -257,19 +197,24 @@ export default function ConnectPage() {
           </p>
         </div>
 
-        <div className="flex flex-col gap-3">
-          {MAIN_LINKS.map((item) => (
-            <MainLinkCard key={item.key} item={item} />
-          ))}
+        <div>
+          <p className="text-center text-xs font-bold uppercase tracking-widest text-gray-400 mb-5">
+            Goobaha Muhiimka Ah
+          </p>
+          <div className="grid grid-cols-3 gap-y-7 place-items-center">
+            {MAIN_LINKS.map((item) => (
+              <IconTile key={item.key} item={item} size="lg" />
+            ))}
+          </div>
         </div>
 
-        <div className="mt-10">
+        <div className="mt-12 pt-10 border-t border-gray-100">
           <p className="text-center text-xs font-bold uppercase tracking-widest text-gray-400 mb-5">
             Nagu Soo Xidhiidh Social Media
           </p>
           <div className="grid grid-cols-3 gap-y-6 place-items-center">
             {SOCIAL_LINKS.map((item) => (
-              <SocialIcon key={item.key} item={item} />
+              <IconTile key={item.key} item={item} size="sm" />
             ))}
           </div>
         </div>
