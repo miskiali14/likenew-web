@@ -41,7 +41,7 @@ const MAIN_LINKS = [
     subtitle: "Xarumaha 24/7 ee Muqdisho",
     href: "/lockers",
     color: "#662d8f",
-    icon: "pin",
+    icon: "locker-photo",
   },
 ];
 
@@ -64,7 +64,9 @@ function Icon({ name, size = 22 }) {
   const common = { width: size, height: size, viewBox: "0 0 24 24", fill: "currentColor" };
   switch (name) {
     case "logo":
-      return <img src="/Logo.png" alt="" className="w-full h-full object-contain p-1.5" />;
+      return <img src="/images/logo-icon.png" alt="" className="w-full h-full object-contain p-1.5" />;
+    case "locker-photo":
+      return <img src="/images/locker-product.png" alt="" className="w-full h-full object-cover" />;
     case "cart":
       return (
         <svg {...common}>
@@ -247,7 +249,7 @@ export default function ConnectPage() {
       <div className="max-w-xl mx-auto px-5 pt-28 pb-20">
         <div className="flex flex-col items-center text-center mb-10">
           <div className="w-20 h-20 rounded-full bg-white border border-gray-200 flex items-center justify-center shadow-md mb-4 overflow-hidden">
-            <img src="/Logo.png" alt="LikeNew" className="w-14 h-14 object-contain" />
+            <img src="/images/logo-icon.png" alt="LikeNew" className="w-14 h-14 object-contain" />
           </div>
           <h1 className="text-gray-900 font-black text-2xl tracking-tight">LikeNew</h1>
           <p className="text-gray-500 text-sm mt-1 max-w-xs">
