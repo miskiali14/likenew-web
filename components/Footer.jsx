@@ -38,6 +38,13 @@ export default function Footer() {
   >
     Application
   </Link>
+
+  <Link
+    href="/connect"
+    className="inline-flex items-center rounded-full bg-[#4421a3] px-6 py-3 text-sm font-semibold text-white transition-all duration-300 hover:bg-[#662d8f]"
+  >
+    Connect With Us
+  </Link>
 </div>
 
         <div className="mt-12 w-full border-t border-gray-100 pt-6">
