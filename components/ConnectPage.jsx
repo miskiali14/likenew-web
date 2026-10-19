@@ -1,10 +1,8 @@
 "use client";
 import Navbar from "@/components/Navbar";
 
-// ---- Xogta links-ka (xaqiiqo ah — ka soo qaatay koodhka jira) ----
-// Erayada "PENDING" waxay u baahan yihiin link dhab ah — beddel marka la
-// helo (looma baahna wax kale oo koodh ah in la taabto).
-const LINKS = [
+// ---- Xogta links-ka muhiimka ah (xaqiiqo ah — ka soo qaatay koodhka jira) ----
+const MAIN_LINKS = [
   {
     key: "order",
     title: "Samee Dalab Website-ka",
@@ -17,9 +15,9 @@ const LINKS = [
     key: "app",
     title: "Soo Dejiso LikeNew App",
     subtitle: "App Store · Google Play",
-    href: null, // laba link oo gaar ah, eeg AppLinks hoose
-    color: "#1a1a2e",
-    icon: "smartphone",
+    href: null, // laba link oo gaar ah, eeg App Store/Play Store hoose
+    color: "#4421a3",
+    icon: "logo",
   },
   {
     key: "whatsapp",
@@ -45,38 +43,16 @@ const LINKS = [
     color: "#662d8f",
     icon: "pin",
   },
-  {
-    key: "tiktok",
-    title: "LikeNew — TikTok",
-    subtitle: "PENDING",
-    href: "PENDING",
-    color: "#000000",
-    icon: "tiktok",
-  },
-  {
-    key: "facebook",
-    title: "LikeNew — Facebook",
-    subtitle: "PENDING",
-    href: "PENDING",
-    color: "#1877F2",
-    icon: "facebook",
-  },
-  {
-    key: "instagram",
-    title: "LikeNew — Instagram",
-    subtitle: "PENDING",
-    href: "PENDING",
-    color: "#E1306C",
-    icon: "instagram",
-  },
-  {
-    key: "linkedin",
-    title: "LikeNew — LinkedIn",
-    subtitle: "PENDING",
-    href: "PENDING",
-    color: "#0A66C2",
-    icon: "linkedin",
-  },
+];
+
+// Social media — saf 3-geljir ah. "PENDING" waa inay u baahan yihiin link
+// dhab ah — beddel marka la helo (looma baahna wax kale oo koodh ah).
+const SOCIAL_LINKS = [
+  { key: "tiktok", title: "TikTok", href: "PENDING", color: "#000000", icon: "tiktok" },
+  { key: "facebook", title: "Facebook", href: "PENDING", color: "#1877F2", icon: "facebook" },
+  { key: "instagram", title: "Instagram", href: "PENDING", color: "#E1306C", icon: "instagram" },
+  { key: "linkedin", title: "LinkedIn", href: "PENDING", color: "#0A66C2", icon: "linkedin" },
+  { key: "snapchat", title: "Snapchat", href: "PENDING", color: "#FFFC00", icon: "snapchat" },
 ];
 
 const APP_STORE_URL =
@@ -87,17 +63,12 @@ const PLAY_STORE_URL =
 function Icon({ name, size = 22 }) {
   const common = { width: size, height: size, viewBox: "0 0 24 24", fill: "currentColor" };
   switch (name) {
+    case "logo":
+      return <img src="/Logo.png" alt="" className="w-full h-full object-contain p-1.5" />;
     case "cart":
       return (
         <svg {...common}>
           <path d="M7 4h-2l-1 2H2v2h2l3.6 7.59-1.35 2.44A2 2 0 0 0 8 21h11v-2H8l1.1-2h7.45a2 2 0 0 0 1.79-1.11L21.7 8H6.21l-.94-2H7V4zm1 16a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm9 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4z" />
-        </svg>
-      );
-    case "smartphone":
-      return (
-        <svg {...common}>
-          <rect x="6" y="2" width="12" height="20" rx="2" fill="none" stroke="currentColor" strokeWidth="2" />
-          <line x1="11" y1="18" x2="13" y2="18" stroke="currentColor" strokeWidth="2" />
         </svg>
       );
     case "pin":
@@ -142,6 +113,12 @@ function Icon({ name, size = 22 }) {
           <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.95v5.66H9.34V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14zM7.12 20.45H3.56V9h3.56v11.45z" />
         </svg>
       );
+    case "snapchat":
+      return (
+        <svg {...common}>
+          <path d="M12 2.4c2.9 0 4.6 2.1 4.65 4.45.02.87-.03 1.76.08 2.1.1.3.63.5 1.1.5.5 0 .97-.27 1.33-.27.4 0 .9.26.9.76 0 .48-.47.7-1 .9-.3.11-.62.2-.72.42-.08.17-.03.4.1.74.28.73 1.02 2.08 2.57 2.5.2.05.32.25.3.44-.05.42-1.1.75-2.37.9-.1.26-.2.56-.28.86-.07.26-.33.4-.6.33-.52-.13-1.05-.18-1.56-.1-.83.13-1.5.74-2.5.74s-1.67-.61-2.5-.74c-.5-.08-1.03-.03-1.56.1-.27.07-.53-.07-.6-.33-.08-.3-.18-.6-.28-.86-1.26-.15-2.32-.48-2.37-.9-.02-.19.1-.4.3-.44 1.55-.42 2.3-1.77 2.57-2.5.13-.34.18-.57.1-.74-.1-.22-.42-.3-.72-.42-.53-.2-1-.42-1-.9 0-.5.5-.76.9-.76.36 0 .83.27 1.33.27.47 0 1-.2 1.1-.5.1-.33.06-1.22.08-2.1.05-2.35 1.75-4.45 4.65-4.45z" />
+        </svg>
+      );
     case "apple":
       return (
         <svg {...common}>
@@ -160,42 +137,36 @@ function Icon({ name, size = 22 }) {
 
 function PendingBadge() {
   return (
-    <span className="ml-auto shrink-0 text-[10px] font-bold uppercase tracking-wide text-white/90 bg-white/25 px-2.5 py-1 rounded-full">
+    <span className="ml-auto shrink-0 text-[10px] font-bold uppercase tracking-wide text-gray-500 bg-gray-100 px-2.5 py-1 rounded-full">
       Dhawaan
     </span>
   );
 }
 
-function LinkCard({ item }) {
+function MainLinkCard({ item }) {
   const isPending = item.href === "PENDING" || item.href === null;
   const external = item.href && item.href.startsWith("http");
 
   const inner = (
     <>
       <div
-        className="shrink-0 w-12 h-12 rounded-2xl flex items-center justify-center text-white shadow-md"
+        className="shrink-0 w-12 h-12 rounded-2xl flex items-center justify-center text-white shadow-md overflow-hidden"
         style={{ backgroundColor: item.color }}
       >
         <Icon name={item.icon} size={22} />
       </div>
       <div className="min-w-0 flex-1">
-        <p className="font-extrabold text-white text-[15px] leading-tight truncate">
+        <p className="font-extrabold text-gray-900 text-[15px] leading-tight truncate">
           {item.title}
         </p>
-        {item.key !== "app" && (
-          <p className="text-white/70 text-xs mt-0.5 truncate">
-            {isPending ? "Link-ka dhawaan ayaa la dari doonaa" : item.subtitle}
-          </p>
-        )}
+        <p className="text-gray-500 text-xs mt-0.5 truncate">{item.subtitle}</p>
       </div>
-      {isPending && <PendingBadge />}
     </>
   );
 
   const baseClass =
-    "group flex items-center gap-4 w-full rounded-2xl p-4 bg-white/10 backdrop-blur-sm border border-white/15 transition-all duration-200 hover:bg-white/20 hover:-translate-y-0.5 hover:shadow-xl";
+    "group flex items-center gap-4 w-full rounded-2xl p-4 bg-white border border-gray-200 shadow-sm transition-all duration-200 hover:border-[#4421a3]/40 hover:shadow-lg hover:-translate-y-0.5";
 
-  // App download card -> laba badhan oo gaar ah (App Store / Play Store)
   if (item.key === "app") {
     return (
       <div className={baseClass}>
@@ -205,7 +176,7 @@ function LinkCard({ item }) {
             href={APP_STORE_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-9 h-9 rounded-xl bg-white/15 hover:bg-white/30 flex items-center justify-center text-white transition-colors"
+            className="w-9 h-9 rounded-xl bg-gray-100 hover:bg-[#4421a3] hover:text-white flex items-center justify-center text-gray-700 transition-colors"
             aria-label="App Store"
           >
             <Icon name="apple" size={18} />
@@ -214,7 +185,7 @@ function LinkCard({ item }) {
             href={PLAY_STORE_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-9 h-9 rounded-xl bg-white/15 hover:bg-white/30 flex items-center justify-center text-white transition-colors"
+            className="w-9 h-9 rounded-xl bg-gray-100 hover:bg-[#4421a3] hover:text-white flex items-center justify-center text-gray-700 transition-colors"
             aria-label="Google Play"
           >
             <Icon name="play" size={18} />
@@ -222,10 +193,6 @@ function LinkCard({ item }) {
         </div>
       </div>
     );
-  }
-
-  if (isPending) {
-    return <div className={baseClass + " opacity-70 cursor-default"}>{inner}</div>;
   }
 
   return (
@@ -240,35 +207,72 @@ function LinkCard({ item }) {
   );
 }
 
+function SocialIcon({ item }) {
+  const isPending = item.href === "PENDING";
+
+  const content = (
+    <div className="flex flex-col items-center gap-2">
+      <div
+        className="w-14 h-14 rounded-2xl flex items-center justify-center text-white shadow-sm transition-transform group-hover:scale-105"
+        style={{ backgroundColor: item.color, color: item.key === "snapchat" ? "#000" : "#fff" }}
+      >
+        <Icon name={item.icon} size={24} />
+      </div>
+      <span className="text-[11px] font-semibold text-gray-600">{item.title}</span>
+      {isPending && <span className="text-[9px] text-gray-400">Dhawaan</span>}
+    </div>
+  );
+
+  if (isPending) {
+    return <div className="group opacity-60 cursor-default">{content}</div>;
+  }
+
+  return (
+    <a
+      href={item.href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="group"
+    >
+      {content}
+    </a>
+  );
+}
+
 export default function ConnectPage() {
   return (
-    <main
-      className="min-h-screen"
-      style={{
-        background:
-          "radial-gradient(circle at 20% 0%, #6a3fc4 0%, #4421a3 45%, #2c1468 100%)",
-      }}
-    >
+    <main className="min-h-screen bg-white">
       <Navbar />
 
       <div className="max-w-xl mx-auto px-5 pt-28 pb-20">
         <div className="flex flex-col items-center text-center mb-10">
-          <div className="w-20 h-20 rounded-full bg-white flex items-center justify-center shadow-xl mb-4 overflow-hidden">
+          <div className="w-20 h-20 rounded-full bg-white border border-gray-200 flex items-center justify-center shadow-md mb-4 overflow-hidden">
             <img src="/Logo.png" alt="LikeNew" className="w-14 h-14 object-contain" />
           </div>
-          <h1 className="text-white font-black text-2xl tracking-tight">LikeNew</h1>
-          <p className="text-white/70 text-sm mt-1 max-w-xs">
+          <h1 className="text-gray-900 font-black text-2xl tracking-tight">LikeNew</h1>
+          <p className="text-gray-500 text-sm mt-1 max-w-xs">
             Dhammaan goobaha aad naga heli karto — hal meel oo kaliya 🧺
           </p>
         </div>
 
         <div className="flex flex-col gap-3">
-          {LINKS.map((item) => (
-            <LinkCard key={item.key} item={item} />
+          {MAIN_LINKS.map((item) => (
+            <MainLinkCard key={item.key} item={item} />
           ))}
         </div>
 
-        <p className="text-center text-white/50 text-xs mt-10">
+        <div className="mt-10">
+          <p className="text-center text-xs font-bold uppercase tracking-widest text-gray-400 mb-5">
+            Nagu Soo Xidhiidh Social Media
+          </p>
+          <div className="grid grid-cols-3 gap-y-6 place-items-center">
+            {SOCIAL_LINKS.map((item) => (
+              <SocialIcon key={item.key} item={item} />
+            ))}
+          </div>
+        </div>
+
+        <p className="text-center text-gray-400 text-xs mt-12">
           © {new Date().getFullYear()} LikeNew Smart Laundry · likenew.so
         </p>
       </div>
