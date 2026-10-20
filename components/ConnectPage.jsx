@@ -63,7 +63,13 @@ const SOCIAL_LINKS = [
     color: "#000000",
     icon: "tiktok",
   },
-  { key: "facebook", title: "Facebook", href: "PENDING", color: "#1877F2", icon: "facebook" },
+  {
+    key: "facebook",
+    title: "Facebook",
+    href: "https://www.facebook.com/share/19jK3jPQd9/",
+    color: "#1877F2",
+    icon: "facebook",
+  },
   {
     key: "instagram",
     title: "Instagram",
