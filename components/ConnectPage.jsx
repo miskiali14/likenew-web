@@ -77,7 +77,13 @@ const SOCIAL_LINKS = [
     color: "#E1306C",
     icon: "instagram",
   },
-  { key: "linkedin", title: "LinkedIn", href: "PENDING", color: "#0A66C2", icon: "linkedin" },
+  {
+    key: "linkedin",
+    title: "LinkedIn",
+    href: "https://www.linkedin.com/company/likenew-so/",
+    color: "#0A66C2",
+    icon: "linkedin",
+  },
   {
     key: "snapchat",
     title: "Snapchat",
