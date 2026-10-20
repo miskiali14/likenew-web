@@ -6,12 +6,12 @@ const APP_STORE_URL =
 const PLAY_STORE_URL =
   "https://play.google.com/store/apps/details?id=com.cleancloudapp.likenew";
 
-// ---- Xogta links-ka muhiimka ah (xaqiiqo ah — ka soo qaatay koodhka jira) ----
-// Qaab icon-grid ah oo la mid ah social media-ga — 6 ikhtiyaar, saf 3-geljir ah.
+// ---- Key link data (real — sourced from existing code) ----
+// Icon-grid layout matching the social media section — 6 options, 3-column grid.
 const MAIN_LINKS = [
   {
     key: "order",
-    title: "Samee Dalab",
+    title: "Place an Order",
     href: "/services1page",
     color: "#ffffff",
     icon: "order-icon",
@@ -53,8 +53,8 @@ const MAIN_LINKS = [
   },
 ];
 
-// Social media — saf 3-geljir ah. "PENDING" waa inay u baahan yihiin link
-// dhab ah — beddel marka la helo (looma baahna wax kale oo koodh ah).
+// Social media — 3-column grid. "PENDING" means it needs a real
+// link — just swap it in when available (no other code changes needed).
 const SOCIAL_LINKS = [
   {
     key: "tiktok",
@@ -164,7 +164,7 @@ function Icon({ name, size = 22 }) {
   return null;
 }
 
-// IconTile — hal component oo labada qaybood (main links + social) isticmaalaan.
+// IconTile — shared component used by both sections (main links + social).
 function IconTile({ item, size = "lg" }) {
   const isPending = item.href === "PENDING" || item.href === null;
   const external = item.href && item.href.startsWith("http");
@@ -187,7 +187,7 @@ function IconTile({ item, size = "lg" }) {
       <span className="text-[11px] font-bold text-gray-700 leading-tight max-w-[72px]">
         {item.title}
       </span>
-      {isPending && <span className="text-[9px] text-gray-400">Dhawaan</span>}
+      {isPending && <span className="text-[9px] text-gray-400">Coming Soon</span>}
     </div>
   );
 
@@ -219,13 +219,13 @@ export default function ConnectPage() {
           </div>
           <h1 className="text-gray-900 font-black text-2xl tracking-tight">LikeNew</h1>
           <p className="text-gray-500 text-sm mt-1 max-w-xs">
-            Dhammaan goobaha aad naga heli karto — hal meel oo kaliya 🧺
+            Everywhere you can find us — all in one place
           </p>
         </div>
 
         <div>
           <p className="text-center text-xs font-bold uppercase tracking-widest text-gray-400 mb-5">
-            Goobaha Muhiimka Ah
+            Key Links
           </p>
           <div className="grid grid-cols-3 gap-y-7 place-items-center">
             {MAIN_LINKS.map((item) => (
@@ -236,7 +236,7 @@ export default function ConnectPage() {
 
         <div className="mt-12 pt-10 border-t border-gray-100">
           <p className="text-center text-xs font-bold uppercase tracking-widest text-gray-400 mb-5">
-            Nagu Soo Xidhiidh Social Media
+            Follow Us on Social Media
           </p>
           <div className="grid grid-cols-3 gap-y-6 place-items-center">
             {SOCIAL_LINKS.map((item) => (
