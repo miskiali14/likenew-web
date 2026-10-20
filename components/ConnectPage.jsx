@@ -13,8 +13,8 @@ const MAIN_LINKS = [
     key: "order",
     title: "Samee Dalab",
     href: "/services1page",
-    color: "#4421a3",
-    icon: "cart",
+    color: "#ffffff",
+    icon: "order-icon",
   },
   {
     key: "appstore",
@@ -100,6 +100,8 @@ function Icon({ name, size = 22 }) {
       return <img src="/images/logo-icon.png" alt="" className="w-full h-full object-contain p-1.5" />;
     case "locker-photo":
       return <img src="/images/locker-product.png" alt="" className="w-full h-full object-cover" />;
+    case "order-icon":
+      return <img src="/images/order-icon.png" alt="" className="w-full h-full object-contain" />;
     case "cart":
       return (
         <svg {...common}>
