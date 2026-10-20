@@ -27,7 +27,7 @@ const MAIN_LINKS = [
     key: "googleplay",
     title: "Google Play",
     href: PLAY_STORE_URL,
-    color: "#01875f",
+    color: "#ffffff",
     icon: "play",
   },
   {
@@ -155,17 +155,9 @@ function Icon({ name, size = 22 }) {
         </svg>
       );
     case "apple":
-      return (
-        <svg {...common}>
-          <path d="M16.37 1.43c.09 1.04-.3 2.05-.93 2.8-.65.76-1.72 1.35-2.76 1.27-.1-1 .36-2.05 1-2.76.7-.78 1.87-1.37 2.69-1.31zM20.5 17.1c-.56 1.27-.82 1.83-1.54 2.95-1 1.56-2.4 3.5-4.14 3.52-1.54.02-1.94-1-4.03-1-2.1 0-2.54.98-4.07 1.02-1.73.05-3.05-1.68-4.05-3.24C.5 16.9-.4 12.7 1.1 9.9c.76-1.4 2.12-2.28 3.6-2.3 1.47-.03 2.86 1 3.76 1 .9 0 2.58-1.23 4.35-1.05.74.03 2.82.3 4.16 2.25-.1.07-2.48 1.46-2.46 4.33.03 3.43 3.04 4.57 3.07 4.57-.03.08-.48 1.63-1.08 3.3z" />
-        </svg>
-      );
+      return <img src="/images/appstore-icon.png" alt="" className="w-full h-full object-contain p-2" />;
     case "play":
-      return (
-        <svg {...common}>
-          <path d="M3.6 2.6c-.35.35-.6.85-.6 1.4v16c0 .55.25 1.05.6 1.4l.1.08L13.5 12 3.7 2.52l-.1.08zM16.8 9.3l-2.6-1.5-2.9 2.9 2.9 2.9 2.65-1.53c.8-.46.8-1.6 0-2.07zM4.3 21.4l9.2-5.3-2.5-2.5-6.7 7.8zM4.3 2.6l6.7 7.8 2.5-2.5-9.2-5.3z" />
-        </svg>
-      );
+      return <img src="/images/googleplay-icon.jpg" alt="" className="w-full h-full object-contain p-2" />;
   }
   return null;
 }
@@ -180,7 +172,9 @@ function IconTile({ item, size = "lg" }) {
   const content = (
     <div className="flex flex-col items-center gap-2 text-center">
       <div
-        className={`${boxSize} rounded-2xl flex items-center justify-center shadow-sm overflow-hidden transition-transform group-hover:scale-105`}
+        className={`${boxSize} rounded-2xl flex items-center justify-center shadow-sm overflow-hidden transition-transform group-hover:scale-105 ${
+          item.color === "#ffffff" ? "border border-gray-200" : ""
+        }`}
         style={{
           backgroundColor: item.color,
           color: item.key === "snapchat" ? "#000" : "#fff",
