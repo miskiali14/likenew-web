@@ -1,13 +1,8 @@
 "use client";
 import Navbar from "@/components/Navbar";
 
-const APP_STORE_URL =
-  "https://apps.apple.com/us/app/likenew-laundry-and-dryclean/id6746805480";
-const PLAY_STORE_URL =
-  "https://play.google.com/store/apps/details?id=com.cleancloudapp.likenew";
-
 // ---- Key link data (real — sourced from existing code) ----
-// Icon-grid layout matching the social media section — 6 options, 3-column grid.
+// Icon-grid layout matching the social media section — 3-column grid.
 const MAIN_LINKS = [
   {
     key: "order",
@@ -17,18 +12,11 @@ const MAIN_LINKS = [
     icon: "order-icon",
   },
   {
-    key: "appstore",
-    title: "App Store",
-    href: APP_STORE_URL,
-    color: "#000000",
-    icon: "apple",
-  },
-  {
-    key: "googleplay",
-    title: "Google Play",
-    href: PLAY_STORE_URL,
+    key: "app",
+    title: "Download the App",
+    href: "/app",
     color: "#ffffff",
-    icon: "play",
+    icon: "order-icon",
   },
   {
     key: "whatsapp",
@@ -156,10 +144,6 @@ function Icon({ name, size = 22 }) {
           <path d="M12 2.4c2.9 0 4.6 2.1 4.65 4.45.02.87-.03 1.76.08 2.1.1.3.63.5 1.1.5.5 0 .97-.27 1.33-.27.4 0 .9.26.9.76 0 .48-.47.7-1 .9-.3.11-.62.2-.72.42-.08.17-.03.4.1.74.28.73 1.02 2.08 2.57 2.5.2.05.32.25.3.44-.05.42-1.1.75-2.37.9-.1.26-.2.56-.28.86-.07.26-.33.4-.6.33-.52-.13-1.05-.18-1.56-.1-.83.13-1.5.74-2.5.74s-1.67-.61-2.5-.74c-.5-.08-1.03-.03-1.56.1-.27.07-.53-.07-.6-.33-.08-.3-.18-.6-.28-.86-1.26-.15-2.32-.48-2.37-.9-.02-.19.1-.4.3-.44 1.55-.42 2.3-1.77 2.57-2.5.13-.34.18-.57.1-.74-.1-.22-.42-.3-.72-.42-.53-.2-1-.42-1-.9 0-.5.5-.76.9-.76.36 0 .83.27 1.33.27.47 0 1-.2 1.1-.5.1-.33.06-1.22.08-2.1.05-2.35 1.75-4.45 4.65-4.45z" />
         </svg>
       );
-    case "apple":
-      return <img src="/images/appstore-icon.png" alt="" className="w-full h-full object-contain p-2" />;
-    case "play":
-      return <img src="/images/googleplay-icon.jpg" alt="" className="w-full h-full object-contain p-2" />;
   }
   return null;
 }
