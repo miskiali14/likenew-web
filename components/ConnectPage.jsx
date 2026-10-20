@@ -5,16 +5,16 @@ import Navbar from "@/components/Navbar";
 // Icon-grid layout matching the social media section — 3-column grid.
 const MAIN_LINKS = [
   {
-    key: "order",
-    title: "Place an Order",
-    href: "/services1page",
+    key: "app",
+    title: "Download the App",
+    href: "/app",
     color: "#ffffff",
     icon: "order-icon",
   },
   {
-    key: "app",
-    title: "Download the App",
-    href: "/app",
+    key: "order",
+    title: "Place an Order",
+    href: "/services1page",
     color: "#ffffff",
     icon: "order-icon",
   },
