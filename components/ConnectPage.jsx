@@ -56,11 +56,29 @@ const MAIN_LINKS = [
 // Social media — saf 3-geljir ah. "PENDING" waa inay u baahan yihiin link
 // dhab ah — beddel marka la helo (looma baahna wax kale oo koodh ah).
 const SOCIAL_LINKS = [
-  { key: "tiktok", title: "TikTok", href: "PENDING", color: "#000000", icon: "tiktok" },
+  {
+    key: "tiktok",
+    title: "TikTok",
+    href: "https://www.tiktok.com/@likenew.so?_r=1&_t=ZS-9AgcvCrb4TN",
+    color: "#000000",
+    icon: "tiktok",
+  },
   { key: "facebook", title: "Facebook", href: "PENDING", color: "#1877F2", icon: "facebook" },
-  { key: "instagram", title: "Instagram", href: "PENDING", color: "#E1306C", icon: "instagram" },
+  {
+    key: "instagram",
+    title: "Instagram",
+    href: "https://www.instagram.com/likenew.so?srtk=MTU0cTFwMGRoMDcwNQ==",
+    color: "#E1306C",
+    icon: "instagram",
+  },
   { key: "linkedin", title: "LinkedIn", href: "PENDING", color: "#0A66C2", icon: "linkedin" },
-  { key: "snapchat", title: "Snapchat", href: "PENDING", color: "#FFFC00", icon: "snapchat" },
+  {
+    key: "snapchat",
+    title: "Snapchat",
+    href: "https://snapchat.com/t/JK3uPtH9",
+    color: "#FFFC00",
+    icon: "snapchat",
+  },
 ];
 
 function Icon({ name, size = 22 }) {
