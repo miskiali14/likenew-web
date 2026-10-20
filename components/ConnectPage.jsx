@@ -39,6 +39,13 @@ const MAIN_LINKS = [
     color: "#662d8f",
     icon: "locker-photo",
   },
+  {
+    key: "found-items",
+    title: "Found Items",
+    href: "https://found.likenew.so/",
+    color: "#ffffff",
+    icon: "found-items-icon",
+  },
 ];
 
 // Social media — 3-column grid. "PENDING" means it needs a real
@@ -90,6 +97,8 @@ function Icon({ name, size = 22 }) {
       return <img src="/images/locker-product.png" alt="" className="w-full h-full object-cover" />;
     case "order-icon":
       return <img src="/images/order-icon.png" alt="" className="w-full h-full object-contain" />;
+    case "found-items-icon":
+      return <img src="/images/found-items-icon.png" alt="" className="w-full h-full object-contain" />;
     case "cart":
       return (
         <svg {...common}>
