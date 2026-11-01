@@ -257,6 +257,18 @@ const NOT_FOUND = {
     `I couldn't find an order with the ID *${id}*.\n\nPlease check your receipt and try again.`,
 };
 
+// ---- Feedback: macmiilku wuxuu weydiisnaa qiimayn 1-5 marka order-ku
+// dhammaado (fariinta koowaad waxaa dira /api/whatsapp/send-feedback) ----
+const FEEDBACK_THANKS = {
+  so: 'Mahadsanid qiimayntaada! Waxaan ku faraxsanahay inaan kuu adeegno 🙏',
+  en: 'Thank you for your feedback! We appreciate you choosing LikeNew 🙏',
+};
+
+const FEEDBACK_LOW = {
+  so: 'Waan ka xunnahay inaanan buuxin rajadaada.\n\nFadlan ii sheeg maxaa dhacay si aan dhaqso wax uga qabanno.',
+  en: "Sorry we didn't meet your expectations.\n\nPlease tell me what happened so we can make it right.",
+};
+
 // ---- Kala-sooc (regex) ----
 
 const ORDER_RE = /\b(HQ|KM5)-\d+\b/i;
@@ -390,6 +402,16 @@ async function computeReply(rawTextIn, waId) {
     const awaiting = await consumeSession(waId);
     if (awaiting === 'COMPLAINT' && rawText && !GREETING_RE.test(rawText)) {
       return await submitComplaint(rawText, waId, lang);
+    }
+    // Qofkan waxaa weydiiyay qiimayn 1-5 ka dib dhammaystirka dalabkiisa.
+    if (awaiting && awaiting.startsWith('FEEDBACK:')) {
+      const ratingMatch = rawText.match(/\b([1-5])\b/);
+      if (ratingMatch) {
+        const orderId = awaiting.slice('FEEDBACK:'.length);
+        return await submitFeedback(orderId, waId, Number(ratingMatch[1]), lang);
+      }
+      // Jawaab aan 1-5 ahayn -> state-ka horey ayaa la "consume" gareeyay,
+      // sii wad kala-sooca caadiga ah (ha u dhicin feedback mar labaad).
     }
   }
 
@@ -687,6 +709,32 @@ async function submitComplaint(details, waId, lang) {
     console.error('complaint submit error', String(e));
     return { success: false, intent: 'COMPLAINT_SAVE_FAILED', reply: COMPLAINT_SAVE_FAILED[lang] };
   }
+}
+
+// ---- Feedback: keydi qiimaynta 1-5 haadlinks, escalate haddii hoose ----
+async function submitFeedback(orderId, waId, rating, lang) {
+  const branch = orderId.startsWith('HQ-') ? 'HQ' : orderId.startsWith('KM5-') ? 'KM5' : null;
+
+  try {
+    const res = await fetch('https://www.haadlinks.com/api/public/feedback', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ orderId, phone: waId, rating, branch }),
+    });
+    if (!res.ok) {
+      console.error('feedback submit failed', res.status, await res.text().catch(() => ''));
+    }
+  } catch (e) {
+    console.error('feedback submit error', String(e));
+  }
+
+  // Qiimayn hoose (1-2) -> si toos ah u gudbi COMPLAINT flow-ga si loo
+  // ogaado maxaa khaldamay (isla session mechanism-ka COMPLAINT).
+  if (rating <= 2) {
+    await setSession(waId, 'COMPLAINT');
+    return { success: true, intent: 'FEEDBACK_LOW', reply: FEEDBACK_LOW[lang] };
+  }
+  return { success: true, intent: 'FEEDBACK_THANKS', reply: FEEDBACK_THANKS[lang] };
 }
 
 // ---- Session: "waxaan weydiiyay, jawaabta xigta waa faahfaahinta" ----
