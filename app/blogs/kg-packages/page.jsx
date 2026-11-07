@@ -2,7 +2,8 @@ import Link from "next/link";
 import Image from "next/image";
 
 export const metadata = {
-  title: "Dooro Xirmada Kugu Habboon | Likenew",
+  title:
+    'Shirkadda Likenew Smart Laundry oo si rasmi ah u soo kordhisay "KG Packages" | Likenew',
   description:
     "Likenew Smart Laundry waxay soo bandhigtay KG Packages, hannaan bille ah oo macaamiisha u sahlaya in dharka lagu xisaabiyo miisaan.",
 };
@@ -17,7 +18,8 @@ export default function KgPackagesPage() {
             ← Ku noqo Blogs
           </Link>
           <h1 className="mt-6 text-3xl md:text-5xl font-extrabold leading-tight">
-            Dooro Xirmada Kugu Habboon
+            Shirkadda Likenew Smart Laundry oo si rasmi ah u soo kordhisay "KG Packages", hannaan
+            bille ah oo macaamiisha u sahlaya in dharka lagu xisaabiyo miisaan
           </h1>
           <div className="mt-8 flex items-center gap-4 text-sm font-medium opacity-90">
             <span className="bg-white/20 px-3 py-1 rounded-full">1 November, 2026</span>
@@ -38,11 +40,6 @@ export default function KgPackagesPage() {
         <div className="p-8 md:p-12 prose prose-lg prose-slate max-w-none text-slate-700 leading-9">
           <p className="text-sm font-bold text-slate-400 uppercase tracking-widest">
             Taariikh: 1 November, 2026
-          </p>
-
-          <p className="font-bold text-slate-900">
-            Shirkadda Likenew Smart Laundry oo si rasmi ah u soo kordhisay "KG Packages", hannaan
-            bille ah oo macaamiisha u sahlaya in dharka lagu xisaabiyo miisaan.
           </p>
 
           <p className="lead text-xl text-slate-900 font-semibold">
@@ -95,7 +92,7 @@ export default function KgPackagesPage() {
 
         {/* Additional Images */}
         <div className="p-8 md:p-12 pt-0 grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="relative w-full h-[280px] md:h-[360px] rounded-2xl overflow-hidden border border-slate-100">
+          <div className="relative w-full aspect-[1026/1280] rounded-2xl overflow-hidden border border-slate-100">
             <Image
               src="/blogs/kg-packages-storefront.jpg"
               alt="Likenew KG Packages"
@@ -103,12 +100,12 @@ export default function KgPackagesPage() {
               className="object-cover"
             />
           </div>
-          <div className="relative w-full h-[280px] md:h-[360px] rounded-2xl overflow-hidden border border-slate-100">
+          <div className="relative w-full aspect-[1026/1280] rounded-2xl overflow-hidden border border-slate-100">
             <Image
               src="/blogs/kg-packages-pricing.jpg"
               alt="Saddexda Xirmo (Package) ee la heli karo: Dhaqnaan 8KG $30, Xarago 15KG $50, Riish 35KG $100"
               fill
-              className="object-contain bg-white"
+              className="object-cover"
             />
           </div>
         </div>

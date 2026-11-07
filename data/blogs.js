@@ -2,7 +2,7 @@ export const blogs = [
 
   {
     slug: "kg-packages",
-    title: "Dooro Xirmada Kugu Habboon",
+    title: 'Shirkadda Likenew Smart Laundry oo si rasmi ah u soo kordhisay "KG Packages"',
     category: "War-saxaafadeed",
     date: "1 November, 2026",
     image: "/blogs/kg-packages-hero.jpg",
