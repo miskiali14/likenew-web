@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 
 export const metadata = {
-  title: 'Likenew oo soo kordhisay "KG Packages" | Likenew',
+  title: "Dooro Xirmada Kugu Habboon | Likenew",
   description:
     "Likenew Smart Laundry waxay soo bandhigtay KG Packages, hannaan bille ah oo macaamiisha u sahlaya in dharka lagu xisaabiyo miisaan.",
 };
@@ -17,7 +17,7 @@ export default function KgPackagesPage() {
             ← Ku noqo Blogs
           </Link>
           <h1 className="mt-6 text-3xl md:text-5xl font-extrabold leading-tight">
-            Likenew oo si rasmi ah u soo kordhisay "KG Packages"
+            Dooro Xirmada Kugu Habboon
           </h1>
           <div className="mt-8 flex items-center gap-4 text-sm font-medium opacity-90">
             <span className="bg-white/20 px-3 py-1 rounded-full">1 November, 2026</span>
@@ -25,12 +25,12 @@ export default function KgPackagesPage() {
         </div>
 
         {/* Hero Image Section */}
-        <div className="relative w-full h-[300px] md:h-[400px]">
+        <div className="relative w-full h-[500px] md:h-[640px] bg-white">
           <Image
             src="/blogs/kg-packages-hero.jpg"
-            alt="Likenew KG Packages"
+            alt="Dooro Xirmada Kugu Habboon: Dhaqnaan 8KG $30, Xarago 15KG $50, Riish 35KG $100"
             fill
-            className="object-cover"
+            className="object-contain"
           />
         </div>
 
@@ -57,16 +57,6 @@ export default function KgPackagesPage() {
             tayo sare leh oo qiimo jaban, kaas oo siinaya qaab fudud oo ay dhar badan ku dhaqan
             karaan iyagoo bixinaya qiimo macquul ah.
           </p>
-
-          {/* Package Pricing Image */}
-          <div className="relative my-10 w-full h-[260px] md:h-[380px] rounded-2xl overflow-hidden border border-slate-100">
-            <Image
-              src="/blogs/kg-packages-pricing.jpg"
-              alt="Saddexda Xirmo (Package) ee la heli karo: Dhaqnaan 8KG $30, Xarago 15KG $50, Riish 35KG $100"
-              fill
-              className="object-contain bg-white"
-            />
-          </div>
 
           {/* Fiiro Gaar ah */}
           <div className="my-10 p-8 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl border border-indigo-100">

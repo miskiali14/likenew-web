@@ -2,7 +2,7 @@ export const blogs = [
 
   {
     slug: "kg-packages",
-    title: 'Likenew oo si rasmi ah u soo kordhisay "KG Packages"',
+    title: "Dooro Xirmada Kugu Habboon",
     category: "War-saxaafadeed",
     date: "1 November, 2026",
     image: "/blogs/kg-packages-hero.jpg",
