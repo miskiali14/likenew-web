@@ -1,6 +1,16 @@
 export const blogs = [
 
   {
+    slug: "kg-packages",
+    title: 'Likenew oo si rasmi ah u soo kordhisay "KG Packages"',
+    category: "War-saxaafadeed",
+    date: "1 November, 2026",
+    image: "/blogs/kg-packages-hero.jpg",
+    desc: "Likenew Smart Laundry waxay soo bandhigtay xirmooyin bille ah oo cusub (KG Packages), oo macaamiisha u sahlaya in dharka lagu xisaabiyo miisaan — laga bilaabo $30.",
+    content: ["..."],
+  },
+
+  {
   slug: "SmartLockersPage",
   title: "Likenew Smart Laundry Launches 'Likenew Smart Lockers', Introducing a New Era in Somalia's Laundry Services",
   category: "News",
