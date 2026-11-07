@@ -36,6 +36,15 @@ export default function KgPackagesPage() {
 
         {/* Content Area */}
         <div className="p-8 md:p-12 prose prose-lg prose-slate max-w-none text-slate-700 leading-9">
+          <p className="text-sm font-bold text-slate-400 uppercase tracking-widest">
+            Taariikh: 31 Oktoobar, 2026
+          </p>
+
+          <p className="font-bold text-slate-900">
+            Shirkadda Likenew Smart Laundry oo si rasmi ah u soo kordhisay "KG Packages", hannaan
+            bille ah oo macaamiisha u sahlaya in dharka lagu xisaabiyo miisaan.
+          </p>
+
           <p className="lead text-xl text-slate-900 font-semibold">
             Muqdisho, Soomaaliya – 1 November, 2026: Annagoo tixgelinayna baahida iyo codsiyada
             macaamiisheenna ah inay helaan adeeg rukun ah haddana qiimo jaban, waxaan maanta si
@@ -58,6 +67,13 @@ export default function KgPackagesPage() {
             karaan iyagoo bixinaya qiimo macquul ah.
           </p>
 
+          <h3 className="text-slate-900 font-black text-xl">Saddexda Xirmo (Package) ee la heli karo:</h3>
+          <ul>
+            <li>✓ Dhaqnaan (8 KG) — $30</li>
+            <li>✓ Xarrago (15 KG) — $50</li>
+            <li>✓ Riish (35 KG) — $100</li>
+          </ul>
+
           {/* Fiiro Gaar ah */}
           <div className="my-10 p-8 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl border border-indigo-100">
             <h3 className="text-indigo-900 font-black text-xl mb-4">Fiiro Gaar ah:</h3>
@@ -73,6 +89,8 @@ export default function KgPackagesPage() {
             casri ah, u danaynaya macmiilka, iyadoo isku xiraysa tayada sare ee shaqada iyo
             awoodda tignoolajiyadda.
           </p>
+
+          <p className="text-center font-black text-slate-400 tracking-widest">— DHAMMAAD —</p>
         </div>
 
         {/* Additional Images */}
@@ -101,6 +119,7 @@ export default function KgPackagesPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <p>Email: <span className="text-white">info@likenew.so</span></p>
             <p>Taleefan/WhatsApp: <span className="text-white">+252 615311877 ama 2414</span></p>
+            <p>Website: <span className="text-white">www.likenew.so</span></p>
           </div>
         </div>
       </article>
