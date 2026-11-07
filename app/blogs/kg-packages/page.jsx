@@ -25,13 +25,33 @@ export default function KgPackagesPage() {
         </div>
 
         {/* Hero Image Section */}
-        <div className="relative w-full h-[500px] md:h-[640px] bg-white">
+        <div className="relative w-full h-[300px] md:h-[400px]">
           <Image
-            src="/blogs/kg-packages-hero.jpg"
-            alt="Dooro Xirmada Kugu Habboon: Dhaqnaan 8KG $30, Xarago 15KG $50, Riish 35KG $100"
+            src="/blogs/kg-packages-storefront.jpg"
+            alt="Likenew KG Packages"
             fill
-            className="object-contain"
+            className="object-cover"
           />
+        </div>
+
+        {/* Package Images */}
+        <div className="p-8 md:p-12 pb-0 grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="relative w-full h-[420px] md:h-[520px] rounded-2xl overflow-hidden border border-slate-100">
+            <Image
+              src="/blogs/kg-packages-hero.jpg"
+              alt="Dooro Xirmada Kugu Habboon: Dhaqnaan 8KG $30, Xarago 15KG $50, Riish 35KG $100"
+              fill
+              className="object-contain bg-white"
+            />
+          </div>
+          <div className="relative w-full h-[420px] md:h-[520px] rounded-2xl overflow-hidden border border-slate-100">
+            <Image
+              src="/blogs/kg-packages-pricing.jpg"
+              alt="Saddexda Xirmo (Package) ee la heli karo: Dhaqnaan 8KG $30, Xarago 15KG $50, Riish 35KG $100"
+              fill
+              className="object-contain bg-white"
+            />
+          </div>
         </div>
 
         {/* Content Area */}
