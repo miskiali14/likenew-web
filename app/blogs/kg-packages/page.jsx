@@ -37,7 +37,7 @@ export default function KgPackagesPage() {
         {/* Content Area */}
         <div className="p-8 md:p-12 prose prose-lg prose-slate max-w-none text-slate-700 leading-9">
           <p className="text-sm font-bold text-slate-400 uppercase tracking-widest">
-            Taariikh: 31 Oktoobar, 2026
+            Taariikh: 1 November, 2026
           </p>
 
           <p className="font-bold text-slate-900">
