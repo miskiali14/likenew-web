@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 export const metadata = {
   title: "Shaqo Bannaan: Marketing Manager | Likenew",
@@ -114,6 +115,17 @@ export default function MarketingManagerJobPage() {
             <span className="bg-white/20 px-3 py-1 rounded-full">🕑 Full-time, on-site</span>
             <span className="bg-white/20 px-3 py-1 rounded-full">🏢 Likenew Smart Laundry</span>
           </div>
+        </div>
+
+        {/* Poster */}
+        <div className="relative w-full aspect-[1600/1204] bg-[#0d0b1a]">
+          <Image
+            src="/careers/marketing-manager-hiring.jpg"
+            alt="We are Hiring: Marketing Manager — Likenew Smart Laundry"
+            fill
+            className="object-cover"
+            priority
+          />
         </div>
 
         {/* Content */}

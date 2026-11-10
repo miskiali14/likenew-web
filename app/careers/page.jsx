@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 export const metadata = {
   title: "Shaqooyinka | Likenew",
@@ -13,6 +14,7 @@ const jobs = [
     location: "Mogadishu, Somalia",
     type: "Full-time, on-site",
     desc: "Hoggaami marketing-ka, adeegga macaamiisha iyo shaqada dijital-ka ee Likenew Smart Laundry. 3+ sano oo khibrad ah, isticmaal joogto ah oo AI tools ah.",
+    image: "/careers/marketing-manager-hiring.jpg",
   },
 ];
 
@@ -49,8 +51,14 @@ export default function CareersPage() {
               key={job.slug}
               className="overflow-hidden rounded-[2rem] border border-gray-100 bg-white shadow-[0_20px_60px_rgba(15,23,42,0.05)]"
             >
-              <div className="relative h-40 w-full bg-[#662d8f] flex items-center justify-center">
-                <span className="text-5xl">💼</span>
+              <div className="relative h-40 w-full bg-[#0d0b1a]">
+                <Image
+                  src={job.image}
+                  alt={job.title}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                  className="object-cover"
+                />
               </div>
 
               <div className="p-6">
