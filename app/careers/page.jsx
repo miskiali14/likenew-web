@@ -2,9 +2,9 @@ import Link from "next/link";
 import Image from "next/image";
 
 export const metadata = {
-  title: "Shaqooyinka | Likenew",
+  title: "Careers | Likenew",
   description:
-    "Ka eeg shaqooyinka bannaan ee Likenew Smart Laundry oo ku yaal Muqdisho, Soomaaliya.",
+    "See the open positions at Likenew Smart Laundry in Mogadishu, Somalia.",
 };
 
 const jobs = [
@@ -13,7 +13,7 @@ const jobs = [
     title: "Marketing Manager",
     location: "Mogadishu, Somalia",
     type: "Full-time, on-site",
-    desc: "Hoggaami marketing-ka, adeegga macaamiisha iyo shaqada dijital-ka ee Likenew Smart Laundry. 3+ sano oo khibrad ah, isticmaal joogto ah oo AI tools ah.",
+    desc: "Lead marketing, customer experience and digital work at Likenew Smart Laundry. 3+ years of experience, daily use of AI tools.",
     image: "/careers/marketing-manager-hiring.jpg",
   },
 ];
@@ -37,11 +37,11 @@ export default function CareersPage() {
           </span>
 
           <h1 className="mt-4 text-4xl md:text-6xl font-black text-gray-900">
-            Shaqooyinka Bannaan
+            Open Positions
           </h1>
 
           <p className="mt-5 text-gray-500 max-w-2xl mx-auto leading-relaxed">
-            Ku biir kooxda Likenew Smart Laundry oo casriyeysa daryeelka dharka ee Soomaaliya.
+            Join the Likenew Smart Laundry team as we modernize laundry care in Somalia.
           </p>
         </div>
 
@@ -78,7 +78,7 @@ export default function CareersPage() {
                   href={`/careers/${job.slug}`}
                   className="mt-6 inline-flex text-sm font-bold text-[#662d8f]"
                 >
-                  Eeg Faahfaahinta →
+                  View Details →
                 </Link>
               </div>
             </article>

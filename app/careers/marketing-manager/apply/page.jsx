@@ -98,17 +98,17 @@ export default function ApplyMarketingManagerPage() {
         <div className="max-w-md w-full bg-white rounded-[2rem] shadow-xl shadow-slate-200/60 border border-slate-100 p-10 text-center">
           <div className="text-5xl">✅</div>
           <h1 className="mt-6 text-2xl font-black text-slate-900">
-            Codsigaaga waa la helay!
+            Application Received!
           </h1>
           <p className="mt-4 text-slate-500 leading-relaxed">
-            Mahadsanid codsigaaga jagada {ROLE}. Kaliya musharraxiinta la xushay ayaa lala soo
-            xiriiri doonaa.
+            Thank you for applying for the {ROLE} position. Only shortlisted candidates will be
+            contacted.
           </p>
           <Link
             href="/careers"
             className="mt-8 inline-flex items-center justify-center rounded-full bg-[#4421a3] px-6 py-3 text-sm font-semibold text-white transition-all duration-300 hover:bg-[#662d8f]"
           >
-            Ku noqo Shaqooyinka
+            Back to Careers
           </Link>
         </div>
       </main>
@@ -124,10 +124,10 @@ export default function ApplyMarketingManagerPage() {
             href="/careers/marketing-manager"
             className="text-xs font-bold uppercase tracking-widest hover:underline opacity-80"
           >
-            ← Ku noqo Jagada
+            ← Back to Job
           </Link>
           <h1 className="mt-6 text-2xl md:text-4xl font-extrabold leading-tight">
-            Foomka Codsiga: {ROLE}
+            Application Form: {ROLE}
           </h1>
           <p className="mt-3 text-white/80 text-sm">
             Deadline: 20 November, 2026 — Likenew Smart Laundry, Mogadishu
@@ -339,7 +339,7 @@ export default function ApplyMarketingManagerPage() {
             disabled={status === "submitting"}
             className="w-full inline-flex items-center justify-center rounded-full bg-[#4421a3] px-6 py-4 text-sm font-semibold text-white transition-all duration-300 hover:bg-[#662d8f] disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            {status === "submitting" ? "Diraya..." : "Gudbi Codsiga"}
+            {status === "submitting" ? "Submitting..." : "Submit Application"}
           </button>
         </form>
       </div>
