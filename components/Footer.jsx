@@ -40,6 +40,13 @@ export default function Footer() {
   </Link>
 
   <Link
+    href="/careers"
+    className="inline-flex items-center rounded-full border border-gray-200 bg-white px-6 py-3 text-sm font-medium text-gray-600 transition-all duration-300 hover:border-[#662d8f] hover:text-[#662d8f]"
+  >
+    Careers
+  </Link>
+
+  <Link
     href="/connect"
     className="inline-flex items-center rounded-full bg-[#4421a3] px-6 py-3 text-sm font-semibold text-white transition-all duration-300 hover:bg-[#662d8f]"
   >
