@@ -64,33 +64,6 @@ const applicationSections = [
 
 const APPLY_EMAIL = "info@likenew.so";
 const APPLY_WHATSAPP = "252610311877";
-const APPLY_SUBJECT = "Application: Marketing Manager";
-const APPLY_BODY = `Full name:
-Phone number (WhatsApp):
-Email address:
-Current location:
-Highest education level and field of study:
-
-Years of marketing experience:
-Current or last job title and company:
-Have you led a team before? If yes, how many people?:
-Links to your best work:
-
-Which AI tools do you use every week?:
-
-30-day marketing plan (5 lines or less):
-
-Why are you the right person for this role? (max 100 words):
-
-(Please attach your CV as a PDF)`;
-
-const mailtoHref = `mailto:${APPLY_EMAIL}?subject=${encodeURIComponent(
-  APPLY_SUBJECT
-)}&body=${encodeURIComponent(APPLY_BODY)}`;
-
-const waHref = `https://wa.me/${APPLY_WHATSAPP}?text=${encodeURIComponent(
-  "Salaan, waxaan rabaa inaan u codsado jagada Marketing Manager ee Likenew Smart Laundry."
-)}`;
 
 export default function MarketingManagerJobPage() {
   return (
@@ -162,9 +135,9 @@ export default function MarketingManagerJobPage() {
 
           <h3 className="text-slate-900 font-black text-xl">Sida Loo Codsan Karo</h3>
           <p>
-            Fadlan noo soo dir magacaaga, CV-gaaga (PDF) iyo jawaabaha su&apos;aalaha hoose iyadoo loo
-            marayo email ama WhatsApp. Waxaad isticmaali kartaa badhanka hoose si aad u furto fariin
-            diyaar u ah.
+            Fadlan buuxi foomka online-ka ah ee hoose. Waxaad la socon doontaa afarta qaybood ee
+            hoose, kadibna waxaa diyaar u ah inaad gudbiso codsigaaga si toos ah — looma baahna
+            email ama WhatsApp.
           </p>
 
           {applicationSections.map((section) => (
@@ -178,22 +151,14 @@ export default function MarketingManagerJobPage() {
             </div>
           ))}
 
-          {/* Apply buttons */}
-          <div className="not-prose mt-10 flex flex-col sm:flex-row gap-4">
-            <a
-              href={waHref}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex-1 inline-flex items-center justify-center rounded-full bg-[#4421a3] px-6 py-4 text-sm font-semibold text-white transition-all duration-300 hover:bg-[#662d8f]"
+          {/* Apply button */}
+          <div className="not-prose mt-10">
+            <Link
+              href="/careers/marketing-manager/apply"
+              className="w-full inline-flex items-center justify-center rounded-full bg-[#4421a3] px-6 py-4 text-sm font-semibold text-white transition-all duration-300 hover:bg-[#662d8f]"
             >
-              Ku Codso WhatsApp
-            </a>
-            <a
-              href={mailtoHref}
-              className="flex-1 inline-flex items-center justify-center rounded-full border border-gray-200 bg-white px-6 py-4 text-sm font-medium text-gray-700 transition-all duration-300 hover:border-[#662d8f] hover:text-[#662d8f]"
-            >
-              Ku Codso Email
-            </a>
+              Buuxi Foomka Codsiga →
+            </Link>
           </div>
         </div>
 
