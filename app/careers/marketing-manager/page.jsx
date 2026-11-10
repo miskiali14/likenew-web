@@ -75,18 +75,18 @@ export default function MarketingManagerJobPage() {
           </p>
 
           <h3 className="text-slate-900 font-black text-xl">Key Responsibilities</h3>
-          <ol>
+          <ul>
             {responsibilities.map((item) => (
               <li key={item}>{item}</li>
             ))}
-          </ol>
+          </ul>
 
           <h3 className="text-slate-900 font-black text-xl">Requirements</h3>
-          <ol>
+          <ul>
             {requirements.map((item) => (
               <li key={item}>{item}</li>
             ))}
-          </ol>
+          </ul>
 
           <h3 className="text-slate-900 font-black text-xl">How to Apply</h3>
           <p>
