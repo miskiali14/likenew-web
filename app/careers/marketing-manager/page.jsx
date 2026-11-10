@@ -2,9 +2,9 @@ import Link from "next/link";
 import Image from "next/image";
 
 export const metadata = {
-  title: "Shaqo Bannaan: Marketing Manager | Likenew",
+  title: "We're Hiring: Marketing Manager | Likenew",
   description:
-    "Likenew Smart Laundry waxay raadinaysaa Marketing Manager ku fadhiya Muqdisho. Akhri shuruudaha, waajibaadka iyo sida loo codsan karo.",
+    "Likenew Smart Laundry is hiring a Marketing Manager in Mogadishu. Read the requirements, responsibilities and how to apply.",
 };
 
 const responsibilities = [
@@ -75,10 +75,10 @@ export default function MarketingManagerJobPage() {
             href="/careers"
             className="text-xs font-bold uppercase tracking-widest hover:underline opacity-80"
           >
-            ← Ku noqo Shaqooyinka
+            ← Back to Careers
           </Link>
           <p className="mt-6 text-xs font-bold uppercase tracking-widest text-white/70">
-            Shaqo Bannaan
+            Open Position
           </p>
           <h1 className="mt-2 text-3xl md:text-5xl font-extrabold leading-tight">
             Marketing Manager
@@ -124,22 +124,20 @@ export default function MarketingManagerJobPage() {
             ))}
           </ul>
 
-          {/* Deadline callout */}
-          <div className="my-10 p-8 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl border border-indigo-100 not-prose">
-            <h3 className="text-indigo-900 font-black text-xl mb-2">Deadline</h3>
-            <p className="text-slate-700">
-              Fadlan codsigaaga soo dir ugu dambeyn <strong>20 November, 2026</strong>. Kaliya
-              musharraxiinta la xushay ayaa lala soo xiriiri doonaa.
-            </p>
-          </div>
-
-          <h3 className="text-slate-900 font-black text-xl">Sida Loo Codsan Karo</h3>
+          <h3 className="text-slate-900 font-black text-xl">How to Apply</h3>
           <p>
-            Fadlan buuxi foomka online-ka ah ee hoose. Waxaad la socon doontaa afarta qaybood ee
-            hoose, kadibna waxaa diyaar u ah inaad gudbiso codsigaaga si toos ah — looma baahna
-            email ama WhatsApp.
+            Fill in the application form:{" "}
+            <Link
+              href="/careers/marketing-manager/apply"
+              className="font-bold text-[#662d8f] underline"
+            >
+              Apply Now
+            </Link>
+            . Deadline: <strong>20 November, 2026</strong>. Only shortlisted candidates will be
+            contacted.
           </p>
 
+          <h3 className="text-slate-900 font-black text-xl">Application Form Questions</h3>
           {applicationSections.map((section) => (
             <div key={section.title}>
               <h4 className="text-slate-900 font-bold">{section.title}</h4>
@@ -150,22 +148,12 @@ export default function MarketingManagerJobPage() {
               </ul>
             </div>
           ))}
-
-          {/* Apply button */}
-          <div className="not-prose mt-10">
-            <Link
-              href="/careers/marketing-manager/apply"
-              className="w-full inline-flex items-center justify-center rounded-full bg-[#4421a3] px-6 py-4 text-sm font-semibold text-white transition-all duration-300 hover:bg-[#662d8f]"
-            >
-              Buuxi Foomka Codsiga →
-            </Link>
-          </div>
         </div>
 
         {/* Footer Info */}
         <div className="bg-[#662d8f] text-slate-300 p-8 md:p-12 text-sm">
           <p className="font-bold text-white mb-4">
-            Wixii faahfaahin dheeri ah, fadlan nagala soo xiriir:
+            For more information, please contact us:
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <p>
