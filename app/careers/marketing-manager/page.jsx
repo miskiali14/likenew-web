@@ -26,42 +26,6 @@ const requirements = [
   "Fluent in Somali and English, written and spoken.",
 ];
 
-const applicationSections = [
-  {
-    title: "A. Personal Details",
-    items: [
-      "Full name",
-      "Phone number (WhatsApp)",
-      "Email address",
-      "Current location",
-      "Highest education level and field of study",
-    ],
-  },
-  {
-    title: "B. Experience",
-    items: [
-      "How many years of marketing experience do you have? (Less than 2 / 2–3 / 3–5 / 5+)",
-      "Current or last job title and company",
-      "Have you led a team before? If yes, how many people?",
-      "Share links to your best work (social pages, campaigns, designs or portfolio).",
-      "Upload your CV (PDF).",
-    ],
-  },
-  {
-    title: "C. AI & Digital Skills",
-    items: [
-      "Which AI tools do you use every week? (ChatGPT, Claude, Gemini, Midjourney, other)",
-    ],
-  },
-  {
-    title: "D. Short Practical Questions",
-    items: [
-      "A new service launches next month. Describe your first 30 day marketing plan in 5 lines or less.",
-      "Why are you the right person for this role? (Max 100 words)",
-    ],
-  },
-];
-
 const APPLY_EMAIL = "info@likenew.so";
 const APPLY_WHATSAPP = "252610311877";
 
@@ -111,18 +75,18 @@ export default function MarketingManagerJobPage() {
           </p>
 
           <h3 className="text-slate-900 font-black text-xl">Key Responsibilities</h3>
-          <ul>
+          <ol>
             {responsibilities.map((item) => (
               <li key={item}>{item}</li>
             ))}
-          </ul>
+          </ol>
 
           <h3 className="text-slate-900 font-black text-xl">Requirements</h3>
-          <ul>
+          <ol>
             {requirements.map((item) => (
               <li key={item}>{item}</li>
             ))}
-          </ul>
+          </ol>
 
           <h3 className="text-slate-900 font-black text-xl">How to Apply</h3>
           <p>
@@ -136,18 +100,6 @@ export default function MarketingManagerJobPage() {
             . Deadline: <strong>20 November, 2026</strong>. Only shortlisted candidates will be
             contacted.
           </p>
-
-          <h3 className="text-slate-900 font-black text-xl">Application Form Questions</h3>
-          {applicationSections.map((section) => (
-            <div key={section.title}>
-              <h4 className="text-slate-900 font-bold">{section.title}</h4>
-              <ul>
-                {section.items.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
-            </div>
-          ))}
         </div>
 
         {/* Footer Info */}
