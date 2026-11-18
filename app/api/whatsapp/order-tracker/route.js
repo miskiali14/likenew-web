@@ -566,6 +566,18 @@ export async function POST(request) {
         return NextResponse.json({ ok: true, ignored: true, reason: 'call_event' });
       }
 
+      // Ka hortag jawaab-laba-jeer-ah: WATI mar mar isla farriinta ayuu laba
+      // jeer soo diraa. Haddii farriintan horey loo maareeyay, ha dirin
+      // jawaab labaad.
+      const msgId = body.whatsappMessageId || body.id || null;
+      if (msgId) {
+        const claimed = await claimMessage(msgId);
+        if (!claimed) {
+          console.log(`[order-bot] duplicate delivery ignored, msgId=${msgId}`);
+          return NextResponse.json({ ok: true, ignored: true, reason: 'duplicate_delivery' });
+        }
+      }
+
       const msgType = String(body.type || 'text').toLowerCase();
       const text =
         msgType === 'text' || msgType === 'message' || msgType === ''
@@ -768,6 +780,28 @@ async function setSession(waId, awaiting) {
     });
   } catch (e) {
     console.error('session set error', String(e));
+  }
+}
+
+// WATI (and WhatsApp providers generally) can deliver the same inbound
+// message more than once (at-least-once delivery). Without this, a
+// re-delivered message gets processed and replied to a second time —
+// claimMessage() makes "have I already handled this exact message?" an
+// atomic check, so only the first delivery gets a reply.
+async function claimMessage(msgId) {
+  try {
+    const res = await fetch(BOT_SESSION_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ waId: `msg:${msgId}`, action: 'claim', awaiting: 'SEEN' }),
+    });
+    const data = await res.json().catch(() => null);
+    // On error, fail open (treat as claimed) — better to risk a rare
+    // duplicate reply than to go silent because the dedup check itself failed.
+    return data ? data.claimed !== false : true;
+  } catch (e) {
+    console.error('message claim error', String(e));
+    return true;
   }
 }
 
