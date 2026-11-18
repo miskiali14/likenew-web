@@ -252,7 +252,7 @@ export default function BedAndBathPage() {
 
       <motion.div className="fixed bottom-10 left-0 w-full flex justify-center px-6 z-50">
         <button
-          onClick={() => router.push("/cart")}
+          onClick={() => router.push("/order")}
           className="bg-[#7047A8] text-white px-14 py-7 rounded-full font-black uppercase tracking-[0.3em] text-[12px] flex items-center gap-8"
         >
           <span>Review Order</span>

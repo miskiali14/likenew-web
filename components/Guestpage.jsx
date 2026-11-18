@@ -1,8 +1,7 @@
 "use client";
 import React, { useState, useEffect, useMemo } from "react";
-import { useRouter } from "next/navigation"; // Halkan ayaa laga saxay khalkhalkii 'navigation'
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, Loader2, ShoppingBag, CheckCircle2, Star, UserPlus } from "lucide-react";
+import { Search, Loader2, ShoppingBag, CheckCircle2, Star } from "lucide-react";
 
 // Khariidadda sawirrada ee 4-ta shay oo af-Ingiriisi ah (English Image Maps)
 const guestImageMap = {
@@ -14,7 +13,6 @@ const guestImageMap = {
 };
 
 export default function Guestpage() {
-  const router = useRouter();
   const [search, setSearch] = useState("");
   const [rawProducts, setRawProducts] = useState([]); 
   const [loading, setLoading] = useState(true);
@@ -167,16 +165,6 @@ export default function Guestpage() {
           />
         </div>
         
-        <div className="absolute top-6 right-6 z-30">
-          <button 
-            onClick={() => router.push("/login")}
-            className="flex items-center gap-2 bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 px-4 py-2 rounded-xl text-white font-bold text-xs transition-all shadow-lg"
-          >
-            <UserPlus size={14} />
-            Sign In / Register
-          </button>
-        </div>
-
         <div className="relative z-20 text-center px-6">
           <motion.div 
             initial={{ opacity: 0, y: 15 }} 

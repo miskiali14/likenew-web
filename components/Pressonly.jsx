@@ -63,13 +63,13 @@ export default function PressOnlyPage() {
       icon: "👟",
       desc: "Shoe care and finishing",
       tag: "Clean",
-      route: "/shoespage",
+      route: "/shoesgrouppage",
     },
     Bags: {
       icon: "🎒",
       desc: "Bag care and finishing",
       tag: "Premium",
-      route: "/bagspage",
+      route: "/bagsgrouppage",
     },
   };
 
@@ -317,7 +317,7 @@ export default function PressOnlyPage() {
       <div className="fixed bottom-10 left-1/2 -translate-x-1/2 w-[90%] max-w-md z-[100]">
         <motion.button
           whileHover={{ scale: 1.03 }}
-          onClick={() => router.push("/cart")}
+          onClick={() => router.push("/order")}
           className="w-full bg-[#7047A8] text-white py-6 rounded-[2.2rem] font-black uppercase tracking-[0.2em] shadow-2xl flex items-center justify-center gap-4 group relative overflow-hidden"
         >
           <div className="absolute inset-0 bg-gradient-to-r from-[#7047A8] to-[#5E3B8C] opacity-0 group-hover:opacity-100 transition-opacity" />

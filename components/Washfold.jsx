@@ -46,7 +46,7 @@ export default function WashAndFoldPage() {
       icon: "💃",
       desc: "Dress & uniform wash care",
       tag: "Clean",
-      route: "/dresspage",
+      route: "/dressgrouppage",
     },
   };
 
@@ -288,7 +288,7 @@ export default function WashAndFoldPage() {
           </div>
 
           <button
-            onClick={() => router.push("/cart")}
+            onClick={() => router.push("/order")}
             className="bg-[#7047A8] hover:bg-[#5E3B8C] text-white p-4 rounded-full transition-all"
           >
             <ShoppingBag size={20} />

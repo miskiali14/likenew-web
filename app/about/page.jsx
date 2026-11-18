@@ -137,9 +137,9 @@ export default function AboutPage() {
             Like<span className="text-purple-600">New</span>
           </div>
           <div className="flex gap-8 text-[10px] font-black uppercase tracking-widest text-gray-400">
-            <a href="#" className="hover:text-purple-600 transition-colors">Privacy Policy</a>
-            <a href="#" className="hover:text-purple-600 transition-colors">Terms of Service</a>
-            <a href="#" className="hover:text-purple-600 transition-colors">Contact</a>
+            <a href="/privacy-policy" className="hover:text-purple-600 transition-colors">Privacy Policy</a>
+            <a href="/terms" className="hover:text-purple-600 transition-colors">Terms of Service</a>
+            <a href="/connect" className="hover:text-purple-600 transition-colors">Contact</a>
           </div>
           <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">
             © 2026 Crafted with Passion.
